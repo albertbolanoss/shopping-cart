@@ -12,6 +12,10 @@ java {
     sourceCompatibility = '17'
 }
 
+ext {
+    springVersion = '3.2.4'
+}
+
 processResources {
     dependsOn(generateSwaggerCode)
 }
@@ -45,27 +49,28 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:$springVersion"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springVersion"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
+    compileOnly "org.springframework.boot:spring-boot-starter-validation:$springVersion"
+    implementation "org.springframework.boot:spring-boot-starter-hateoas:$springVersion"
 
-    // OpenAPI Starts
+    // OpenAPI
     swaggerCodegen 'org.openapitools:openapi-generator-cli:6.2.1'
     compileOnly 'io.swagger:swagger-annotations:1.6.4'
-    compileOnly 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.openapitools:jackson-databind-nullable:0.2.3'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-    // required for schema in swagger generated code
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.0'
     implementation 'io.springfox:springfox-oas:3.0.0'
-    // OpenAPI Ends
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
-    // lombok
+    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
+    // Database driver and flywaydb
+    runtimeOnly 'com.h2database:h2:2.2.224'
+    implementation 'org.flywaydb:flyway-core:10.10.0'
 }
 
 tasks.named('test') {
