@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    config:
+      overrideNone: true
+      overrideSystemProperties: false
+  datasource:
+    url: jdbc:h2:mem:ecomm;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=false
+    name: comm
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ecomm
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  flyway:
+    url: ${spring.datasource.url}
+    schemas: ecomm
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}

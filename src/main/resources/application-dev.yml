@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: false
+  jpa:
+    show-sql: true
+    format_sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
