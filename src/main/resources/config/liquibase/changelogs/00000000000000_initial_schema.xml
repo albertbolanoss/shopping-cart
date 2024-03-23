@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                   http://www.liquibase.org/xml/ns/dbchangelog-ext
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20240323-1" author="luis.bolanoss">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="customer"/>
+            </not>
+        </preConditions>
+        <createTable tableName="customer">
+            <column name="customerId" type="uuid" autoIncrement="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean" defaultValue="true" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="luis.bolanoss" id="1_createIndex_index_one">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="customer"/>
+            <not>
+                <indexExists indexName="idx_customer_username_password"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_customer_username_password" tableName="customer">
+            <column name="username"/>
+            <column name="password"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

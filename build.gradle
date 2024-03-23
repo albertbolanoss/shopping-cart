@@ -70,7 +70,10 @@ dependencies {
 
     // Database driver and flywaydb
     runtimeOnly 'com.h2database:h2:2.2.224'
-    implementation 'org.flywaydb:flyway-core:10.10.0'
+
+    // Liquibase Migration
+    implementation 'org.liquibase:liquibase-core:4.26.0'
+
 }
 
 tasks.named('test') {

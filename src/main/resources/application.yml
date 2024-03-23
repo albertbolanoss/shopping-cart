@@ -14,9 +14,7 @@ spring:
       hibernate:
         default_schema: ecomm
     database-platform: org.hibernate.dialect.H2Dialect
+  liquibase:
+    change-log: classpath:config/liquibase/changelog-master.xml
 
-  flyway:
-    url: ${spring.datasource.url}
-    schemas: ecomm
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+

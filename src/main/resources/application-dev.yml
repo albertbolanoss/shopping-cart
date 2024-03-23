@@ -5,7 +5,7 @@ spring:
     console:
       enabled: true
       settings:
-        web-allow-others: false
+        web-allow-others: true
   jpa:
     show-sql: true
     format_sql: true
