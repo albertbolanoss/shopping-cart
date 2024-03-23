@@ -1,6 +1,8 @@
 package com.perficient.shoppingcart.infrastructure.api.exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import java.util.Locale;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +16,6 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-
-
-import java.util.Locale;
 
 /**
  * @author : github.com/sharmasourabh
@@ -39,11 +37,8 @@ public class RestApiErrorHandler {
     public ResponseEntity<Error> handleException(HttpServletRequest request, Exception ex,
                                                  Locale locale) {
         ex.printStackTrace(); // TODO: Should be kept only for development
-        Error error = ErrorUtils
-                .createError(com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.GENERIC_ERROR.getErrMsgKey(),
-                        com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.GENERIC_ERROR.getErrCode(),
-                        HttpStatus.INTERNAL_SERVER_ERROR.value()).setUrl(request.getRequestURL().toString())
-                .setReqMethod(request.getMethod());
+        Error error = new Error(ErrorCode.GENERIC_ERROR.getErrMsgKey(), ErrorCode.GENERIC_ERROR.getErrCode(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), request.getRequestURL().toString(), request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -52,11 +47,9 @@ public class RestApiErrorHandler {
                                                                           HttpMediaTypeNotSupportedException ex,
                                                                           Locale locale) {
         ex.printStackTrace(); // TODO: Should be kept only for development
-        Error error = ErrorUtils
-                .createError(com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MEDIATYPE_NOT_SUPPORTED.getErrMsgKey(),
-                        com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MEDIATYPE_NOT_SUPPORTED.getErrCode(),
-                        HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()).setUrl(request.getRequestURL().toString())
-                .setReqMethod(request.getMethod());
+        Error error = new Error(ErrorCode.HTTP_MEDIATYPE_NOT_SUPPORTED.getErrMsgKey(),
+                ErrorCode.HTTP_MEDIATYPE_NOT_SUPPORTED.getErrCode(),
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), request.getRequestURL().toString(), request.getMethod());
         log.info("HttpMediaTypeNotSupportedException :: request.getMethod(): " + request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -66,11 +59,9 @@ public class RestApiErrorHandler {
                                                                        HttpMessageNotWritableException ex,
                                                                        Locale locale) {
         ex.printStackTrace(); // TODO: Should be kept only for development
-        Error error = ErrorUtils
-                .createError(com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MESSAGE_NOT_WRITABLE.getErrMsgKey(),
-                        com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MESSAGE_NOT_WRITABLE.getErrCode(),
-                        HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()).setUrl(request.getRequestURL().toString())
-                .setReqMethod(request.getMethod());
+        Error error = new Error(ErrorCode.HTTP_MESSAGE_NOT_WRITABLE.getErrMsgKey(),
+                ErrorCode.HTTP_MESSAGE_NOT_WRITABLE.getErrCode(),
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), request.getRequestURL().toString(), request.getMethod());
         log.info("HttpMessageNotWritableException :: request.getMethod(): " + request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -80,11 +71,9 @@ public class RestApiErrorHandler {
                                                                            HttpMediaTypeNotAcceptableException ex,
                                                                            Locale locale) {
         ex.printStackTrace(); // TODO: Should be kept only for development
-        Error error = ErrorUtils
-                .createError(com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE.getErrMsgKey(),
-                        com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE.getErrCode(),
-                        HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()).setUrl(request.getRequestURL().toString())
-                .setReqMethod(request.getMethod());
+        Error error = new Error(ErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE.getErrMsgKey(),
+                ErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE.getErrCode(),
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), request.getRequestURL().toString(), request.getMethod());
         log.info("HttpMediaTypeNotAcceptableException :: request.getMethod(): " + request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -94,11 +83,9 @@ public class RestApiErrorHandler {
                                                                        HttpMessageNotReadableException ex,
                                                                        Locale locale) {
         ex.printStackTrace(); // TODO: Should be kept only for development
-        Error error = ErrorUtils
-                .createError(com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrMsgKey(),
-                        com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrCode(),
-                        HttpStatus.NOT_ACCEPTABLE.value()).setUrl(request.getRequestURL().toString())
-                .setReqMethod(request.getMethod());
+        Error error = new Error(ErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrMsgKey(),
+                ErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrCode(),
+                HttpStatus.NOT_ACCEPTABLE.value(), request.getRequestURL().toString(), request.getMethod());
         log.info("HttpMessageNotReadableException :: request.getMethod(): " + request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -108,11 +95,9 @@ public class RestApiErrorHandler {
                                                           JsonParseException ex,
                                                           Locale locale) {
         ex.printStackTrace(); // TODO: Should be kept only for development
-        Error error = ErrorUtils
-                .createError(com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.JSON_PARSE_ERROR.getErrMsgKey(),
-                        com.perficient.shoppingcart.infrastructure.api.exceptions.ErrorCode.JSON_PARSE_ERROR.getErrCode(),
-                        HttpStatus.NOT_ACCEPTABLE.value()).setUrl(request.getRequestURL().toString())
-                .setReqMethod(request.getMethod());
+        Error error = new Error(ErrorCode.JSON_PARSE_ERROR.getErrMsgKey(),
+                ErrorCode.JSON_PARSE_ERROR.getErrCode(),
+                HttpStatus.NOT_ACCEPTABLE.value(), request.getRequestURL().toString(), request.getMethod());
         log.info("JsonParseException :: request.getMethod(): " + request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
