@@ -1,5 +1,6 @@
 package com.perficient.shoppingcart.domain;
 
+import com.perficient.shoppingcart.shared.ShoppingCart;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

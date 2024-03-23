@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.domain;
+package com.perficient.shoppingcart.shared;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

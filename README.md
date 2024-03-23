@@ -43,7 +43,7 @@ Total shopping cart: 13,000.00
 
 Total payment: 14,060.00
 
-The logic for the total and the total payment is given by the class com.perficient.shoppingcart.domain.ShoppingCart.
+The logic for the total and the total payment is given by the class com.perficient.shoppingcart.shared.ShoppingCart.
 The application should:
 
 1. Expose the operations through a Rest API that follows the Rest API best practices.

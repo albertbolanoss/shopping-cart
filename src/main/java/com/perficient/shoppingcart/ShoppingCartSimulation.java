@@ -1,6 +1,6 @@
 package com.perficient.shoppingcart;
 
-import com.perficient.shoppingcart.domain.ShoppingCart;
+import com.perficient.shoppingcart.shared.ShoppingCart;
 
 import java.math.BigDecimal;
 
