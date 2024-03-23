@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.infrastructure.api.exceptions;
+package com.perficient.shoppingcart.application.api.exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import java.util.Locale;

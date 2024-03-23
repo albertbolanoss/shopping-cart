@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.infrastructure.api.exceptions;
+package com.perficient.shoppingcart.application.api.exceptions;
 
 /**
  * An enumeration of error codes and associated i18n message keys for order

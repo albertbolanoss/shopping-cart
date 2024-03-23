@@ -1,7 +1,7 @@
-package com.perficient.shoppingcart.infrastructure.api.controllers;
+package com.perficient.shoppingcart.application.api.controllers;
 
-import com.perficient.shoppingcart.infrastructure.api.controller.CartApi;
-import com.perficient.shoppingcart.infrastructure.api.model.Item;
+import com.perficient.shoppingcart.application.api.controller.CartApi;
+import com.perficient.shoppingcart.application.api.model.Item;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
