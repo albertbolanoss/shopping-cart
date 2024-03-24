@@ -6,36 +6,42 @@
                    http://www.liquibase.org/xml/ns/dbchangelog-ext
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+
+    <changeSet id="00000000000000_create_schema" author="luis.bolanoss">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS ecomm;
+        </sql>
+    </changeSet>
     <changeSet id="00000000000000_create_table_customer" author="luis.bolanoss">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="CUSTOMER"/>
+                <tableExists tableName="customer" schemaName="ecomm"/>
             </not>
         </preConditions>
-        <createTable tableName="CUSTOMER">
-            <column name="CUSTOMER_ID" type="uuid" autoIncrement="1">
+        <createTable tableName="customer" schemaName="ecomm">
+            <column name="customer_id" type="uuid" autoIncrement="1">
                 <constraints nullable="false" />
             </column>
-            <column name="USERNAME" type="varchar(255)">
+            <column name="username" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="PASSWORD" type="varchar(255)">
+            <column name="password" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="ACTIVE" type="boolean" defaultValue="true" />
+            <column name="active" type="boolean" defaultValue="true" />
         </createTable>
     </changeSet>
 
     <changeSet id="00000000000000_create_index_customer_user_passwd" author="luis.bolanoss">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="CUSTOMER"/>
+            <tableExists tableName="customer"/>
             <not>
-                <indexExists indexName="IDX_CUSTOMER_USERNAME_PASSWORD"/>
+                <indexExists indexName="idx_customer_username_password"/>
             </not>
         </preConditions>
-        <createIndex indexName="IDX_CUSTOMER_USERNAME_PASSWORD" tableName="CUSTOMER">
-            <column name="USERNAME"/>
-            <column name="PASSWORD"/>
+        <createIndex indexName="idx_customer_username_password" tableName="customer" >
+            <column name="username"/>
+            <column name="password"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

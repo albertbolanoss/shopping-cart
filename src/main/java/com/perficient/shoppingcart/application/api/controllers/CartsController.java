@@ -1,10 +1,9 @@
 package com.perficient.shoppingcart.application.api.controllers;
 
-import com.perficient.shoppingcart.application.api.controller.ApiUtil;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
 import com.perficient.shoppingcart.application.api.model.Cart;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import com.perficient.shoppingcart.infrastructure.repositories.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
