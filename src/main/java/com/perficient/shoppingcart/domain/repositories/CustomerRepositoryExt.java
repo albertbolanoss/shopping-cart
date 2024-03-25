@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.infrastructure.repositories;
+package com.perficient.shoppingcart.domain.repositories;
 
 import com.perficient.shoppingcart.infrastructure.entities.Customer;
 import org.springframework.data.jpa.repository.Query;
