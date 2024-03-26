@@ -14,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -99,6 +100,17 @@ public class RestApiErrorHandler {
                 ErrorCode.JSON_PARSE_ERROR.getErrCode(),
                 HttpStatus.NOT_ACCEPTABLE.value(), request.getRequestURL().toString(), request.getMethod());
         log.info("JsonParseException :: request.getMethod(): " + request.getMethod());
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Error> handleMethodArgumentNotValidException(HttpServletRequest request,
+                                                          JsonParseException ex,
+                                                          Locale locale) {
+        Error error = new Error(ErrorCode.HTTP_METHOD_ARGUMENT_NOT_VALID.getErrMsgKey(),
+                ErrorCode.JSON_PARSE_ERROR.getErrCode(),
+                HttpStatus.NOT_ACCEPTABLE.value(), request.getRequestURL().toString(), request.getMethod());
+        log.info("MethodArgumentNotValidException :: request.getMethod(): " + request.getMethod());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

@@ -1,12 +1,12 @@
 package com.perficient.shoppingcart.domain.repositories;
 
-import com.perficient.shoppingcart.infrastructure.entities.Customer;
+import com.perficient.shoppingcart.domain.entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, UUID>, CustomerRepositoryExt {
+public interface UserRepository extends CrudRepository<User, UUID> {
 
 }

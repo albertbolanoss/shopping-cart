@@ -1,28 +1,29 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
-                   http://www.liquibase.org/xml/ns/dbchangelog-ext
-                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
 
-    <changeSet id="00000000000000_create_schema" author="luis.bolanoss">
-        <sql>
-            CREATE SCHEMA IF NOT EXISTS ecomm;
-        </sql>
-    </changeSet>
     <changeSet id="00000000000000_create_table_customer" author="luis.bolanoss">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="customer" schemaName="ecomm"/>
+                <tableExists tableName="customer"/>
             </not>
         </preConditions>
-        <createTable tableName="customer" schemaName="ecomm">
-            <column name="customer_id" type="uuid" autoIncrement="1">
+        <createTable tableName="user">
+            <column name="id" type="uuid" autoIncrement="1">
                 <constraints nullable="false" />
             </column>
-            <column name="username" type="varchar(255)">
+            <column name="firstName" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="lastName" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="phone" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
             <column name="password" type="varchar(255)">
@@ -30,18 +31,5 @@
             </column>
             <column name="active" type="boolean" defaultValue="true" />
         </createTable>
-    </changeSet>
-
-    <changeSet id="00000000000000_create_index_customer_user_passwd" author="luis.bolanoss">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="customer"/>
-            <not>
-                <indexExists indexName="idx_customer_username_password"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_customer_username_password" tableName="customer" >
-            <column name="username"/>
-            <column name="password"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

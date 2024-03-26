@@ -22,7 +22,12 @@ public enum ErrorCode {
     JSON_PARSE_ERROR("PACKT-0005",
             "Make sure request payload should be a valid JSON object."),
     HTTP_MESSAGE_NOT_READABLE("PACKT-0006",
-            "Make sure request payload should be a valid JSON or XML object according to 'Content-Type'.");
+            "Make sure request payload should be a valid JSON or XML object according to 'Content-Type'."),
+
+    HTTP_METHOD_ARGUMENT_NOT_VALID("PACKT-0007",
+            "Make sure request body or query parameters have the require information " +
+                    "and complies with the rules of the scheme");
+
 
     private String errCode;
     private String errMsgKey;

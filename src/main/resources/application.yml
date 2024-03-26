@@ -4,7 +4,7 @@ spring:
       overrideNone: true
       overrideSystemProperties: false
   datasource:
-    url: jdbc:h2:mem:ecomm;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=false
+    url: jdbc:h2:file:./TestDataBase
     name: comm
     driverClassName: org.h2.Driver
     username: sa
@@ -12,7 +12,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        default_schema: ecomm
+        default_schema:
     database-platform: org.hibernate.dialect.H2Dialect
   liquibase:
     change-log: classpath:config/liquibase/changelog-master.xml

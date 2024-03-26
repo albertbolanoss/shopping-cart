@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.domain;
+package com.perficient.shoppingcart.domain.model;
 
 import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
 import org.springframework.web.context.annotation.SessionScope;
