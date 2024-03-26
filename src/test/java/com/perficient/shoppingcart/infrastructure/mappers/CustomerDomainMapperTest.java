@@ -1,6 +1,6 @@
 package com.perficient.shoppingcart.infrastructure.mappers;
 
-import com.perficient.shoppingcart.infrastructure.mother.AddUserReqMother;
+import com.perficient.shoppingcart.infrastructure.mother.AddCustomerReqMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ public class CustomerDomainMapperTest {
 
     @Test
     void convertFromARequest() {
-        var addUserReq = AddUserReqMother.random();
+        var addUserReq = AddCustomerReqMother.random();
 
         var actual = this.customerDomainMapper.convertFromARequest(addUserReq);
 
