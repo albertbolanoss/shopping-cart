@@ -33,6 +33,7 @@ public class CustomerMother {
      */
     public static Customer randomNewCustomer() {
         return new Customer(
+            null,
             FakerMother.randomFirstname(FIRSTNAME_MAX_LENGTH),
             FakerMother.randomLastname(LASTNAME_MAX_LENGTH),
             FakerMother.randomEmail(),
@@ -53,6 +54,7 @@ public class CustomerMother {
                 null,
                 null,
                 null,
+                null,
                 null
         );
     }
@@ -63,6 +65,7 @@ public class CustomerMother {
      */
     public static Customer invalidMaxLengthNewCustomer() {
         return new Customer(
+                null,
                 FakerMother.randomText(FIRSTNAME_MAX_LENGTH + 1),
                 FakerMother.randomText(LASTNAME_MAX_LENGTH + 1),
                 FakerMother.randomText(EMAIL_MAX_LENGTH + 1),
@@ -78,6 +81,7 @@ public class CustomerMother {
      */
     public static Customer invalidEmailNewCustomer() {
         return new Customer(
+                null,
                 FakerMother.randomFirstname(FIRSTNAME_MAX_LENGTH),
                 FakerMother.randomLastname(LASTNAME_MAX_LENGTH),
                 FakerMother.randomUsername(),

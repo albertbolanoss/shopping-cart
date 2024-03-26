@@ -89,11 +89,11 @@ components:
         firstName:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 125
         lastName:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 125
         email:
           type: string
           format: email
@@ -101,7 +101,7 @@ components:
           maxLength: 255
         phone:
           type: string
-          maxLength: 20
+          maxLength: 40
         password:
           type: string
           minLength: 1

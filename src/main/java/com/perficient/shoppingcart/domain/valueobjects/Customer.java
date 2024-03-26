@@ -4,12 +4,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Represent a domain customer
  */
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 public class Customer {
@@ -37,7 +35,7 @@ public class Customer {
     /**
      * The Customer Identified
      */
-    private CustomerId customerId;
+    private final CustomerId customerId;
     /**
      * The customer first name
      */

@@ -17,9 +17,10 @@ public class CustomerEntityMapperTest {
     }
 
     @Test
-    void convert() {
+    void convertFromDomain() {
         var customer = CustomerMother.randomNewCustomer();
-        var actual = this.customerEntityMapper.convertToEntity(customer);
+
+        var actual = this.customerEntityMapper.convertFromDomain(customer);
 
         assertNotNull(actual);
         assertNull(actual.getId());

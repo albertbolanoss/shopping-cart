@@ -8,8 +8,5 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface CustomerEntityMapper {
     @Mapping(target = "id", source = "customerId.id")
-    User convertToEntity(Customer customer);
-
-//    @Mapping(target = "firstName", source = "firstName")
-//    Customer convertToDomain(User user);
+    User convertFromDomain(Customer customer);
 }

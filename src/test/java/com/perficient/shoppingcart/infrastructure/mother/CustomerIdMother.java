@@ -7,10 +7,14 @@ import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
  */
 public class CustomerIdMother {
     /**
+     * First name max length
+     */
+    private static final int CUSTOMER_ID_MAX_LENGTH = 36;
+    /**
      * Generate a random CustomerId
      * @return CustomerId model instance
      */
     public static CustomerId random() {
-        return new CustomerId(FakerMother.randomHex(36));
+        return new CustomerId(FakerMother.randomHex(CUSTOMER_ID_MAX_LENGTH));
     }
 }
