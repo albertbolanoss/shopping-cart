@@ -18,21 +18,19 @@ public class FakerMother {
     }
 
     /**
-     * Create a random first name with max length restriction
-     * @param maxLength the max length of the string to generate
+     * Create a random first name
      * @return a random string first name
      */
-    public static String randomFirstname(int maxLength) {
-        return reduceIfMaxLengthExceeded(faker.name().firstName(), maxLength);
+    public static String randomFirstname() {
+        return faker.name().firstName();
     }
 
     /**
-     * Create a random last name with max length restriction
-     * @param maxLength the max length of the string to generate
+     * Create a random last name
      * @return a random string last name
      */
-    public static String randomLastname(int maxLength) {
-        return reduceIfMaxLengthExceeded(faker.name().lastName(), maxLength);
+    public static String randomLastname() {
+        return faker.name().lastName();
     }
 
     /**
@@ -65,21 +63,6 @@ public class FakerMother {
      */
     public static String randomPassword() {
         return faker.internet().password();
-    }
-
-    /**
-     * Reduce a text if the text length exceeded the max length parameter
-     * @param text the text to check
-     * @param maxLength the max length to verify
-     * @return a string or sub string if the text length exceeded the max length parameter
-     */
-    private static String reduceIfMaxLengthExceeded(String text, int maxLength) {
-        if (text.length() > maxLength) {
-            int beginIndex = 0;
-            return text.substring(beginIndex, maxLength);
-        }
-
-        return text;
     }
 
     /**

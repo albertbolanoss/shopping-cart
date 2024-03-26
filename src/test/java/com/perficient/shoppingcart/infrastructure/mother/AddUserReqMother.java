@@ -1,24 +1,20 @@
 package com.perficient.shoppingcart.infrastructure.mother;
 
-import com.perficient.shoppingcart.application.api.model.AddUserReq;
+import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
 
 /**
  * Generate data for Add user request instances
  */
 public class AddUserReqMother {
-    /**
-     * First name max length
-     */
-    private static final int FIRSTNAME_MAX_LENGTH = 125;
-    /**
-     * Last name max length
-     */
-    private static final int LASTNAME_MAX_LENGTH = 125;
 
-    public static AddUserReq random() {
-        return new AddUserReq()
-                .firstName(FakerMother.randomFirstname(FIRSTNAME_MAX_LENGTH))
-                .lastName(FakerMother.randomLastname(LASTNAME_MAX_LENGTH))
+    /**
+     * Generate a Add User Request with random data
+     * @return a instance of AddUserReq
+     */
+    public static AddCustomerReq random() {
+        return new AddCustomerReq()
+                .firstName(FakerMother.randomFirstname())
+                .lastName(FakerMother.randomLastname())
                 .email(FakerMother.randomEmail())
                 .phone(FakerMother.randomInternationalPhoneNumber())
                 .password(FakerMother.randomPassword());

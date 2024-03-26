@@ -10,7 +10,7 @@
                 <tableExists tableName="customer"/>
             </not>
         </preConditions>
-        <createTable tableName="user">
+        <createTable tableName="customer">
             <column name="id" type="uuid" autoIncrement="1">
                 <constraints nullable="false" />
             </column>

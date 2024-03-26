@@ -9,23 +9,23 @@ public class CustomerMother {
     /**
      * First name max length
      */
-    private static final int FIRSTNAME_MAX_LENGTH = 125;
+    public static final int FIRSTNAME_MAX_LENGTH = 125;
     /**
      * Last name max length
      */
-    private static final int LASTNAME_MAX_LENGTH = 125;
+    public static final int LASTNAME_MAX_LENGTH = 125;
     /**
      * Email max length
      */
-    private static final int EMAIL_MAX_LENGTH = 255;
+    public static final int EMAIL_MAX_LENGTH = 255;
     /**
      * Password max length
      */
-    private static final int PASSWORD_MAX_LENGTH = 255;
+    public static final int PASSWORD_MAX_LENGTH = 255;
     /**
      * Phone max length
      */
-    private static final int PHONE_MAX_LENGTH = 40;
+    public static final int PHONE_MAX_LENGTH = 40;
 
     /**
      * Generate a random Customer model without id and active
@@ -34,8 +34,8 @@ public class CustomerMother {
     public static Customer randomNewCustomer() {
         return new Customer(
             null,
-            FakerMother.randomFirstname(FIRSTNAME_MAX_LENGTH),
-            FakerMother.randomLastname(LASTNAME_MAX_LENGTH),
+            FakerMother.randomFirstname(),
+            FakerMother.randomLastname(),
             FakerMother.randomEmail(),
             FakerMother.randomPassword(),
             FakerMother.randomInternationalPhoneNumber(),
@@ -82,8 +82,8 @@ public class CustomerMother {
     public static Customer invalidEmailNewCustomer() {
         return new Customer(
                 null,
-                FakerMother.randomFirstname(FIRSTNAME_MAX_LENGTH),
-                FakerMother.randomLastname(LASTNAME_MAX_LENGTH),
+                FakerMother.randomFirstname(),
+                FakerMother.randomLastname(),
                 FakerMother.randomUsername(),
                 FakerMother.randomPassword(),
                 FakerMother.randomInternationalPhoneNumber(),

@@ -19,30 +19,30 @@ externalDocs:
 servers:
   - url: https://ecommerce.swagger.io/v2
 tags:
-  - name: User
-    description: Operations about users
+  - name: Customer
+    description: Operations about customer
 paths:
-  /api/v1/user:
+  /api/v1/customer:
     post:
-      tags: [User]
-      summary: Create a new user.
-      description: Register a new user to the application.
-      operationId: createUser
+      tags: [Customer]
+      summary: Register a new customer.
+      description: Register a new customer to the E-Commerce App.
+      operationId: createCustomer
       requestBody:
         required: true
-        description: Item object
+        description: New Customer
         content:
           application/xml:
             schema:
-              $ref: '#/components/schemas/AddUserReq'
+              $ref: '#/components/schemas/AddCustomerReq'
           application/json:
             schema:
-              $ref: '#/components/schemas/AddUserReq'
+              $ref: '#/components/schemas/AddCustomerReq'
       responses:
         201:
-          description: Order added successfully
+          description: Customer created successfuly
         409:
-          description: If user already existed.
+          description: If the customer already existed.
           content:
             application/xml:
               schema:
@@ -51,7 +51,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
-          description: If user does not exist.
+          description: If customer does not exist.
           content:
             application/xml:
               schema:
@@ -61,7 +61,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    User:
+    Customer:
       type: object
       properties:
         id:
@@ -82,7 +82,7 @@ components:
           description: User Status
       xml:
         name: User
-    AddUserReq:
+    AddCustomerReq:
       description: Request object for new user registration.
       type: object
       properties:
@@ -114,7 +114,7 @@ components:
 
 
       xml:
-        name: AddUserReq
+        name: AddCustomerReq
     Error:
       type: object
       properties:

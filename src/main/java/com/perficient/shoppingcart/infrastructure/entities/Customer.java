@@ -9,13 +9,11 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Entity
-@Table(name = "user")
+@Table(name = "customer")
 @AllArgsConstructor
 @Getter
-public class User {
+public class Customer {
     @Id
     @GeneratedValue
     @Column(name = "id", updatable = false, nullable = false)
