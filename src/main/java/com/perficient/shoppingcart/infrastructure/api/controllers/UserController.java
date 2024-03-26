@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.application.api.controllers;
+package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 
 import com.perficient.shoppingcart.application.api.controller.UserApi;

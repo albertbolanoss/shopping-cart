@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.application.api.exceptions;
+package com.perficient.shoppingcart.infrastructure.api.exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import java.util.Locale;
@@ -105,8 +105,8 @@ public class RestApiErrorHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Error> handleMethodArgumentNotValidException(HttpServletRequest request,
-                                                          JsonParseException ex,
-                                                          Locale locale) {
+                                                                       JsonParseException ex,
+                                                                       Locale locale) {
         Error error = new Error(ErrorCode.HTTP_METHOD_ARGUMENT_NOT_VALID.getErrMsgKey(),
                 ErrorCode.JSON_PARSE_ERROR.getErrCode(),
                 HttpStatus.NOT_ACCEPTABLE.value(), request.getRequestURL().toString(), request.getMethod());

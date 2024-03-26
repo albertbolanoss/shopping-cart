@@ -1,6 +1,6 @@
-package com.perficient.shoppingcart.domain.model;
+package com.perficient.shoppingcart.model;
 
-import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
+import com.perficient.shoppingcart.valueobjects.CustomerId;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.domain.entities;
+package com.perficient.shoppingcart.infrastructure.entities;
 
 
 import jakarta.persistence.Column;
@@ -19,7 +19,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    private String id;
 
     @Column(name = "firstName")
     private String firstName;

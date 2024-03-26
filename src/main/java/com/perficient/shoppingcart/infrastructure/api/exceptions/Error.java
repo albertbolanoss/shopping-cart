@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.application.api.exceptions;
+package com.perficient.shoppingcart.infrastructure.api.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

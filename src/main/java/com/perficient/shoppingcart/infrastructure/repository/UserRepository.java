@@ -1,6 +1,6 @@
-package com.perficient.shoppingcart.domain.repositories;
+package com.perficient.shoppingcart.infrastructure.repository;
 
-import com.perficient.shoppingcart.domain.entities.User;
+import com.perficient.shoppingcart.infrastructure.entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
