@@ -17,4 +17,6 @@ spring:
   liquibase:
     change-log: classpath:config/liquibase/changelog-master.xml
 
-
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

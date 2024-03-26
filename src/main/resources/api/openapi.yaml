@@ -19,12 +19,12 @@ externalDocs:
 servers:
   - url: https://ecommerce.swagger.io/v2
 tags:
-  - name: user
+  - name: User
     description: Operations about users
 paths:
   /api/v1/user:
     post:
-      tags: [user]
+      tags: [User]
       summary: Create a new user.
       description: Register a new user to the application.
       operationId: createUser
@@ -96,6 +96,7 @@ components:
           maxLength: 100
         email:
           type: string
+          format: email
           minLength: 1
           maxLength: 255
         phone:
