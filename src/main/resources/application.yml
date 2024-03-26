@@ -4,7 +4,7 @@ spring:
       overrideNone: true
       overrideSystemProperties: false
   datasource:
-    url: jdbc:h2:file:./TestDataBase
+    url: jdbc:h2:mem:TestDataBase;DATABASE_TO_UPPER=FALSE #jdbc:h2:file:./TestDataBase;DATABASE_TO_UPPER=FALSE
     name: comm
     driverClassName: org.h2.Driver
     username: sa
