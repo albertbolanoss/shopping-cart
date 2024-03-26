@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart;
+package com.perficient.shoppingcart.shared;
 
 import com.perficient.shoppingcart.shared.ShoppingCart;
 

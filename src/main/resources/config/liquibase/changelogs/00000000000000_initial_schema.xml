@@ -14,16 +14,16 @@
             <column name="id" type="uuid" autoIncrement="1">
                 <constraints nullable="false" />
             </column>
-            <column name="firstName" type="varchar(100)">
+            <column name="firstName" type="varchar(125)">
                 <constraints nullable="false" />
             </column>
-            <column name="lastName" type="varchar(100)">
+            <column name="lastName" type="varchar(125)">
                 <constraints nullable="true" />
             </column>
             <column name="email" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="phone" type="varchar(20)">
+            <column name="phone" type="varchar(40)">
                 <constraints nullable="false" />
             </column>
             <column name="password" type="varchar(255)">

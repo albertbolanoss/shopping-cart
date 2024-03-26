@@ -1,6 +1,6 @@
 package com.perficient.shoppingcart.infrastructure.mother;
 
-import com.perficient.shoppingcart.valueobjects.CustomerId;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
 
 /**
  * Generate Customer Id Data

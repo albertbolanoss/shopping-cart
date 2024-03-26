@@ -44,6 +44,14 @@ public class FakerMother {
     }
 
     /**
+     * Create a random username
+     * @return a random string username
+     */
+    public static String randomUsername() {
+        return faker.internet().username();
+    }
+
+    /**
      * Create a random phone number
      * @return a random string phone number
      */
@@ -72,5 +80,14 @@ public class FakerMother {
         }
 
         return text;
+    }
+
+    /**
+     * Generate a text with a specify length
+     * @param textLength the text length to generate
+     * @return a string text
+     */
+    public static String randomText(int textLength) {
+        return faker.lorem().characters(textLength);
     }
 }

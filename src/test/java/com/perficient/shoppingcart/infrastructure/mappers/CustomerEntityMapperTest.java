@@ -1,11 +1,12 @@
 package com.perficient.shoppingcart.infrastructure.mappers;
 
-import com.perficient.shoppingcart.infrastructure.mother.CustomerModelMother;
-import com.perficient.shoppingcart.model.CustomerModel;
+import com.perficient.shoppingcart.infrastructure.mother.CustomerMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CustomerEntityMapperTest {
     private CustomerEntityMapper customerEntityMapper;
@@ -17,24 +18,17 @@ public class CustomerEntityMapperTest {
 
     @Test
     void convert() {
-        var customerModel = CustomerModelMother.randomNewCustomer();
-        var actual = this.customerEntityMapper.convert(customerModel);
+        var customer = CustomerMother.randomNewCustomer();
+        var actual = this.customerEntityMapper.convertToEntity(customer);
 
         assertNotNull(actual);
-
+        assertNull(actual.getId());
+        assertEquals(customer.getEmail(), actual.getEmail());
+        assertEquals(customer.getPassword(), actual.getPassword());
+        assertEquals(customer.getActive(), actual.isActive());
+        assertEquals(customer.getPhone(), actual.getPhone());
+        assertEquals(customer.getFirstName(), actual.getFirstName());
+        assertEquals(customer.getLastName(), actual.getLastName());
     }
 
-//    @Test
-//    void convertNoVali() {
-//        var customerModel = new CustomerModel(
-//                "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
-//                "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
-//                null,
-//                null
-//        );
-//        var actual = this.customerEntityMapper.convert(customerModel);
-//
-//        assertNotNull(actual);
-//
-//    }
 }

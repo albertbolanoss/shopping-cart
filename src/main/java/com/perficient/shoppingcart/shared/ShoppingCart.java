@@ -1,9 +1,15 @@
 package com.perficient.shoppingcart.shared;
 
+import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
+import org.springframework.web.context.annotation.SessionScope;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ShoppingCart {
 
@@ -59,5 +65,40 @@ public class ShoppingCart {
         public QuantityLessThanZeroException(String message) {
             super(message);
         }
+    }
+
+    @SessionScope
+    public static class Cart {
+        private CustomerId customerId;
+
+        public record Item(int quantity, String product, BigDecimal unitPrice) {}
+
+        private final ConcurrentLinkedDeque<Item> items = new ConcurrentLinkedDeque<>();
+
+        public void addItem(Item item) {
+            items.add(item);
+        }
+
+        public void removeItem(int index) {
+            if (index < 0 || index >= items.size()) {
+                throw new IllegalArgumentException("Invalid index for item removal");
+            }
+
+            items.stream().skip(index).findFirst().ifPresent(items::remove);
+        }
+
+        public void removeProduct(Item item) {
+
+        }
+
+        public ConcurrentLinkedDeque<Item> getItemsInCart() {
+            return items;
+        }
+
+
+        public List<Item> getProducts() {
+            return Collections.emptyList();
+        }
+
     }
 }

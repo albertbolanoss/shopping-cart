@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import java.util.Locale;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class RestApiErrorHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public ResponseEntity<Error> handleMethodArgumentNotValidException(HttpServletRequest request,
                                                                        JsonParseException ex,
                                                                        Locale locale) {
