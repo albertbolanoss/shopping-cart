@@ -1,9 +1,14 @@
 package com.perficient.shoppingcart.application;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.perficient.shoppingcart.domain.exceptions.AlreadyExistException;
+import com.perficient.shoppingcart.domain.exceptions.CartAppException;
 import com.perficient.shoppingcart.domain.services.CustomerService;
-import com.perficient.shoppingcart.domain.valueobjects.Customer;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 public class RegisterCustomerService {
@@ -23,9 +28,13 @@ public class RegisterCustomerService {
 
     /**
      * Register a customer domain
-     * @param customer the customer to register
+     * @param customerDomain the customer to register
      */
-    public void register(Customer customer) {
-        customerService.register(customer);
+    public void register(CustomerDomain customerDomain) {
+        try {
+            customerService.register(customerDomain);
+        } catch (AlreadyExistException ex) {
+            throw new HttpClientErrorException(HttpStatus.CONFLICT, ex.getMessage());
+        }
     }
 }

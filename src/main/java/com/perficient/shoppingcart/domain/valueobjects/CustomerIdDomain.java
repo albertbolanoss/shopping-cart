@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class CustomerId {
+public class CustomerIdDomain {
     /**
      * The Customer Identified
      */

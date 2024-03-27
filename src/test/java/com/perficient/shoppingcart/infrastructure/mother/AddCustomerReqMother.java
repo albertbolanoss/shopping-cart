@@ -39,11 +39,11 @@ public class AddCustomerReqMother {
      */
     public static AddCustomerReq invalidMaxLength() {
         return new AddCustomerReq()
-                .firstName(FakerMother.randomText(CustomerMother.FIRSTNAME_MAX_LENGTH + 1))
-                .lastName(FakerMother.randomText(CustomerMother.LASTNAME_MAX_LENGTH + 1))
-                .email(FakerMother.randomText(CustomerMother.EMAIL_MAX_LENGTH + 1))
-                .phone(FakerMother.randomText(CustomerMother.PHONE_MAX_LENGTH + 1))
-                .password(FakerMother.randomText(CustomerMother.PASSWORD_MAX_LENGTH + 1));
+                .firstName(FakerMother.randomText(CustomerDomainMother.FIRSTNAME_MAX_LENGTH + 1))
+                .lastName(FakerMother.randomText(CustomerDomainMother.LASTNAME_MAX_LENGTH + 1))
+                .email(FakerMother.randomText(CustomerDomainMother.EMAIL_MAX_LENGTH + 1))
+                .phone(FakerMother.randomText(CustomerDomainMother.PHONE_MAX_LENGTH + 1))
+                .password(FakerMother.randomText(CustomerDomainMother.PASSWORD_MAX_LENGTH + 1));
     }
 
     /**

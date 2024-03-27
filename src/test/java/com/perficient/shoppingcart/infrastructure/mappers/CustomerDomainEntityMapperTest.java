@@ -1,17 +1,16 @@
 package com.perficient.shoppingcart.infrastructure.mappers;
 
-import com.perficient.shoppingcart.infrastructure.mother.CustomerMother;
-import org.junit.jupiter.api.BeforeEach;
+import com.perficient.shoppingcart.infrastructure.mother.CustomerDomainMother;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CustomerEntityMapperTest {
+public class CustomerDomainEntityMapperTest {
     @Test
     void convertFromDomain() {
-        var customer = CustomerMother.randomNewCustomer();
+        var customer = CustomerDomainMother.randomNewCustomer();
 
         var actual = CustomerEntityMapper.convertFromDomain(customer);
 

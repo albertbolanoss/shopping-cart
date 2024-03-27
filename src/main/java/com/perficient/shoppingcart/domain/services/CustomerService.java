@@ -1,12 +1,15 @@
 package com.perficient.shoppingcart.domain.services;
 
+import com.perficient.shoppingcart.domain.exceptions.AlreadyExistException;
 import com.perficient.shoppingcart.domain.repositories.CustomerDomainRepository;
-import com.perficient.shoppingcart.domain.valueobjects.Customer;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Optional;
 
 /**
  * Customer domain services
@@ -30,9 +33,15 @@ public class CustomerService {
 
     /**
      * Register a new customer to the business
-     * @param customer the customer to add
+     * @param customerDomain the customer to add
      */
-    public void register(@NotNull @Valid Customer customer) {
-        customerDomainRepository.save(customer);
+    public void register(@NotNull @Valid CustomerDomain customerDomain) {
+        Optional.ofNullable(customerDomainRepository.findByEmail(customerDomain.getEmail()))
+            .ifPresent((value) -> {
+                var message = String.format("The customer email (%s) is already registered", value.getEmail());
+                throw new AlreadyExistException(message);
+            });
+
+        customerDomainRepository.save(customerDomain);
     }
 }

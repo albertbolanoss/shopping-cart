@@ -1,6 +1,7 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.perficient.shoppingcart.application.RegisterCustomerService;
 import com.perficient.shoppingcart.application.api.controller.CustomerApi;
 import com.perficient.shoppingcart.application.api.model.AddCustomerReq;

@@ -2,6 +2,6 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <include file="classpath:config/liquibase/changelogs/00000000000000_initial_schema.xml"
+    <include file="classpath:config/liquibase/changelogs/202403270001_initial_customer_table.xml"
              relativeToChangelogFile="false" />
 </databaseChangeLog>
