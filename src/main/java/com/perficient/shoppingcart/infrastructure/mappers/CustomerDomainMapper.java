@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public class CustomerDomainMapper {
     public static CustomerDomain convertFromARequest(AddCustomerReq addUserReq) {
-        return Optional.of(addUserReq)
+        return Optional.ofNullable(addUserReq)
             .map(addCustomerReq ->
-                    new CustomerDomain(null,
+                    new CustomerDomain(new CustomerIdDomain(null),
                             addCustomerReq.getFirstName(),
                             addCustomerReq.getLastName(),
                             addCustomerReq.getEmail(),
@@ -22,7 +22,7 @@ public class CustomerDomainMapper {
     }
 
     public static CustomerDomain convertFromEntity(Customer customer) {
-        return Optional.of(customer)
+        return Optional.ofNullable(customer)
                 .map(entity ->
                         new CustomerDomain(new CustomerIdDomain(entity.getId()),
                                 entity.getFirstName(),

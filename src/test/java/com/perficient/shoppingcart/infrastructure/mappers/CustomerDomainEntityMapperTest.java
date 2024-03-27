@@ -24,4 +24,25 @@ public class CustomerDomainEntityMapperTest {
         assertEquals(customer.getLastName(), actual.getLastName());
     }
 
+    @Test
+    void convertFromDomainNullable() {
+        var actual = CustomerEntityMapper.convertFromDomain(null);
+
+        assertNull(actual);
+    }
+
+    @Test
+    void convertFromDomainValuesNullables() {
+        var customerDomain = CustomerDomainMother.nullableNewCustomer();
+        var actual = CustomerEntityMapper.convertFromDomain(customerDomain);
+
+        assertNotNull(actual);
+        assertNull(actual.getId());
+        assertNull(actual.getEmail());
+        assertNull(actual.getPassword());
+        assertNull(actual.getLastName());
+        assertNull(actual.getFirstName());
+        assertNull(actual.getPhone());
+    }
+
 }

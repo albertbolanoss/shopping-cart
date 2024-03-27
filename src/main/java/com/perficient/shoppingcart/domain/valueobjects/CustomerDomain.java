@@ -35,7 +35,7 @@ public class CustomerDomain {
     /**
      * The Customer Identified
      */
-    private final CustomerIdDomain customerIdDomain;
+    private final CustomerIdDomain customerId;
     /**
      * The customer first name
      */
