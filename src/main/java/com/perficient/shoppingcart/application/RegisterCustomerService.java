@@ -1,8 +1,6 @@
 package com.perficient.shoppingcart.application;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.perficient.shoppingcart.domain.exceptions.AlreadyExistException;
-import com.perficient.shoppingcart.domain.exceptions.CartAppException;
 import com.perficient.shoppingcart.domain.services.CustomerService;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
 import org.springframework.beans.factory.annotation.Autowired;
