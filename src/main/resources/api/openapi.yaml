@@ -22,7 +22,10 @@ tags:
   - name: Customer
     description: Operations about customer
   - name: Cart
-    description: Operations about customer
+    description: Operations about shopping cart
+  - name: Product
+    description: Operations about products
+
 paths:
   /api/v1/customer:
     post:
@@ -52,6 +55,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /api/v1/product:
+    post:
+      tags: [ Product ]
+      summary: Register a new product.
+      description: Register a new product to the E-Commerce App.
+      operationId: addProduct
+      requestBody:
+        required: true
+        description: Create a new Product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProductReq'
+      responses:
+        201:
+          description: Product created successfuly
+        409:
+          description: If the product already existed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/v1/customer/{customerId}/items:
     get:
       tags: [ Cart ]
@@ -77,49 +104,10 @@ paths:
         404:
           description: Given customer ID doesn't exist
           content: { }
-
-  /api/v1/customer/{customerId}/product/{productId}:
-    post:
-      tags: [ Cart ]
-      summary: Register a new product item to card.
-      description: Register a product item.
-      operationId: createItem
-      parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
-          schema:
-            type: string
-        - name: productId
-          in: path
-          description: Product Identifier
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        description: New Item
-        content:
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Item'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Item'
-      responses:
-        201:
-          description: Item created successfuly
-        404:
-          description: If customer does not exist.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
     delete:
       tags: [ Cart ]
-      summary: Delete all items of a product from shopping cart
-      description: Deletes all items of a product from shopping cart of given customer
+      summary: Delete all items from shopping cart
+      description: Deletes all items of a product from shopping cart of given customer id
       operationId: deleteProductFromCart
       parameters:
         - name: customerId
@@ -128,21 +116,19 @@ paths:
           required: true
           schema:
             type: string
-        - name: productId
-          in: path
-          description: Product Identifier
-          required: true
-          schema:
-            type: string
       responses:
         202:
           description: Accepts the request, regardless of whether the specified item exists in the cart or not.
-  /api/v1/customer/{customerId}/product/{productId}/items:
-    put:
+        404:
+          description: Given customer ID doesn't exist
+          content: { }
+
+  /api/v1/customer/{customerId}/product/{productId}/item:
+    post:
       tags: [ Cart ]
-      summary: Replace/add an item in shopping cart
-      description: Adds an item to the shopping cart if it doesn't already exist, or replace with given item if it does.
-      operationId: addOrReplaceItemsByCustomerId
+      summary: Add a new item to the cart.
+      description: Add a new product to the cart.
+      operationId: addItemToCart
       parameters:
         - name: customerId
           in: path
@@ -156,27 +142,18 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        description: Item object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Item'
       responses:
         201:
-          description: Item added successfully
+          description: Item was added successfuly
+        404:
+          description: If customer does not exist.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Item'
-        404:
-          description: Given customer ID doesn't exist
-          content: { }
+                $ref: '#/components/schemas/Error'
     delete:
       tags: [ Cart ]
-      summary: Delete the item from shopping cart
+      summary: Delete an item from shopping cart
       description: Deletes the item from shopping cart of given customer
       operationId: deleteItemFromCart
       parameters:
@@ -197,27 +174,6 @@ paths:
           description: Accepts the request, regardless of whether the specified item exists in the cart or not.
 components:
   schemas:
-    Customer:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        phone:
-          type: string
-        password:
-          type: string
-        active:
-          type: boolean
-          description: User Status
-      xml:
-        name: User
     AddCustomerReq:
       description: Request object for new customer registration.
       type: object
@@ -280,3 +236,35 @@ components:
           description: The item's price per unit
           type: number
           format: number
+    AddProductReq:
+      description: Product to sell
+      type: object
+      properties:
+        name:
+          description: The product name
+          type: string
+          minLength: 1
+          maxLength: 150
+        code:
+          description: The product code
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          description: Product's description
+          type: string
+          minLength: 1
+          maxLength: 255
+        unitPrice:
+          description: The item's price per unit
+          type: number
+          format: number
+        count:
+          description: Product count
+          type: integer
+          format: int32
+      required:
+        - name
+        - code
+        - count
+
