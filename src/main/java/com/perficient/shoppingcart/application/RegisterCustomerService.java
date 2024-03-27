@@ -1,8 +1,7 @@
 package com.perficient.shoppingcart.application;
 
-import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
 import com.perficient.shoppingcart.domain.services.CustomerService;
-import com.perficient.shoppingcart.infrastructure.mappers.CustomerDomainMapper;
+import com.perficient.shoppingcart.domain.valueobjects.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +23,9 @@ public class RegisterCustomerService {
 
     /**
      * Register a customer domain
-     * @param addCustomerReq the add customer request
+     * @param customer the customer to register
      */
-    public void register(AddCustomerReq addCustomerReq) {
-        var customerDomain = CustomerDomainMapper.convertFromARequest(addCustomerReq);
-        customerService.register(customerDomain);
+    public void register(Customer customer) {
+        customerService.register(customer);
     }
 }

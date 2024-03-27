@@ -4,6 +4,7 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 import com.perficient.shoppingcart.application.RegisterCustomerService;
 import com.perficient.shoppingcart.application.api.controller.CustomerApi;
 import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
+import com.perficient.shoppingcart.infrastructure.mappers.CustomerDomainMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,8 @@ public class CustomerController implements CustomerApi {
      * @return a response entity
      */
     public ResponseEntity<Void> createCustomer(@Valid AddCustomerReq addCustomerReq) {
-        registerCustomerService.register(addCustomerReq);
+        var customer = CustomerDomainMapper.convertFromARequest(addCustomerReq);
+        registerCustomerService.register(customer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
