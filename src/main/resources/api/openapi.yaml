@@ -21,6 +21,8 @@ servers:
 tags:
   - name: Customer
     description: Operations about customer
+  - name: Cart
+    description: Operations about customer
 paths:
   /api/v1/customer:
     post:
@@ -32,9 +34,6 @@ paths:
         required: true
         description: New Customer
         content:
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/AddCustomerReq'
           application/json:
             schema:
               $ref: '#/components/schemas/AddCustomerReq'
@@ -44,21 +43,158 @@ paths:
         409:
           description: If the customer already existed.
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Error'
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         404:
           description: If customer does not exist.
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Error'
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/v1/customer/{customerId}/items:
+    get:
+      tags: [ Cart ]
+      summary: Returns the list of items in customer's shopping cart
+      description: Returns the items in shopping cart of given customer
+      operationId: getCartItemsByCustomerId
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        404:
+          description: Given customer ID doesn't exist
+          content: { }
+
+  /api/v1/customer/{customerId}/product/{productId}:
+    post:
+      tags: [ Cart ]
+      summary: Register a new product item to card.
+      description: Register a product item.
+      operationId: createItem
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Product Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: New Item
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Item'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        201:
+          description: Item created successfuly
+        404:
+          description: If customer does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [ Cart ]
+      summary: Delete all items of a product from shopping cart
+      description: Deletes all items of a product from shopping cart of given customer
+      operationId: deleteProductFromCart
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Product Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        202:
+          description: Accepts the request, regardless of whether the specified item exists in the cart or not.
+  /api/v1/customer/{customerId}/product/{productId}/items:
+    put:
+      tags: [ Cart ]
+      summary: Replace/add an item in shopping cart
+      description: Adds an item to the shopping cart if it doesn't already exist, or replace with given item if it does.
+      operationId: addOrReplaceItemsByCustomerId
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Product Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Item object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        201:
+          description: Item added successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        404:
+          description: Given customer ID doesn't exist
+          content: { }
+    delete:
+      tags: [ Cart ]
+      summary: Delete the item from shopping cart
+      description: Deletes the item from shopping cart of given customer
+      operationId: deleteItemFromCart
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Product Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        202:
+          description: Accepts the request, regardless of whether the specified item exists in the cart or not.
 components:
   schemas:
     Customer:
@@ -83,7 +219,7 @@ components:
       xml:
         name: User
     AddCustomerReq:
-      description: Request object for new user registration.
+      description: Request object for new customer registration.
       type: object
       properties:
         firstName:
@@ -111,8 +247,6 @@ components:
         - lastName
         - email
         - password
-
-
       xml:
         name: AddCustomerReq
     Error:
@@ -131,3 +265,18 @@ components:
           type: string
       xml:
         name: Error
+    Item:
+      description: Items in shopping cart
+      type: object
+      properties:
+        id:
+          description: Item Identifier (Product)
+          type: string
+        quantity:
+          description: The item quantity
+          type: integer
+          format: int32
+        unitPrice:
+          description: The item's price per unit
+          type: number
+          format: number
