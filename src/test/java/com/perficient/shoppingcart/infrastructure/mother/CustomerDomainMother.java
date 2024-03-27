@@ -1,11 +1,11 @@
 package com.perficient.shoppingcart.infrastructure.mother;
 
-import com.perficient.shoppingcart.domain.valueobjects.Customer;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
 
 /**
  * Genera random data for Customer Model
  */
-public class CustomerMother {
+public class CustomerDomainMother {
     /**
      * First name max length
      */
@@ -31,8 +31,8 @@ public class CustomerMother {
      * Generate a random Customer model without id and active
      * @return a customer model instance
      */
-    public static Customer randomNewCustomer() {
-        return new Customer(
+    public static CustomerDomain randomNewCustomer() {
+        return new CustomerDomain(
             null,
             FakerMother.randomFirstname(),
             FakerMother.randomLastname(),
@@ -47,8 +47,8 @@ public class CustomerMother {
      * Generate a customer with all properties nullables
      * @return a customer model instance
      */
-    public static Customer nullableNewCustomer() {
-        return new Customer(
+    public static CustomerDomain nullableNewCustomer() {
+        return new CustomerDomain(
                 null,
                 null,
                 null,
@@ -63,8 +63,8 @@ public class CustomerMother {
      * Generate a customer with invalids max length
      * @return a customer model instance
      */
-    public static Customer invalidMaxLengthNewCustomer() {
-        return new Customer(
+    public static CustomerDomain invalidMaxLengthNewCustomer() {
+        return new CustomerDomain(
                 null,
                 FakerMother.randomText(FIRSTNAME_MAX_LENGTH + 1),
                 FakerMother.randomText(LASTNAME_MAX_LENGTH + 1),
@@ -79,8 +79,8 @@ public class CustomerMother {
      * Generate a random Customer model with invalid email
      * @return a customer model instance
      */
-    public static Customer invalidEmailNewCustomer() {
-        return new Customer(
+    public static CustomerDomain invalidEmailNewCustomer() {
+        return new CustomerDomain(
                 null,
                 FakerMother.randomFirstname(),
                 FakerMother.randomLastname(),

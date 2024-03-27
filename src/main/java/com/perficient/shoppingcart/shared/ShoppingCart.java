@@ -1,6 +1,6 @@
 package com.perficient.shoppingcart.shared;
 
-import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerIdDomain;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.math.BigDecimal;
@@ -69,7 +69,7 @@ public class ShoppingCart {
 
     @SessionScope
     public static class Cart {
-        private CustomerId customerId;
+        private CustomerIdDomain customerIdDomain;
 
         public record Item(int quantity, String product, BigDecimal unitPrice) {}
 

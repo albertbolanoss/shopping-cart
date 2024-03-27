@@ -1,11 +1,11 @@
 package com.perficient.shoppingcart.infrastructure.mother;
 
-import com.perficient.shoppingcart.domain.valueobjects.CustomerId;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerIdDomain;
 
 /**
  * Generate Customer Id Data
  */
-public class CustomerIdMother {
+public class CustomerIdDomainMother {
     /**
      * First name max length
      */
@@ -14,7 +14,7 @@ public class CustomerIdMother {
      * Generate a random CustomerId
      * @return CustomerId model instance
      */
-    public static CustomerId random() {
-        return new CustomerId(FakerMother.randomHex(CUSTOMER_ID_MAX_LENGTH));
+    public static CustomerIdDomain random() {
+        return new CustomerIdDomain(FakerMother.randomHex(CUSTOMER_ID_MAX_LENGTH));
     }
 }

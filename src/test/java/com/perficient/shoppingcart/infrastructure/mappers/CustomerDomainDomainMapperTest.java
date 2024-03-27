@@ -1,7 +1,6 @@
 package com.perficient.shoppingcart.infrastructure.mappers;
 
 import com.perficient.shoppingcart.infrastructure.mother.AddCustomerReqMother;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CustomerDomainMapperTest {
+public class CustomerDomainDomainMapperTest {
 
     @Test
     void convertFromARequest() {
@@ -18,7 +17,7 @@ public class CustomerDomainMapperTest {
         var actual = CustomerDomainMapper.convertFromARequest(addUserReq);
 
         assertNotNull(actual);
-        assertNull(actual.getCustomerId());
+        assertNull(actual.getCustomerIdDomain());
         assertTrue(actual.getActive());
         assertEquals(addUserReq.getEmail(), actual.getEmail());
         assertEquals(addUserReq.getPassword(), actual.getPassword());

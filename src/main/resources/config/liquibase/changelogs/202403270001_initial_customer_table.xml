@@ -32,4 +32,11 @@
             <column name="active" type="boolean" defaultValue="true" />
         </createTable>
     </changeSet>
+
+    <changeSet id="00000000000000_create_unq_email_customer" author="luis.bolanoss">
+        <addUniqueConstraint
+                columnNames="email"
+                constraintName="unq_customer_email"
+                tableName="customer"/>
+    </changeSet>
 </databaseChangeLog>

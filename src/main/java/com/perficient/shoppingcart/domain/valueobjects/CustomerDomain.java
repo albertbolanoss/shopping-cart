@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class Customer {
+public class CustomerDomain {
     /**
      * First name max length
      */
@@ -35,7 +35,7 @@ public class Customer {
     /**
      * The Customer Identified
      */
-    private final CustomerId customerId;
+    private final CustomerIdDomain customerIdDomain;
     /**
      * The customer first name
      */
