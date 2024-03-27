@@ -9,18 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CustomerEntityMapperTest {
-    private CustomerEntityMapper customerEntityMapper;
-
-    @BeforeEach
-    public void init() {
-        this.customerEntityMapper = new CustomerEntityMapperImpl();
-    }
-
     @Test
     void convertFromDomain() {
         var customer = CustomerMother.randomNewCustomer();
 
-        var actual = this.customerEntityMapper.convertFromDomain(customer);
+        var actual = CustomerEntityMapper.convertFromDomain(customer);
 
         assertNotNull(actual);
         assertNull(actual.getId());

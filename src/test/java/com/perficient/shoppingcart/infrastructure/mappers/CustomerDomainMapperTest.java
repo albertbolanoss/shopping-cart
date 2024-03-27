@@ -10,18 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CustomerDomainMapperTest {
-    private CustomerDomainMapper customerDomainMapper;
-
-    @BeforeEach
-    public void init() {
-        this.customerDomainMapper = new CustomerDomainMapperImpl();
-    }
 
     @Test
     void convertFromARequest() {
         var addUserReq = AddCustomerReqMother.random();
 
-        var actual = this.customerDomainMapper.convertFromARequest(addUserReq);
+        var actual = CustomerDomainMapper.convertFromARequest(addUserReq);
 
         assertNotNull(actual);
         assertNull(actual.getCustomerId());
