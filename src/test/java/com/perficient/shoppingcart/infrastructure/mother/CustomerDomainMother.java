@@ -6,7 +6,7 @@ import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
  * Genera random data for Customer Model
  */
 public class CustomerDomainMother {
-    /**
+    /*
      * First name max length
      */
     public static final int FIRSTNAME_MAX_LENGTH = 125;
@@ -26,6 +26,22 @@ public class CustomerDomainMother {
      * Phone max length
      */
     public static final int PHONE_MAX_LENGTH = 40;
+
+    /**
+     * Generate a random Customer model without id and active
+     * @return a customer model instance
+     */
+    public static CustomerDomain random() {
+        return new CustomerDomain(
+                CustomerIdDomainMother.random(),
+                FakerMother.randomFirstname(),
+                FakerMother.randomLastname(),
+                FakerMother.randomEmail(),
+                FakerMother.randomPassword(),
+                FakerMother.randomInternationalPhoneNumber(),
+                Boolean.TRUE
+        );
+    }
 
     /**
      * Generate a random Customer model without id and active

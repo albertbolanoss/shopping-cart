@@ -641,7 +641,7 @@ components:
           type: integer
           format: int32
           description: The total pages
-        currentPage:
+        pageNumber:
           type: integer
           format: int32
           description: The current page
