@@ -96,6 +96,16 @@ paths:
             minLength: 1
             maxLength: 255
           description: The customer email
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [lastName_asc, lastName_desc, firstName_asc, firstName_desc]
+          style: form
+          explode: false
+          description: Sort direction. Use asc for ascending, desc for descending. Additionally, lastName_asc and lastName_desc for sorting by last name, and firstName_asc and firstName_desc for sorting by first name.
       responses:
         200:
           description: successful operation
@@ -104,7 +114,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customer'
+                  $ref: '#/components/schemas/GetCustomerPage'
 
   /api/v1/product:
     post:
@@ -615,3 +625,29 @@ components:
           type: string
           minLength: 1
           maxLength: 255
+    GetCustomerPage:
+      description: The page customer object.
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          format: int32
+          description: The whole number of items
+        pageSize:
+          type: integer
+          format: int32
+          description: The page size
+        totalPages:
+          type: integer
+          format: int32
+          description: The total pages
+        currentPage:
+          type: integer
+          format: int32
+          description: The current page
+        content:
+          description: Collection of items in cart.
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+
