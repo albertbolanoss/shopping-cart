@@ -25,6 +25,10 @@ tags:
     description: Operations about shopping cart
   - name: Product
     description: Operations about products
+  - name: Payment
+    description: Operations about products
+  - name: PaymentMethod
+    description: Operations about products
 
 paths:
   /api/v1/customer:
@@ -55,6 +59,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    get:
+      tags: [ Customer ]
+      summary: Get the customers that match with the filters.
+      description: Get the customers from E-Commerce App.
+      operationId: getCustomers
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: firstName
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 125
+          description: The customer first name
+        - in: query
+          name: lastName
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 125
+          description: The customer last name
+        - in: query
+          name: email
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+          description: The customer email
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
 
   /api/v1/product:
     post:
@@ -78,6 +128,107 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    get:
+      tags: [ Product ]
+      summary: Get the products that match with the filters.
+      description: Get the products from E-Commerce App.
+      operationId: getProducts
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: code
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          description: The product code
+        - in: query
+          name: name
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 150
+          description: The product name
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /api/v1/paymentmethod:
+    post:
+      tags: [ PaymentMethod ]
+      summary: Register a new payment method.
+      description: Register a new payment method to the E-Commerce App.
+      operationId: addPaymentMethod
+      requestBody:
+        required: true
+        description: Create a new Payment method
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPaymentMethodReq'
+      responses:
+        201:
+          description: Payment method created successfuly
+        409:
+          description: If the Payment method already existed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags: [ PaymentMethod ]
+      summary: Get the payment methods that match with the filters.
+      description: Get the payment methods  from E-Commerce App.
+      operationId: getPaymentMethods
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: code
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          description: The payment method code
+        - in: query
+          name: name
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 150
+          description: The payment method name
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
 
   /api/v1/customer/{customerId}/items:
     get:
@@ -172,6 +323,66 @@ paths:
       responses:
         202:
           description: Accepts the request, regardless of whether the specified item exists in the cart or not.
+
+  /api/v1/customer/{customerId}/paymentmethod/{paymentMethodId}/payment:
+    post:
+      tags: [ Payment ]
+      summary: Checkout items from a customer's cart
+      description: Checkout items from a customer's cart
+      operationId: payCartItems
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+        - name: paymentMethodId
+          in: path
+          description: the payment method
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: If the payment was successfuly
+        404:
+          description: If there aren't item in the cart for the customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags: [ Payment ]
+      summary: Get the summary of the items with subtotals and totals
+      description: Get the summary of the items with subtotals and totals
+      operationId: getPaymentSummary
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Identifier
+          required: true
+          schema:
+            type: string
+        - name: paymentMethodId
+          in: path
+          description: the payment method
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentSummary'
+        404:
+          description: If there aren't item in the cart for the customer.
+          content: { }
+
 components:
   schemas:
     AddCustomerReq:
@@ -267,4 +478,140 @@ components:
         - name
         - code
         - count
-
+    PaymentSummary:
+      description: Customer Payment
+      type: object
+      properties:
+        customerId:
+          description: Customer id
+          type: string
+        total:
+          description: The item's price per unit
+          type: number
+          format: number
+        items:
+          description: Collection of items in cart.
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSummaryItems'
+    PaymentSummaryItems:
+      description: Items to checkout / pay
+      type: object
+      properties:
+        id:
+          description: Item Identifier (Product)
+          type: string
+          minLength: 1
+          maxLength: 36
+        quantity:
+          description: The item quantity
+          type: integer
+          format: int32
+        unitPrice:
+          description: The item's price per unit
+          type: number
+          format: number
+        subtotal:
+          description: The item's price per unit
+          type: number
+          format: number
+    AddPaymentMethodReq:
+      description: The payment methods.
+      type: object
+      properties:
+        code:
+          description: Payment method code
+          type: string
+          minLength: 1
+          maxLength: 100
+        name:
+          description: Payment method name
+          type: string
+          minLength: 1
+          maxLength: 150
+        description:
+          description: Payment method description
+          type: string
+          minLength: 1
+          maxLength: 255
+    Customer:
+      description: The customer object.
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 36
+          description: Customer id
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 125
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 125
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 255
+        phone:
+          type: string
+          maxLength: 40
+    Product:
+      description: Product instance
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 36
+          description: Product id
+        name:
+          description: The product name
+          type: string
+          minLength: 1
+          maxLength: 150
+        code:
+          description: The product code
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          description: Product's description
+          type: string
+          minLength: 1
+          maxLength: 255
+        unitPrice:
+          description: The item's price per unit
+          type: number
+          format: number
+        count:
+          description: Product count
+          type: integer
+          format: int32
+    PaymentMethod:
+      description: The payment methods.
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 36
+          description: Payment method id
+        code:
+          description: Payment method code
+          type: string
+          minLength: 1
+          maxLength: 100
+        name:
+          description: Payment method name
+          type: string
+          minLength: 1
+          maxLength: 150
+        description:
+          description: Payment method description
+          type: string
+          minLength: 1
+          maxLength: 255

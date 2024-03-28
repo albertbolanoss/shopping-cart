@@ -5,7 +5,6 @@ import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
 import com.perficient.shoppingcart.infrastructure.mappers.CustomerDomainMapper;
 import com.perficient.shoppingcart.infrastructure.mappers.CustomerEntityMapper;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class CustomerDomainRepositoryImpl implements CustomerDomainRepository {
      * @param customerDomain the customer domain
      */
     @Override
-    public void save(@NotNull @Valid CustomerDomain customerDomain) {
+    public void save(CustomerDomain customerDomain) {
         var customerEntity = CustomerEntityMapper.convertFromDomain(customerDomain);
         customerRepository.save(customerEntity);
     }
@@ -47,7 +46,7 @@ public class CustomerDomainRepositoryImpl implements CustomerDomainRepository {
      * @return a customer domain
      */
     @Override
-    public CustomerDomain findByEmail(@NotNull @NotBlank String email) {
+    public CustomerDomain findByEmail(String email) {
         return customerRepository.findByEmail(email)
                 .map(CustomerDomainMapper::convertFromEntity)
                 .orElse(null);
