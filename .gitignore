@@ -38,6 +38,8 @@ out/
 
 # Gradle
 gradle/
+gradlew
+gradlew.bat
 
 # Build
 target

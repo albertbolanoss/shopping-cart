@@ -16,14 +16,20 @@ jobs:
           java-version: 17
           distribution: 'adopt'
 
+      - name: Install Gradle
+        run: |
+          wget https://services.gradle.org/distributions/gradle-7.3-bin.zip
+          unzip -d $HOME gradle-7.3-bin.zip
+          export PATH=$HOME/gradle-7.3/bin:$PATH
+
       - name: Build with Gradle
-        run: ./gradlew build
+        run: gradle build
 
       - name: Run tests
-        run: ./gradlew test
+        run: gradle test
 
       - name: Generate artifact
-        run: ./gradlew assemble
+        run: gradle assemble
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
