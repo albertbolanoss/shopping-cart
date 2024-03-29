@@ -38,7 +38,7 @@ public class RegisterCustomerService {
             customerService.register(customerDomain);
         } catch (AlreadyExistException ex) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT, ex.getMessage());
-        } catch (ConstraintViolationException ex) {
+        } catch (ConstraintViolationException | IllegalArgumentException ex) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }

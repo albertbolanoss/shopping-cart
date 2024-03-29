@@ -8,6 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class CustomerPageDomain {
-    private PageResponseDomain pageResponseDomain;
     private List<CustomerDomain> customerDomains;
+    private PageResponseDomain pageResponseDomain;
+    private CustomerReqFilterDomain customerReqFilterDomain;
 }

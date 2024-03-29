@@ -17,9 +17,4 @@ public class PageResponseDomain {
      * The total of generated pages
      */
     private int totalPages;
-
-    /**
-     * The request page domain
-     */
-    private PageRequestDomain pageRequestDomain;
 }
