@@ -3,11 +3,11 @@ package com.perficient.shoppingcart.infrastructure.repository;
 import com.perficient.shoppingcart.domain.repositories.CustomerDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerDomain;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerPageDomain;
-import com.perficient.shoppingcart.domain.valueobjects.PageRequestDomain;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
 import com.perficient.shoppingcart.domain.valueobjects.PageResponseDomain;
+import com.perficient.shoppingcart.infrastructure.api.pageable.PageRequestCreator;
 import com.perficient.shoppingcart.infrastructure.mappers.CustomerDomainMapper;
 import com.perficient.shoppingcart.infrastructure.mappers.CustomerEntityMapper;
-import com.perficient.shoppingcart.infrastructure.mappers.PageRequestMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,22 +60,26 @@ public class CustomerDomainRepositoryImpl implements CustomerDomainRepository {
     }
 
     @Override
-    public CustomerPageDomain findCustomers(CustomerDomain customerDomain, PageRequestDomain pageRequestDomain) {
-        var customerPageable = customerRepository.findByCustomersByFirstNameLastNameEmail(
-                customerDomain.getFirstName(),
-                customerDomain.getLastName(),
-                customerDomain.getEmail(),
-                PageRequestMapper.fromDomain(pageRequestDomain)
+    public CustomerPageDomain findByFilters(CustomerReqFilterDomain customerReqFilterDomain) {
+        var pageRequest = PageRequestCreator.create(
+                customerReqFilterDomain.getPageNumber(),
+                customerReqFilterDomain.getPageSize(),
+                customerReqFilterDomain.getSort()
         );
-        var customersDomain = customerPageable.getContent()
+        var customerPageable = customerRepository.findByCustomersByFirstNameLastNameEmail(
+                customerReqFilterDomain.getFirstName(),
+                customerReqFilterDomain.getLastName(),
+                customerReqFilterDomain.getEmail(),
+                pageRequest
+        );
+        var customers = customerPageable.getContent()
                 .stream().map(CustomerDomainMapper::convertFromEntity)
                 .collect(Collectors.toList());
 
-
         var pageResponseDomain = new PageResponseDomain(customerPageable.getTotalElements(),
-                customerPageable.getTotalPages(), pageRequestDomain);
+                customerPageable.getTotalPages());
 
-        return new CustomerPageDomain(pageResponseDomain, customersDomain);
+        return new CustomerPageDomain(customers, pageResponseDomain, customerReqFilterDomain);
     }
 
 }

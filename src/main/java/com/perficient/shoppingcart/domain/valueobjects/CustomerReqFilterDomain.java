@@ -2,16 +2,13 @@ package com.perficient.shoppingcart.domain.valueobjects;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
-/**
- * Represent a domain customer
- */
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
-@Builder
-public class CustomerDomain {
+public class CustomerReqFilterDomain {
     /**
      * First name max length
      */
@@ -24,22 +21,8 @@ public class CustomerDomain {
      * Email max length
      */
     private static final int EMAIL_MAX_LENGTH = 255;
-    /**
-     * Password max length
-     */
-    private static final int PASSWORD_MAX_LENGTH = 255;
-    /**
-     * Phone max length
-     */
-    private static final int PHONE_MAX_LENGTH = 40;
 
-    /**
-     * The Customer Identified
-     */
-    private final CustomerIdDomain customerId;
-    /**
-     * The customer first name
-     */
+
     private final @Size(max = FIRSTNAME_MAX_LENGTH) String firstName;
     /**
      * The customer last name
@@ -49,17 +32,20 @@ public class CustomerDomain {
      * The customer email
      */
     private final @Size(max = EMAIL_MAX_LENGTH) String email;
+
     /**
-     * The customer password
+     * The page number or offset
      */
-    private final @Size(max = PASSWORD_MAX_LENGTH) String password;
+    private int pageNumber;
+
     /**
-     * The customer phone
+     * The page size or limit
      */
-    private final @Size(max = PHONE_MAX_LENGTH) String phone;
+    private int pageSize;
+
     /**
-     * indicates whether the customer is active or inactive
+     * The sort of the query
      */
-    private final Boolean active;
+    private List<String> sort;
 
 }

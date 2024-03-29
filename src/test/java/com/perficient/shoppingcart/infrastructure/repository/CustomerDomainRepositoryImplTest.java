@@ -1,9 +1,8 @@
 package com.perficient.shoppingcart.infrastructure.repository;
 
-import com.perficient.shoppingcart.domain.valueobjects.PageRequestDomain;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
 import com.perficient.shoppingcart.infrastructure.api.pageable.PageRequestCreator;
 import com.perficient.shoppingcart.infrastructure.entities.Customer;
-import com.perficient.shoppingcart.infrastructure.mappers.PageRequestMapper;
 import com.perficient.shoppingcart.infrastructure.mother.CustomerDomainMother;
 import com.perficient.shoppingcart.infrastructure.mother.CustomerMother;
 import org.junit.jupiter.api.Test;
@@ -14,14 +13,12 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 
-import java.awt.print.Pageable;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
@@ -75,40 +72,11 @@ public class CustomerDomainRepositoryImplTest {
         assertNull(actual);
     }
 
-    /*
     @Test
     void findCustomers() {
-        var customerDomain = CustomerDomainMother.randomNewCustomer();
-        var sort = Arrays.asList("field1_asc", "field2_desc");
-        var pageNumber = 0;
-        var pageSize = 10;
-        var pageRequestDomain = new PageRequestDomain(pageNumber, pageSize, sort);
-        var pageable = PageRequestCreator.create(pageNumber, pageSize, sort);
-        var customers = Arrays.asList(
-                CustomerMother.random(),
-                CustomerMother.random(),
-                CustomerMother.random());
-
-        var customersPage = new PageImpl<>(customers, pageable, customers.size());
-
-        when(customerRepository.findByCustomersByFirstNameLastNameEmail(anyString(),anyString(),anyString(), any()))
-                .thenReturn(customersPage);
-
-        var actual = customerDomainRepositoryImpl.findCustomers(customerDomain, pageRequestDomain);
-
-        assertNotNull(actual);
-    }
-     */
-
-    @Test
-    void findCustomers() {
-        var customerDomain = CustomerDomainMother.randomNewCustomer();
         var sort = Arrays.asList("field1_asc", "field2_desc");
         var pageNumber = 1;
         var pageSize = 2;
-        var expectedTotalPages = 2;
-        var expectedTotalItemsByCurrentPage = 1;
-        var pageRequestDomain = new PageRequestDomain(pageNumber, pageSize, sort);
         var pageable = PageRequestCreator.create(pageNumber, pageSize, sort);
         var customers = Arrays.asList(
                 CustomerMother.random(),
@@ -116,20 +84,15 @@ public class CustomerDomainRepositoryImplTest {
                 CustomerMother.random());
         var customerRepository = mock(CustomerRepository.class);
         var customersPage = new PageImpl<>(customers, pageable, customers.size());
+        var customerReqFilterDomain = new CustomerReqFilterDomain(
+                "firstName", "lastName", "email", pageNumber, pageSize, sort);
+
         when(customerRepository.findByCustomersByFirstNameLastNameEmail(anyString(),anyString(),anyString(), any()))
                 .thenReturn(customersPage);
 
         var customerDomainRepositoryImpl = new CustomerDomainRepositoryImpl(customerRepository);
-        var actual = customerDomainRepositoryImpl.findCustomers(customerDomain, pageRequestDomain);
+        var actual = customerDomainRepositoryImpl.findByFilters(customerReqFilterDomain);
 
         assertNotNull(actual);
-        assertNotNull(actual.getPageResponseDomain());
-        // assertEquals(customers.size(), actual.getPageResponseDomain().getTotalItems());
-        // assertEquals(expectedTotalPages, actual.getPageResponseDomain().getTotalPages());
-        assertNotNull(actual.getPageResponseDomain().getPageRequestDomain());
-        // assertEquals(expectedTotalPages, actual.getPageResponseDomain().getPageRequestDomain().getPageNumber());
-        assertEquals(expectedTotalPages, actual.getPageResponseDomain().getPageRequestDomain().getPageSize());
-        assertNotNull(actual.getCustomerDomains());
-        // assertEquals(expectedTotalItemsByCurrentPage, actual.getCustomerDomains().size());
     }
 }

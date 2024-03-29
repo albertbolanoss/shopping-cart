@@ -70,11 +70,13 @@ paths:
           schema:
             type: integer
           description: The number of items to skip before starting to collect the result set
+          required: true
         - in: query
           name: limit
           schema:
             type: integer
           description: The numbers of items to return
+          required: true
         - in: query
           name: firstName
           schema:
@@ -112,9 +114,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GetCustomerPage'
+                $ref: '#/components/schemas/GetCustomerPage'
 
   /api/v1/product:
     post:
@@ -424,8 +424,6 @@ components:
         - lastName
         - email
         - password
-      xml:
-        name: AddCustomerReq
     Error:
       type: object
       properties:
@@ -631,7 +629,7 @@ components:
       properties:
         totalItems:
           type: integer
-          format: int32
+          format: int64
           description: The whole number of items
         pageSize:
           type: integer
@@ -650,4 +648,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Customer'
+    GetCustomersReq:
+      description: The get customers parameters.
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The page size
+        limit:
+          type: integer
+          format: int32
+          description: The total pages
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 125
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 125
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 255
+        sort:
+          type: array
+          items:
+            type: string
+      required:
+        - offset
+        - limit
 

@@ -1,7 +1,9 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.perficient.shoppingcart.application.GetCustomersByFiltersService;
 import com.perficient.shoppingcart.application.RegisterCustomerService;
+import com.perficient.shoppingcart.infrastructure.api.hateoas.CustomerPageModelAssembler;
 import com.perficient.shoppingcart.infrastructure.mother.AddCustomerReqMother;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,12 @@ public class CustomerControllerTest {
 
     @MockBean
     private RegisterCustomerService registerCustomerService;
+
+    @MockBean
+    private GetCustomersByFiltersService getCustomersByFiltersService;
+
+    @MockBean
+    private CustomerPageModelAssembler customerPageModelAssembler;
 
     @Test
     void createCustomerSuccessfully() throws Exception {
