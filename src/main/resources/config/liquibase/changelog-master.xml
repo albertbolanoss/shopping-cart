@@ -4,4 +4,10 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <include file="classpath:config/liquibase/changelogs/202403270001_initial_customer_table.xml"
              relativeToChangelogFile="false" />
+
+    <include file="classpath:config/liquibase/changelogs/202403290001_initial_product_table.xml"
+             relativeToChangelogFile="false" />
+
+    <include file="classpath:config/liquibase/changelogs/202403290001_insert_initial_data.xml"
+             relativeToChangelogFile="false" />
 </databaseChangeLog>

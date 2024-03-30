@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="insert_initial_data" author="luis.bolanoss">
+        <insert tableName="product">
+            <column name="id" value="1"/>
+            <column name="name" value="Product001"/>
+            <column name="code" value="001"/>
+            <column name="description" value="Producto de Prueba"/>
+            <column name="unitPrice" valueNumeric="123.45"/>
+            <column name="stock" valueNumeric="50"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

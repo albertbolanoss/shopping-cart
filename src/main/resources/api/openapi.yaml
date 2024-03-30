@@ -240,19 +240,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/PaymentMethod'
 
-  /api/v1/customer/{customerId}/items:
+  /api/v1/items:
     get:
       tags: [ Cart ]
-      summary: Returns the list of items in customer's shopping cart
-      description: Returns the items in shopping cart of given customer
-      operationId: getCartItemsByCustomerId
-      parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
-          schema:
-            type: string
+      summary: Returns the list of items in customer's session shopping cart
+      description: Returns the items in session shopping cart of given customer
+      operationId: getCartItems
       responses:
         200:
           description: successful operation
@@ -267,16 +260,9 @@ paths:
           content: { }
     delete:
       tags: [ Cart ]
-      summary: Delete all items from shopping cart
-      description: Deletes all items of a product from shopping cart of given customer id
-      operationId: deleteProductFromCart
-      parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
-          schema:
-            type: string
+      summary: Delete all items from customer's session shopping cart
+      description: Delete all items from customer's session shopping cart
+      operationId: deleteAllItems
       responses:
         202:
           description: Accepts the request, regardless of whether the specified item exists in the cart or not.
@@ -284,19 +270,13 @@ paths:
           description: Given customer ID doesn't exist
           content: { }
 
-  /api/v1/customer/{customerId}/product/{productId}/item:
-    post:
+  /api/v1/product/{productId}/item:
+    patch:
       tags: [ Cart ]
       summary: Add a new item to the cart.
       description: Add a new product to the cart.
-      operationId: addItemToCart
+      operationId: addItem
       parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
-          schema:
-            type: string
         - name: productId
           in: path
           description: Product Identifier
@@ -305,7 +285,7 @@ paths:
             type: string
       responses:
         201:
-          description: Item was added successfuly
+          description: Item was updated successfuly
         404:
           description: If customer does not exist.
           content:
@@ -314,16 +294,10 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       tags: [ Cart ]
-      summary: Delete an item from shopping cart
-      description: Deletes the item from shopping cart of given customer
-      operationId: deleteItemFromCart
+      summary: Delete an item in customer's session shopping cart
+      description: Delete an item in customer's session shopping cart
+      operationId: deleteItem
       parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
-          schema:
-            type: string
         - name: productId
           in: path
           description: Product Identifier
@@ -334,64 +308,60 @@ paths:
         202:
           description: Accepts the request, regardless of whether the specified item exists in the cart or not.
 
-  /api/v1/customer/{customerId}/paymentmethod/{paymentMethodId}/payment:
+  /api/v1/checkout:
     post:
-      tags: [ Payment ]
-      summary: Checkout items from a customer's cart
-      description: Checkout items from a customer's cart
-      operationId: payCartItems
+      tags: [ Cart ]
+      summary: Checkout the items in the customer's session cart
+      description: Checkout the items in the customer's session cart
+      operationId: checkout
       parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
+        - in: query
+          name: paymentMethod
           schema:
-            type: string
-        - name: paymentMethodId
-          in: path
-          description: the payment method
-          required: true
-          schema:
-            type: string
+            type: array
+            items:
+              type: string
+              enum: [ VISA, MASTERCARD, CASH ]
+          style: form
+          explode: false
+          description: The payment method
       responses:
         201:
           description: If the payment was successfuly
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckoutSummary'
         404:
           description: If there aren't item in the cart for the customer.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    get:
+
+  /api/v1/payment:
+    post:
       tags: [ Payment ]
-      summary: Get the summary of the items with subtotals and totals
-      description: Get the summary of the items with subtotals and totals
-      operationId: getPaymentSummary
-      parameters:
-        - name: customerId
-          in: path
-          description: Customer Identifier
-          required: true
-          schema:
-            type: string
-        - name: paymentMethodId
-          in: path
-          description: the payment method
-          required: true
-          schema:
-            type: string
+      summary: Pay for the checked items.
+      description: Checkout the items in the customer's session cart
+      operationId: payForCheckoutItems
       responses:
-        200:
-          description: Successful operation
+        201:
+          description: If the payment was successfuly
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PaymentSummary'
+                  $ref: '#/components/schemas/CheckoutSummary'
         404:
           description: If there aren't item in the cart for the customer.
-          content: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -486,7 +456,7 @@ components:
         - name
         - code
         - count
-    PaymentSummary:
+    CheckoutSummary:
       description: Customer Payment
       type: object
       properties:
@@ -501,8 +471,8 @@ components:
           description: Collection of items in cart.
           type: array
           items:
-            $ref: '#/components/schemas/PaymentSummaryItems'
-    PaymentSummaryItems:
+            $ref: '#/components/schemas/CheckoutSummaryItems'
+    CheckoutSummaryItems:
       description: Items to checkout / pay
       type: object
       properties:

@@ -1,12 +1,13 @@
 package com.perficient.shoppingcart.infrastructure.mother;
 
 import net.datafaker.Faker;
+import net.datafaker.providers.base.Commerce;
 
 /**
  * Generate random data using Faker library
  */
 public class FakerMother {
-    private static final Faker faker = new Faker();
+    public static final Faker faker = new Faker();
 
     /**
      * Create a random hexadecimal with the defined length
@@ -73,4 +74,5 @@ public class FakerMother {
     public static String randomText(int textLength) {
         return faker.lorem().characters(textLength);
     }
+
 }
