@@ -53,6 +53,9 @@ dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:$springVersion"
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springVersion"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
+    implementation "org.springframework.boot:spring-boot-starter-cache:$springVersion"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis:$springVersion"
+
 
     // OpenAPI
     swaggerCodegen 'org.openapitools:openapi-generator-cli:6.2.1'

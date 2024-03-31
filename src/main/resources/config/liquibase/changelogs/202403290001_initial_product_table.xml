@@ -1,0 +1,44 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="00000000000000_create_table_product" author="luis.bolanoss">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product">
+            <column name="id" type="varchar(36)" autoIncrement="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(150)">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="unit_price" type="decimal">
+                <constraints nullable="false" />
+            </column>
+            <column name="stock" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="active" type="boolean" defaultValue="true">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="00000000000000_create_unq_code_product" author="luis.bolanoss">
+        <addUniqueConstraint
+                columnNames="code"
+                constraintName="unq_code_product"
+                tableName="product"/>
+    </changeSet>
+</databaseChangeLog>

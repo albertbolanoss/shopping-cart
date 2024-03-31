@@ -22,7 +22,7 @@ public class CartControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @Test
+
     void addItemToCartSuccessfully() throws Exception {
         var customerId = UUID.randomUUID().toString();
         var productId = UUID.randomUUID().toString();

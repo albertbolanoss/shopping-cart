@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-public class ProductController implements ProductApi {
+public class ProductController /* implements ProductApi */ {
     public ResponseEntity<Void> addProduct(AddProductReq addProductReq) {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="insert_initial_data" author="luis.bolanoss">
+        <insert tableName="product">
+            <column name="id" value="379fbb01-ff84-4a61-8856-afa2d52b3974"/>
+            <column name="name" value="Banana"/>
+            <column name="code" value="001"/>
+            <column name="description" value="Fruit"/>
+            <column name="unit_price" valueNumeric="2000.00"/>
+            <column name="stock" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="product">
+            <column name="id" value="560a00dd-6864-49b9-b3f5-1ef420a0efca"/>
+            <column name="name" value="Orange"/>
+            <column name="code" value="002"/>
+            <column name="description" value="Fruit"/>
+            <column name="unit_price" valueNumeric="1000.00"/>
+            <column name="stock" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="product">
+            <column name="id" value="2f04919e-b6a8-4235-ac96-69c1659fa965"/>
+            <column name="name" value="Strawberry"/>
+            <column name="code" value="003"/>
+            <column name="description" value="Fruit"/>
+            <column name="unit_price" valueNumeric="2000.00"/>
+            <column name="stock" valueNumeric="5"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
