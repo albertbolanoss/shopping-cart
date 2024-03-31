@@ -8,8 +8,10 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
@@ -17,7 +19,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Product {
+@Setter
+public class Product implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -33,7 +36,7 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "unitPrice")
+    @Column(name = "unit_price")
     private BigDecimal unitPrice;
 
     @Column(name = "stock")

@@ -4,12 +4,9 @@ import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.exceptions.ProductNotAvailableException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
-import com.perficient.shoppingcart.domain.valueobjects.ProductDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * Product service domain
@@ -32,8 +29,7 @@ public class CartService {
      * @return a
      */
     public CartItemDomain getItemFromStock(ProductIdDomain productIdDomain) {
-        var currentProductDomain = Optional.ofNullable(
-                productDomainRepository.getProductFromStock(productIdDomain))
+        var currentProductDomain = productDomainRepository.getProductFromStock(productIdDomain)
                 .orElseThrow(() -> new NotExistException(
                     String.format("The product (%s) does not exist", productIdDomain.getId())));
 
@@ -43,6 +39,7 @@ public class CartService {
         }
 
         var availableInStock = currentProductDomain.getStock() - 1;
+        /*
         var productDomain = new ProductDomain(
                 currentProductDomain.getProductIdDomain(),
                 currentProductDomain.getCode(),
@@ -52,10 +49,10 @@ public class CartService {
                 currentProductDomain.getActive()
         );
 
-        productDomainRepository.updateProductInStock(productDomain);
+        productDomainRepository.updateProductInStock(productId);
+        */
 
         return new CartItemDomain(
-                currentProductDomain.getProductIdDomain().getId(),
                 currentProductDomain.getStock() + 1,
                 currentProductDomain.getUnitPrice()
         );

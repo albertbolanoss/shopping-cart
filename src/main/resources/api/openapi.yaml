@@ -271,7 +271,7 @@ paths:
           content: { }
 
   /api/v1/product/{productId}/item:
-    patch:
+    post:
       tags: [ Cart ]
       summary: Add a new item to the cart.
       description: Add a new product to the cart.

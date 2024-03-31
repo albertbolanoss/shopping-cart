@@ -23,7 +23,7 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="unitPrice" type="decimal">
+            <column name="unit_price" type="decimal">
                 <constraints nullable="false" />
             </column>
             <column name="stock" type="int">
@@ -33,5 +33,12 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="00000000000000_create_unq_code_product" author="luis.bolanoss">
+        <addUniqueConstraint
+                columnNames="code"
+                constraintName="unq_code_product"
+                tableName="product"/>
     </changeSet>
 </databaseChangeLog>

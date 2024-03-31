@@ -11,8 +11,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -28,17 +28,19 @@ public class ProductDomainRepositoryImplTest {
         var product = ProductMother.random();
         var productIdDomain = ProductIdDomainMother.random();
 
-        when(productRepository.findById(any())).thenReturn(Optional.of(product));
+        when(productRepository.findById(anyString())).thenReturn(Optional.of(product));
 
         var actual = productDomainRepository.getProductFromStock(productIdDomain);
 
-        assertNotNull(actual);
-        assertNotNull(actual.getProductIdDomain());
-        assertEquals(product.getCode(), actual.getCode());
-        assertEquals(product.getName(), actual.getName());
-        assertEquals(product.getStock(), actual.getStock());
-        assertEquals(product.getUnitPrice(), actual.getUnitPrice());
-        assertEquals(product.isActive(), actual.getActive());
+        assertTrue(actual.isPresent());
+
+        var productDomain = actual.get();
+        assertNotNull(productDomain.getProductIdDomain());
+        assertEquals(product.getCode(), productDomain.getCode());
+        assertEquals(product.getName(), productDomain.getName());
+        assertEquals(product.getStock(), productDomain.getStock());
+        assertEquals(product.getUnitPrice(), productDomain.getUnitPrice());
+        assertEquals(product.isActive(), productDomain.getActive());
 
     }
 

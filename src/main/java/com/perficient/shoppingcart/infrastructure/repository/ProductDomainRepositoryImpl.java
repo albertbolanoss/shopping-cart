@@ -6,17 +6,15 @@ import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mappers.ProductDomainMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.Optional;
 
 
 /**
  * Product domain repository
  */
-@Repository
+@Service
 @Slf4j
 public class ProductDomainRepositoryImpl implements ProductDomainRepository {
     /**
@@ -30,18 +28,8 @@ public class ProductDomainRepositoryImpl implements ProductDomainRepository {
     }
 
     @Override
-    @Cacheable(value="ProductInStock", key="#productIdDomain.id")
-    public ProductDomain getProductFromStock(ProductIdDomain productIdDomain) {
-        return productRepository.findById(UUID.fromString(productIdDomain.getId()))
-                .map(ProductDomainMapper::fromEntity)
-                .orElse(null);
+    public Optional<ProductDomain> getProductFromStock(ProductIdDomain productIdDomain) {
+        return productRepository.findById(productIdDomain.getId())
+                .map(ProductDomainMapper::fromEntity);
     }
-
-    @Override
-    @CachePut(value="ProductInStock", key="#productIdDomain.id")
-    public void updateProductInStock(ProductDomain productDomain) {
-        log.debug("Update product: {} - with stock: {}",
-                productDomain.getCode(), productDomain.getStock());
-    }
-
 }

@@ -2,6 +2,7 @@ package com.perficient.shoppingcart.infrastructure.api.exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.Arrays;
  * @created : 31/10/2022, Monday
  **/
 @ControllerAdvice
+@Slf4j
 public class RestApiErrorHandler {
     private final MessageSource messageSource;
 
@@ -137,7 +139,7 @@ public class RestApiErrorHandler {
     }
 
     @ExceptionHandler({Exception.class, RuntimeException.class})
-    public ResponseEntity<Error> handleException(HttpServletRequest request) {
+    public ResponseEntity<Error> handleException(HttpServletRequest request, Exception ex) {
         Error error = new Error(
                 ErrorCode.GENERIC_ERROR.getErrCode(),
                 ErrorCode.GENERIC_ERROR.getErrMsgKey(),
@@ -145,6 +147,8 @@ public class RestApiErrorHandler {
                 request.getRequestURL().toString(),
                 request.getMethod()
         );
+        log.error("Shopping Cart exception: ", ex);
+
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

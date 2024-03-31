@@ -3,8 +3,8 @@ package com.perficient.shoppingcart.domain.repositories;
 import com.perficient.shoppingcart.domain.valueobjects.ProductDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 
-public interface ProductDomainRepository {
-    ProductDomain getProductFromStock(ProductIdDomain productIdDomain);
+import java.util.Optional;
 
-    void updateProductInStock(ProductDomain productDomain);
+public interface ProductDomainRepository {
+    Optional<ProductDomain> getProductFromStock(ProductIdDomain productIdDomain);
 }

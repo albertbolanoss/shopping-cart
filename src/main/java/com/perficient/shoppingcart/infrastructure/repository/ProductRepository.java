@@ -1,9 +1,13 @@
 package com.perficient.shoppingcart.infrastructure.repository;
 
 import com.perficient.shoppingcart.infrastructure.entities.Product;
+import org.hibernate.validator.constraints.UUID;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.UUID;
+import java.util.Optional;
 
 public interface ProductRepository extends CrudRepository<Product, UUID> {
+    @Cacheable(value="ProductInStock", key="#id")
+    Optional<Product> findById(String id);
 }
