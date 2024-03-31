@@ -4,9 +4,12 @@ import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.exceptions.ProductNotAvailableException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
+import com.perficient.shoppingcart.domain.valueobjects.ProductDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Product service domain
@@ -28,7 +31,7 @@ public class CartService {
      * @param productIdDomain the product id domain
      * @return a
      */
-    public CartItemDomain getItemFromStock(ProductIdDomain productIdDomain) {
+    public CartItemDomain getItemFromStock(ProductIdDomain productIdDomain, Optional<CartItemDomain> cartItemDomain) {
         var currentProductDomain = productDomainRepository.getProductFromStock(productIdDomain)
                 .orElseThrow(() -> new NotExistException(
                     String.format("The product (%s) does not exist", productIdDomain.getId())));
@@ -38,22 +41,22 @@ public class CartService {
                     String.format("The product (%s) is not available in the stock", productIdDomain.getId()));
         }
 
-        var availableInStock = currentProductDomain.getStock() - 1;
-        /*
         var productDomain = new ProductDomain(
                 currentProductDomain.getProductIdDomain(),
                 currentProductDomain.getCode(),
                 currentProductDomain.getName(),
                 currentProductDomain.getUnitPrice(),
-                availableInStock,
-                currentProductDomain.getActive()
-        );
+                currentProductDomain.getStock() - 1,
+                currentProductDomain.getActive());
 
-        productDomainRepository.updateProductInStock(productId);
-        */
+        productDomainRepository.updateProductInStock(productDomain);
+
+        var currentQuantity = cartItemDomain
+            .map(CartItemDomain::getQuantity)
+            .orElse(0);
 
         return new CartItemDomain(
-                currentProductDomain.getStock() + 1,
+                currentQuantity + 1,
                 currentProductDomain.getUnitPrice()
         );
     }

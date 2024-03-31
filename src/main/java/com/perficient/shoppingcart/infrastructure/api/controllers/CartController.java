@@ -11,12 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @Validated
+@SessionScope
 public class CartController implements CartApi {
     /**
      * Add item from stock service
@@ -39,7 +42,8 @@ public class CartController implements CartApi {
      */
     public ResponseEntity<Void> addItem(String productId)  {
         var productIdDomain = new ProductIdDomain(productId);
-        var chartItem = addItemFromStock.add(productIdDomain);
+        var cartItemDomain = Optional.ofNullable(cartItems.get(productId));
+        var chartItem = addItemFromStock.add(productIdDomain, cartItemDomain);
 
         cartItems.put(productId, chartItem);
 

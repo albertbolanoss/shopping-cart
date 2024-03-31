@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ProductDomainRepository {
     Optional<ProductDomain> getProductFromStock(ProductIdDomain productIdDomain);
+
+    void updateProductInStock(ProductDomain productDomain);
 }

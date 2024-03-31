@@ -28,7 +28,7 @@ public class ProductDomainRepositoryImplTest {
         var product = ProductMother.random();
         var productIdDomain = ProductIdDomainMother.random();
 
-        when(productRepository.findById(anyString())).thenReturn(Optional.of(product));
+        when(productRepository.findByIdFromCache(anyString())).thenReturn(Optional.of(product));
 
         var actual = productDomainRepository.getProductFromStock(productIdDomain);
 

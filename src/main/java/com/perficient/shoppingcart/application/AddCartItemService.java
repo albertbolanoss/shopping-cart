@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.Optional;
+
 /**
  * Add cart item service application
  */
@@ -28,10 +30,11 @@ public class AddCartItemService {
     /**
      * Add a product item to the stock
      * @param productIdDomain the product id domain
+     * @param cartItemDomain the customer cart item domain
      */
-    public CartItemDomain add(ProductIdDomain productIdDomain) {
+    public CartItemDomain add(ProductIdDomain productIdDomain, Optional<CartItemDomain> cartItemDomain) {
         try {
-            return cartService.getItemFromStock(productIdDomain);
+            return cartService.getItemFromStock(productIdDomain, cartItemDomain);
         } catch (NotExistException | ProductNotAvailableException ex) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
