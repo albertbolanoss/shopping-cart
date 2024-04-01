@@ -64,7 +64,7 @@ public class CustomerController implements CustomerApi {
 
         var customerPageDomain = getCustomersByFiltersService.findByFilter(customerDomain);
 
-        return Optional.of(customerPageDomain)
+        return Optional.ofNullable(customerPageDomain)
                 .map(customerPageModelAssembler::toModel)
                 .map(ResponseEntity::ok)
                 .orElse(notFound().build());

@@ -42,4 +42,9 @@ public class ProductDomain {
      * if the product is active or disabled
      */
     private Boolean active;
+
+    /**
+     * The product description
+     */
+    private String description;
 }

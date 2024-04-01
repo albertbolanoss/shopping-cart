@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Product service domain
@@ -29,9 +30,10 @@ public class CartService {
     /**
      * Get a product items from the stock
      * @param productIdDomain the product id domain
-     * @return a
+     * @return an updated cart item
      */
-    public CartItemDomain getItemFromStock(ProductIdDomain productIdDomain, Optional<CartItemDomain> cartItemDomain) {
+    public CartItemDomain getItemFromStock(ProductIdDomain productIdDomain,
+                                           ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
         var currentProductDomain = productDomainRepository.getProductFromStock(productIdDomain)
                 .orElseThrow(() -> new NotExistException(
                     String.format("The product (%s) does not exist", productIdDomain.getId())));
@@ -47,11 +49,13 @@ public class CartService {
                 currentProductDomain.getName(),
                 currentProductDomain.getUnitPrice(),
                 currentProductDomain.getStock() - 1,
-                currentProductDomain.getActive());
+                currentProductDomain.getActive(),
+                currentProductDomain.getDescription()
+        );
 
         productDomainRepository.updateProductInStock(productDomain);
 
-        var currentQuantity = cartItemDomain
+        var currentQuantity = Optional.ofNullable(cartItemsDomain.get(productIdDomain.getId()))
             .map(CartItemDomain::getQuantity)
             .orElse(0);
 
