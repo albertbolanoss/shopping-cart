@@ -11,8 +11,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 public class CartItemDomain {
-
+    /**
+     * The item quantity
+     */
     private Integer quantity;
 
+    /**
+     * The item unit price
+     */
     private BigDecimal unitPrice;
 }

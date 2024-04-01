@@ -3,8 +3,12 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perficient.shoppingcart.application.GetCustomersByFiltersService;
 import com.perficient.shoppingcart.application.RegisterCustomerService;
+import com.perficient.shoppingcart.application.api.model.GetCustomerPage;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerPageDomain;
+import com.perficient.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
 import com.perficient.shoppingcart.infrastructure.api.hateoas.CustomerPageModelAssembler;
 import com.perficient.shoppingcart.infrastructure.mother.AddCustomerReqMother;
+import com.perficient.shoppingcart.infrastructure.mother.CustomerPageDomainMother;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerController.class)
@@ -37,7 +43,7 @@ public class CustomerControllerTest {
     void createCustomerSuccessfully() throws Exception {
         var addCustomerReq = AddCustomerReqMother.random();
 
-        mvc.perform( MockMvcRequestBuilders
+        mvc.perform(MockMvcRequestBuilders
             .post(URI)
             .content(mapper.writeValueAsString(addCustomerReq))
             .contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +55,7 @@ public class CustomerControllerTest {
     void createCustomerAddNewCustomerNullable() throws Exception {
         var addCustomerReq = AddCustomerReqMother.nullable();
 
-        mvc.perform( MockMvcRequestBuilders
+        mvc.perform(MockMvcRequestBuilders
                         .post(URI)
                         .content(mapper.writeValueAsString(addCustomerReq))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +67,7 @@ public class CustomerControllerTest {
     void createCustomerInvalidMaxLength() throws Exception {
         var addCustomerReq = AddCustomerReqMother.invalidMaxLength();
 
-        mvc.perform( MockMvcRequestBuilders
+        mvc.perform(MockMvcRequestBuilders
                         .post(URI)
                         .content(mapper.writeValueAsString(addCustomerReq))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,11 +79,49 @@ public class CustomerControllerTest {
     void createCustomerInvalidEmail() throws Exception {
         var addCustomerReq = AddCustomerReqMother.invalidEmail();
 
-        mvc.perform( MockMvcRequestBuilders
+        mvc.perform(MockMvcRequestBuilders
                         .post(URI)
                         .content(mapper.writeValueAsString(addCustomerReq))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getCustomers() throws Exception {
+
+        var customerPageDomainMother = CustomerPageDomainMother.random();
+        GetCustomerPage getCustomerPage = new GetCustomerPage();
+
+        when(getCustomersByFiltersService.findByFilter(any(CustomerReqFilterDomain.class)))
+                .thenReturn(customerPageDomainMother);
+
+        when(customerPageModelAssembler.toModel(any(CustomerPageDomain.class))).thenReturn(getCustomerPage);
+
+        mvc.perform(MockMvcRequestBuilders
+                    .get(URI)
+                    .param("offset", "0")
+                    .param("limit", "10")
+                    .param("firstName", "John")
+                    .param("lastName", "Doe")
+                    .param("email", "john.doe@example.com")
+                    .param("sort", "field1,field2")
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getCustomersNoFound() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders
+                        .get(URI)
+                        .param("offset", "0")
+                        .param("limit", "10")
+                        .param("firstName", "John")
+                        .param("lastName", "Doe")
+                        .param("email", "john.doe@example.com")
+                        .param("sort", "field1,field2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

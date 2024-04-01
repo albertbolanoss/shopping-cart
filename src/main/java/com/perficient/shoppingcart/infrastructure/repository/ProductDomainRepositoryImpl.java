@@ -19,21 +19,18 @@ import java.util.Optional;
 @Slf4j
 public class ProductDomainRepositoryImpl implements ProductDomainRepository {
     /**
-     * The product repository
+     * The product cache repository
      */
-    private final ProductRepository productRepository;
-
     private final ProductCacheRepository productCacheRepository;
 
     @Autowired
-    public ProductDomainRepositoryImpl(ProductRepository productRepository, ProductCacheRepository productCacheRepository) {
-        this.productRepository = productRepository;
+    public ProductDomainRepositoryImpl(ProductCacheRepository productCacheRepository) {
         this.productCacheRepository = productCacheRepository;
     }
 
     @Override
     public Optional<ProductDomain> getProductFromStock(ProductIdDomain productIdDomain) {
-        return productRepository.findByIdFromCache(productIdDomain.getId())
+        return productCacheRepository.findByIdFromCache(productIdDomain.getId())
                 .map(ProductDomainMapper::fromEntity);
     }
 
@@ -43,6 +40,6 @@ public class ProductDomainRepositoryImpl implements ProductDomainRepository {
                 .map(ProductMapper::fromDomain)
                 .orElse(null);
 
-        productCacheRepository.updateProductCache(product);
+        productCacheRepository.updateProductInCache(product);
     }
 }

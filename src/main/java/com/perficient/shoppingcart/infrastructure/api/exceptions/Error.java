@@ -2,7 +2,6 @@ package com.perficient.shoppingcart.infrastructure.api.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Error
@@ -14,26 +13,25 @@ import lombok.RequiredArgsConstructor;
  * @created : 31/10/2022, Monday
  **/
 
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 public class Error {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
     /**
      * Application error code, which is different from HTTP error code.
      */
-    private final String errorCode;
+    private String errorCode;
 
     /**
      * Short, human-readable summary of the problem.
      */
-    private final String message;
+    private String message;
 
     /**
      * HTTP status code for this occurrence of the problem, set by the origin server.
      */
-    private final Integer status;
+    private Integer status;
 
     /**
      * Url of request that produced the error.
