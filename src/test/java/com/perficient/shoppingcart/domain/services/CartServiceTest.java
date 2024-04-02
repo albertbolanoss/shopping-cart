@@ -36,9 +36,12 @@ class CartServiceTest {
     @Mock
     private ProductDomainRepository productDomainRepository;
 
+    @Mock
+    private CartPaymentService cartPaymentService;
+
     @BeforeEach
     void init() {
-        cartService = new CartService(productDomainRepository);
+        cartService = new CartService(productDomainRepository, cartPaymentService);
     }
 
     @Test

@@ -1,11 +1,9 @@
 package com.perficient.shoppingcart.domain.services;
 
 import com.perficient.shoppingcart.domain.enumerators.PaymentMethod;
+import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
 import com.perficient.shoppingcart.domain.exceptions.PaymentMethodNotSupportedException;
-import com.perficient.shoppingcart.domain.services.PaymentTotal;
-import com.perficient.shoppingcart.domain.services.PaymentTotalCashService;
-import com.perficient.shoppingcart.domain.services.PaymentTotalMaterCardService;
-import com.perficient.shoppingcart.domain.services.PaymentTotalVisaService;
+import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +11,20 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Payment total strategy service
  */
 @Service
-public class PaymentTotalService {
+public class CartPaymentService {
     private final Map<String, PaymentTotal> paymentTotalMap;
 
     @Autowired
-    public PaymentTotalService(PaymentTotalVisaService paymentTotalVisaService,
-                               PaymentTotalMaterCardService paymentTotalMaterCardService,
-                               PaymentTotalCashService paymentTotalCashService) {
+    public CartPaymentService(PaymentTotalVisaService paymentTotalVisaService,
+                              PaymentTotalMaterCardService paymentTotalMaterCardService,
+                              PaymentTotalCashService paymentTotalCashService) {
         this.paymentTotalMap = new HashMap<>();
         paymentTotalMap.put(PaymentMethod.VISA.name(), paymentTotalVisaService);
         paymentTotalMap.put(PaymentMethod.MASTERCARD.name(), paymentTotalMaterCardService);
@@ -34,12 +34,23 @@ public class PaymentTotalService {
     /**
      *
      * @param paymentMethod the payment method enumerator
-     * @param subtotal the subtotal
+     * @param cartItemsDomain the cart items domain
      * @return a big decimal of the total with fee
      */
-    BigDecimal calculateTotalWithFee(PaymentMethod paymentMethod, BigDecimal subtotal) {
+    BigDecimal calculateTotalWithFee(PaymentMethod paymentMethod,
+                                     ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+
+        Optional.ofNullable(cartItemsDomain).orElseThrow(() -> new CartEmptyException("The cart is empty"));
+
         PaymentTotal paymentTotal = Optional.ofNullable(paymentTotalMap.get(paymentMethod.name()))
                 .orElseThrow(() -> new PaymentMethodNotSupportedException("The payment method is not supported yet"));
+
+
+        var cart = new ConcurrentHashMap<>(cartItemsDomain);
+        var subtotal = cart.values().stream()
+                .map(cartItem -> cartItem.getUnitPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         return paymentTotal.calculateTotalWithFee(subtotal);
     }
 }

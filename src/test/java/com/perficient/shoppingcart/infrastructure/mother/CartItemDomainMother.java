@@ -40,4 +40,15 @@ public class CartItemDomainMother {
                 BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L))
         );
     }
+
+    /**
+     * Generate a random cart item domain
+     * @return a cart item domain
+     */
+    public static CartItemDomain withFixValues() {
+        return new CartItemDomain(
+                5,
+                new BigDecimal("18542.5645475")
+        );
+    }
 }
