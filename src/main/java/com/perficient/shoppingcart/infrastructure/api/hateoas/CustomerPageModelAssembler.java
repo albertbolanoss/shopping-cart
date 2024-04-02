@@ -1,6 +1,6 @@
 package com.perficient.shoppingcart.infrastructure.api.hateoas;
 
-import com.perficient.shoppingcart.application.api.model.GetCustomerPage;
+import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerPageDomain;
 import com.perficient.shoppingcart.infrastructure.api.controllers.CustomerController;
 import com.perficient.shoppingcart.infrastructure.mappers.CustomerApiModelMapper;
@@ -15,15 +15,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class CustomerPageModelAssembler extends
-        RepresentationModelAssemblerSupport<CustomerPageDomain, GetCustomerPage> {
+        RepresentationModelAssemblerSupport<CustomerPageDomain, GetCustomerPageReq> {
 
     public CustomerPageModelAssembler() {
-        super(CustomerController.class, GetCustomerPage.class);
+        super(CustomerController.class, GetCustomerPageReq.class);
     }
 
     @SneakyThrows
     @Override
-    public GetCustomerPage toModel(CustomerPageDomain customerPageDomain) {
+    public GetCustomerPageReq toModel(CustomerPageDomain customerPageDomain) {
         var id = UUID.randomUUID().toString();
         var resource = createModelWithId(id, customerPageDomain);
         var content = customerPageDomain.getCustomerDomains().stream()

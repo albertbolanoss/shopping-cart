@@ -5,7 +5,7 @@ import com.perficient.shoppingcart.application.GetCustomersByFiltersService;
 import com.perficient.shoppingcart.application.RegisterCustomerService;
 import com.perficient.shoppingcart.application.api.controller.CustomerApi;
 import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
-import com.perficient.shoppingcart.application.api.model.GetCustomerPage;
+import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
 import com.perficient.shoppingcart.infrastructure.api.hateoas.CustomerPageModelAssembler;
 import com.perficient.shoppingcart.infrastructure.mappers.CustomerDomainMapper;
@@ -56,8 +56,8 @@ public class CustomerController implements CustomerApi {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public ResponseEntity<GetCustomerPage> getCustomers(Integer offset, Integer limit, String firstName,
-            String lastName, String email, List<String> sort) {
+    public ResponseEntity<GetCustomerPageReq> getCustomers(Integer offset, Integer limit, String firstName,
+                                                           String lastName, String email, List<String> sort) {
 
         CustomerReqFilterDomain customerDomain = new CustomerReqFilterDomain(
                 firstName, lastName, email, offset, limit, sort);

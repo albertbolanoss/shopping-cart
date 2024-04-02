@@ -52,13 +52,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorReq'
         404:
           description: If customer does not exist.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorReq'
     get:
       tags: [ Customer ]
       summary: Get the customers that match with the filters.
@@ -114,7 +114,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCustomerPage'
+                $ref: '#/components/schemas/GetCustomerPageReq'
 
   /api/v1/product:
     post:
@@ -137,7 +137,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorReq'
     get:
       tags: [ Product ]
       summary: Get the products that match with the filters.
@@ -176,7 +176,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: '#/components/schemas/ProductReq'
 
   /api/v1/paymentmethod:
     post:
@@ -199,7 +199,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorReq'
     get:
       tags: [ PaymentMethod ]
       summary: Get the payment methods that match with the filters.
@@ -238,7 +238,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PaymentMethod'
+                  $ref: '#/components/schemas/PaymentMethodReq'
 
   /api/v1/items:
     get:
@@ -261,7 +261,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentSummary'
+                $ref: '#/components/schemas/PaymentSummaryReq'
         404:
           description: Given customer ID doesn't exist
           content: { }
@@ -298,7 +298,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorReq'
     delete:
       tags: [ Cart ]
       summary: Delete an item in customer's session shopping cart
@@ -334,13 +334,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentSummary'
+                $ref: '#/components/schemas/PaymentSummaryReq'
         404:
           description: If there aren't item in the cart for the customer.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorReq'
 
 components:
   schemas:
@@ -373,7 +373,7 @@ components:
         - lastName
         - email
         - password
-    Error:
+    ErrorReq:
       type: object
       properties:
         errorCode:
@@ -389,7 +389,7 @@ components:
           type: string
       xml:
         name: Error
-    Item:
+    ItemReq:
       description: Items in shopping cart
       type: object
       properties:
@@ -435,7 +435,7 @@ components:
         - name
         - code
         - count
-    PaymentSummary:
+    PaymentSummaryReq:
       description: Customer Payment
       type: object
       properties:
@@ -447,7 +447,7 @@ components:
           description: Collection of items in cart.
           type: array
           items:
-            $ref: '#/components/schemas/Item'
+            $ref: '#/components/schemas/ItemReq'
     AddPaymentMethodReq:
       description: The payment methods.
       type: object
@@ -467,7 +467,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-    Customer:
+    CustomerReq:
       description: The customer object.
       type: object
       properties:
@@ -492,7 +492,7 @@ components:
         phone:
           type: string
           maxLength: 40
-    Product:
+    ProductReq:
       description: Product instance
       type: object
       properties:
@@ -524,7 +524,7 @@ components:
           description: Product count
           type: integer
           format: int32
-    PaymentMethod:
+    PaymentMethodReq:
       description: The payment methods.
       type: object
       properties:
@@ -548,7 +548,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-    GetCustomerPage:
+    GetCustomerPageReq:
       description: The page customer object.
       type: object
       properties:
@@ -572,7 +572,7 @@ components:
           description: Collection of items in cart.
           type: array
           items:
-            $ref: '#/components/schemas/Customer'
+            $ref: '#/components/schemas/CustomerReq'
     GetCustomersReq:
       description: The get customers parameters.
       type: object

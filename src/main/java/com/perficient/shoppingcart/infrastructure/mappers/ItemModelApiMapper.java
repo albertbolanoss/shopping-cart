@@ -1,6 +1,6 @@
 package com.perficient.shoppingcart.infrastructure.mappers;
 
-import com.perficient.shoppingcart.application.api.model.Item;
+import com.perficient.shoppingcart.application.api.model.ItemReq;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ public class ItemModelApiMapper {
      * @param CartItemDomain the cart items
      * @return a list of model api items
      */
-    public static List<Item> fromDomain(ConcurrentMap<String, CartItemDomain> CartItemDomain) {
-        List<Item> items = new ArrayList<>();
+    public static List<ItemReq> fromDomain(ConcurrentMap<String, CartItemDomain> CartItemDomain) {
+        List<ItemReq> items = new ArrayList<>();
 
         if (Optional.ofNullable(CartItemDomain).isPresent()) {
             for (Map.Entry<String, CartItemDomain> entry : CartItemDomain.entrySet()) {
                 String productId = entry.getKey();
                 CartItemDomain cartItem = entry.getValue();
 
-                Item item = new Item()
+                ItemReq item = new ItemReq()
                         .id(productId)
                         .quantity(cartItem.getQuantity())
                         .unitPrice(cartItem.getUnitPrice());

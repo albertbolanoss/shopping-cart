@@ -3,7 +3,7 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 import com.perficient.shoppingcart.application.AddCartItemService;
 import com.perficient.shoppingcart.application.DeleteCartItemService;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
-import com.perficient.shoppingcart.application.api.model.PaymentSummary;
+import com.perficient.shoppingcart.application.api.model.PaymentSummaryReq;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mappers.ItemModelApiMapper;
@@ -66,8 +66,8 @@ public class CartController implements CartApi {
      * @return a list api model items
      */
     @Override
-    public ResponseEntity<PaymentSummary> getCartItems(String paymentMethod) {
-        PaymentSummary paymentSummary = new PaymentSummary()
+    public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethod) {
+        PaymentSummaryReq paymentSummary = new PaymentSummaryReq()
                 .items(ItemModelApiMapper.fromDomain(cartItems))
                 .total(new BigDecimal(0));
 
