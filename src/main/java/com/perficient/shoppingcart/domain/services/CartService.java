@@ -1,5 +1,6 @@
 package com.perficient.shoppingcart.domain.services;
 
+import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
 import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.exceptions.ProductNotAvailableException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
@@ -9,6 +10,8 @@ import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -60,11 +63,15 @@ public class CartService {
     /**
      * Delete an item from cart
      * @param productIdDomain the product id domain
-     * @param cartItemsDomain the cart item domain
+     * @param cartItemsDomain the cart items domain
      * @return the ConcurrentMap cart item domain
      */
     public ConcurrentMap<String, CartItemDomain> deleteItemFromCart(ProductIdDomain productIdDomain,
                                            ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+
+        if (cartItemsDomain == null || cartItemsDomain.isEmpty()) {
+            throw new CartEmptyException("The cart does not contain any item");
+        }
 
         ConcurrentMap<String, CartItemDomain> cart = new ConcurrentHashMap<>(cartItemsDomain);
 
@@ -90,6 +97,42 @@ public class CartService {
 
         return cart;
     }
+
+
+    /**
+     * Delete all the item from cart
+     * @param cartItemsDomain the cart items domain
+     */
+    public void deleteAllItemFromCart(ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+        if (cartItemsDomain == null || cartItemsDomain.isEmpty()) {
+            throw new CartEmptyException("The cart does not contain any item");
+        }
+
+        ConcurrentMap<String, CartItemDomain> cart = new ConcurrentHashMap<>(cartItemsDomain);
+        List<ProductDomain> products = new ArrayList<>();
+
+        cart.keySet().forEach(productId -> {
+            var productIdDomain = new ProductIdDomain(productId);
+            var cartItem = cart.get(productId);
+            var currentProductDomain = productDomainRepository.getProductFromStock(productIdDomain)
+                    .orElseThrow(() -> new NotExistException(
+                            String.format("The product (%s) does not exist", productIdDomain.getId())));
+
+            var newProductStock = new ProductDomain(
+                    currentProductDomain.getProductIdDomain(),
+                    currentProductDomain.getCode(),
+                    currentProductDomain.getName(),
+                    currentProductDomain.getUnitPrice(),
+                    currentProductDomain.getStock() + cartItem.getQuantity(),
+                    currentProductDomain.getActive(),
+                    currentProductDomain.getDescription()
+            );
+            products.add(newProductStock);
+        });
+
+        products.forEach(productDomainRepository::updateProductInStock);
+    }
+
 
     /**
      * Update the product stock

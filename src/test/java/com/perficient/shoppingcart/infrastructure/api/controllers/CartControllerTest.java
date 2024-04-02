@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,6 +81,19 @@ public class CartControllerTest {
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(addItemURI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteAllItems() throws Exception {
+        ConcurrentMap<String, CartItemDomain> cartItems = new ConcurrentHashMap<>();
+
+        doNothing().when(deleteCartItemService).deleteAllItemFromCart(any());
+
+        mvc.perform(MockMvcRequestBuilders
+                        .delete(URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());

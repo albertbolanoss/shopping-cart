@@ -1,5 +1,6 @@
 package com.perficient.shoppingcart.domain.services;
 
+import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
 import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.exceptions.ProductNotAvailableException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
@@ -24,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -145,5 +148,52 @@ class CartServiceTest {
         assertThrows(NotExistException.class,
                 () -> cartService.deleteItemFromCart(productIdDomain, cartItemsDomain));
 
+    }
+
+    @Test
+    void deleteItemFromCartEmptyCart() {
+        var productDomain = ProductDomainMother.random();
+        var productIdDomain = new ProductIdDomain(productDomain.getProductIdDomain().getId());
+
+        assertThrows(CartEmptyException.class,
+                () -> cartService.deleteItemFromCart(productIdDomain, null));
+
+    }
+
+    @Test
+    void deleteAllItemFromCart() {
+        var cartItemDomain = CartItemDomainMother.twoOrMoreInStock();
+        var productDomain = ProductDomainMother.random();
+
+        ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
+        cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
+
+        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+                .thenReturn(Optional.of(productDomain));
+
+        cartService.deleteAllItemFromCart(cartItemsDomain);
+
+        verify(productDomainRepository, times(1)).updateProductInStock(any(ProductDomain.class));
+    }
+
+    @Test
+    void deleteAllItemFromCartEmptyCart() {
+        var productDomain = ProductDomainMother.random();
+
+        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+                .thenReturn(Optional.of(productDomain));
+
+        assertThrows(CartEmptyException.class, () ->  cartService.deleteAllItemFromCart(null));
+    }
+
+    @Test
+    void deleteAllItemFromCartNullableCart() {
+        var productDomain = ProductDomainMother.random();
+
+        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+                .thenReturn(Optional.of(productDomain));
+
+
+        assertThrows(CartEmptyException.class, () ->  cartService.deleteAllItemFromCart(null));
     }
 }

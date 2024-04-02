@@ -1,5 +1,6 @@
 package com.perficient.shoppingcart.application;
 
+import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
 import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.services.CartService;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
@@ -32,7 +33,20 @@ public class DeleteCartItemService {
 
         try {
             return cartService.deleteItemFromCart(productIdDomain, cartItemsDomain);
-        } catch (NotExistException ex) {
+        } catch (NotExistException | CartEmptyException ex) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+    }
+
+    /**
+     * Delete all the items from cart
+     * @param cartItemsDomain the cart items domain
+     */
+    public void deleteAllItemFromCart(
+            ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+        try {
+            cartService.deleteAllItemFromCart(cartItemsDomain);
+        } catch (NotExistException | CartEmptyException ex) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }

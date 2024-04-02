@@ -70,6 +70,11 @@ public class CartController implements CartApi {
         return ResponseEntity.ok(ItemModelApiMapper.fromDomain(cartItems));
     }
 
+    /**
+     * Delete an item from the cart
+     * @param productId Product Identifier (required)
+     * @return response entity
+     */
     @Override
     public ResponseEntity<Void> deleteItem(String productId) {
         var productIdDomain = new ProductIdDomain(productId);
@@ -79,4 +84,20 @@ public class CartController implements CartApi {
 
         return ResponseEntity.noContent().build();
     }
+
+
+    /**
+     * Delete all the item from of the cart
+     * @return response entity
+     */
+    @Override
+    public ResponseEntity<Void> deleteAllItems() {
+        ConcurrentHashMap<String, CartItemDomain> cart = new ConcurrentHashMap<>(cartItems);
+        deleteCartItemService.deleteAllItemFromCart(cart);
+
+        cartItems = new ConcurrentHashMap<>();
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

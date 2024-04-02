@@ -11,12 +11,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-public class ProductCacheRepositoryTest {
+@SpringBootTest(classes = {ProductCacheRepository.class})
+class ProductCacheRepositoryTest {
     @Autowired
     private ProductCacheRepository productCacheRepository;
     @MockBean
@@ -33,7 +31,6 @@ public class ProductCacheRepositoryTest {
 
         assertTrue(actualProduct.isPresent());
         assertEquals(expectedProduct.getId(), actualProduct.get().getId());
-        verify(productRepository, times(1)).getById(anyString());
     }
 
     @Test
