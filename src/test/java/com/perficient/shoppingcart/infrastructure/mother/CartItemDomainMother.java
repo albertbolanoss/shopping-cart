@@ -17,6 +17,27 @@ public class CartItemDomainMother {
                 FakerMother.faker.number().numberBetween(1,100),
                 BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L))
         );
+    }
 
+    /**
+     * Generate a random cart item domain
+     * @return a cart item domain
+     */
+    public static CartItemDomain twoOrMoreInStock() {
+        return new CartItemDomain(
+                FakerMother.faker.number().numberBetween(2,50),
+                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L))
+        );
+    }
+
+    /**
+     * Generate a random cart item domain
+     * @return a cart item domain
+     */
+    public static CartItemDomain onInStocks() {
+        return new CartItemDomain(
+                1,
+                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L))
+        );
     }
 }

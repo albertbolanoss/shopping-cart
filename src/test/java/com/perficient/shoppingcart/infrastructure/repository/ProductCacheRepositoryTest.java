@@ -1,14 +1,11 @@
 package com.perficient.shoppingcart.infrastructure.repository;
 
-import com.perficient.shoppingcart.infrastructure.entities.Product;
 import com.perficient.shoppingcart.infrastructure.mother.ProductMother;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,18 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-public class ProductCacheRepositoryTest {
+@SpringBootTest(classes = {ProductCacheRepository.class})
+class ProductCacheRepositoryTest {
+    @Autowired
     private ProductCacheRepository productCacheRepository;
-    @Mock
+    @MockBean
     private ProductRepository productRepository;
-
-    private final Map<String, Optional<Product>> cache = new HashMap<>();
-
-    @BeforeEach
-    void init() {
-        productCacheRepository = new ProductCacheRepository(productRepository);
-    }
 
     @Test
     void findByIdFromCache() {
@@ -35,6 +26,7 @@ public class ProductCacheRepositoryTest {
 
         when(productRepository.getById(anyString())).thenReturn(Optional.of(expectedProduct));
 
+        productCacheRepository.findByIdFromCache(expectedProduct.getId());
         var actualProduct = productCacheRepository.findByIdFromCache(expectedProduct.getId());
 
         assertTrue(actualProduct.isPresent());
@@ -49,5 +41,6 @@ public class ProductCacheRepositoryTest {
 
         assertTrue(actualProduct.isPresent());
         assertEquals(expectedProduct.getId(), actualProduct.get().getId());
+        
     }
 }
