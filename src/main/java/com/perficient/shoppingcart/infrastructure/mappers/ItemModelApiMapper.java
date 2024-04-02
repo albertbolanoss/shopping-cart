@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Convert to Item from model api
@@ -19,7 +19,7 @@ public class ItemModelApiMapper {
      * @param CartItemDomain the cart items
      * @return a list of model api items
      */
-    public static List<Item> fromDomain(ConcurrentHashMap<String, CartItemDomain> CartItemDomain) {
+    public static List<Item> fromDomain(ConcurrentMap<String, CartItemDomain> CartItemDomain) {
         List<Item> items = new ArrayList<>();
 
         if (Optional.ofNullable(CartItemDomain).isPresent()) {

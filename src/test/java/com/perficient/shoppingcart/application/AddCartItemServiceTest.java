@@ -54,7 +54,6 @@ class AddCartItemServiceTest {
     @Test
     void addProductNotExist() {
         var productIdDomain = ProductIdDomainMother.random();
-        var cartItemDomain = CartItemDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
         when(cartService.getItemFromStock(any(), any())).thenThrow(new NotExistException("The product not exist"));
@@ -65,7 +64,6 @@ class AddCartItemServiceTest {
     @Test
     void addProductNotAvailable() {
         var productIdDomain = ProductIdDomainMother.random();
-        var cartItemDomain = CartItemDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
         when(cartService.getItemFromStock(any(), any()))

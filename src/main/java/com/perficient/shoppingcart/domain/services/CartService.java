@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -43,17 +44,8 @@ public class CartService {
                     String.format("The product (%s) is not available in the stock", productIdDomain.getId()));
         }
 
-        var productDomain = new ProductDomain(
-                currentProductDomain.getProductIdDomain(),
-                currentProductDomain.getCode(),
-                currentProductDomain.getName(),
-                currentProductDomain.getUnitPrice(),
-                currentProductDomain.getStock() - 1,
-                currentProductDomain.getActive(),
-                currentProductDomain.getDescription()
-        );
-
-        productDomainRepository.updateProductInStock(productDomain);
+        var productStock = currentProductDomain.getStock() - 1;
+        updateProductInStock(currentProductDomain, productStock);
 
         var currentQuantity = Optional.ofNullable(cartItemsDomain.get(productIdDomain.getId()))
             .map(CartItemDomain::getQuantity)
@@ -64,4 +56,57 @@ public class CartService {
                 currentProductDomain.getUnitPrice()
         );
     }
+
+    /**
+     * Delete an item from cart
+     * @param productIdDomain the product id domain
+     * @param cartItemsDomain the cart item domain
+     * @return the ConcurrentMap cart item domain
+     */
+    public ConcurrentMap<String, CartItemDomain> deleteItemFromCart(ProductIdDomain productIdDomain,
+                                           ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+
+        ConcurrentMap<String, CartItemDomain> cart = new ConcurrentHashMap<>(cartItemsDomain);
+
+        var currentProductDomain = productDomainRepository.getProductFromStock(productIdDomain)
+                .orElseThrow(() -> new NotExistException(
+                        String.format("The product (%s) does not exist", productIdDomain.getId())));
+
+        var productId = productIdDomain.getId();
+        var cartItem = Optional.ofNullable(cart.get(productId))
+                .orElseThrow(() -> new NotExistException("The product not exist in the cart"));
+
+        if (cartItem.getQuantity() > 1) {
+            var quantity = cartItem.getQuantity() - 1;
+            var item = new CartItemDomain(quantity, cartItem.getUnitPrice());
+
+            cart.put(productId, item);
+        } else {
+            cart.remove(productId);
+        }
+
+        var productStock = currentProductDomain.getStock() + 1;
+        updateProductInStock(currentProductDomain, productStock);
+
+        return cart;
+    }
+
+    /**
+     * Update the product stock
+     * @param productDomain the product domain
+     * @param quantity the product in stock
+     */
+    private void updateProductInStock(ProductDomain productDomain, int quantity) {
+        var newProductStock = new ProductDomain(
+                productDomain.getProductIdDomain(),
+                productDomain.getCode(),
+                productDomain.getName(),
+                productDomain.getUnitPrice(),
+                quantity,
+                productDomain.getActive(),
+                productDomain.getDescription()
+        );
+        productDomainRepository.updateProductInStock(newProductStock);
+    }
+
 }
