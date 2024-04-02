@@ -3,7 +3,7 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 import com.perficient.shoppingcart.application.AddCartItemService;
 import com.perficient.shoppingcart.application.DeleteCartItemService;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
-import com.perficient.shoppingcart.application.api.model.Item;
+import com.perficient.shoppingcart.application.api.model.PaymentSummary;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mappers.ItemModelApiMapper;
@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -66,8 +66,12 @@ public class CartController implements CartApi {
      * @return a list api model items
      */
     @Override
-    public ResponseEntity<List<Item>> getCartItems() {
-        return ResponseEntity.ok(ItemModelApiMapper.fromDomain(cartItems));
+    public ResponseEntity<PaymentSummary> getCartItems(String paymentMethod) {
+        PaymentSummary paymentSummary = new PaymentSummary()
+                .items(ItemModelApiMapper.fromDomain(cartItems))
+                .total(new BigDecimal(0));
+
+        return ResponseEntity.ok(paymentSummary);
     }
 
     /**
