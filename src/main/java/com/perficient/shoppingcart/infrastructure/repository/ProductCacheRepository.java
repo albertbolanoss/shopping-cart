@@ -29,17 +29,19 @@ public class ProductCacheRepository {
      * @return a Product entity
      */
     @Cacheable(value="ProductInStock", key="#id", unless = "#result == null")
-    Optional<Product> findByIdFromCache(String id) {
-        return productRepository.getById(id);
+    Integer getStockQuantity(String id) {
+        return productRepository.getById(id).map(Product::getStock)
+                .orElse(0);
     }
 
     /**
      * Update a product in cache
-     * @param product the product to update
+     * @param id the product id
+     * @param quantity the quantity
      * @return an optional of product entity
      */
-    @CachePut(value="ProductInStock", key="#product.id")
-    public Optional<Product> updateProductInCache(Product product) {
-        return Optional.ofNullable(product);
+    @CachePut(value="ProductInStock", key="#id")
+    public Integer updateStockQuantity(String id, Integer quantity) {
+        return Optional.ofNullable(quantity).orElse(0);
     }
 }

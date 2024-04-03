@@ -9,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -22,25 +21,25 @@ class ProductCacheRepositoryTest {
 
     @Test
     void findByIdFromCache() {
-        var expectedProduct = ProductMother.random();
+        var product = ProductMother.random();
+        var expectedStock = product.getStock();
 
-        when(productRepository.getById(anyString())).thenReturn(Optional.of(expectedProduct));
+        when(productRepository.getById(anyString())).thenReturn(Optional.of(product));
 
-        productCacheRepository.findByIdFromCache(expectedProduct.getId());
-        var actualProduct = productCacheRepository.findByIdFromCache(expectedProduct.getId());
+        productCacheRepository.getStockQuantity(product.getId());
+        var actualStockQuantity = productCacheRepository.getStockQuantity(product.getId());
 
-        assertTrue(actualProduct.isPresent());
-        assertEquals(expectedProduct.getId(), actualProduct.get().getId());
+        assertEquals(expectedStock, actualStockQuantity);
     }
 
     @Test
     void updateProductInCache() {
-        var expectedProduct = ProductMother.random();
+        var product = ProductMother.random();
+        var expectedStockQuantity = product.getStock();
 
-        var actualProduct = productCacheRepository.updateProductInCache(expectedProduct);
+        var actualStockQuantity = productCacheRepository.updateStockQuantity(product.getId(), product.getStock());
 
-        assertTrue(actualProduct.isPresent());
-        assertEquals(expectedProduct.getId(), actualProduct.get().getId());
+        assertEquals(expectedStockQuantity, actualStockQuantity);
         
     }
 }

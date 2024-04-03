@@ -5,7 +5,6 @@ import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.exceptions.ProductNotAvailableException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
-import com.perficient.shoppingcart.domain.valueobjects.ProductDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mother.CartItemDomainMother;
 import com.perficient.shoppingcart.infrastructure.mother.ProductDomainMother;
@@ -30,7 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +44,10 @@ class CartServiceTest {
     private CartPaymentService cartPaymentService;
 
     @Captor
-    ArgumentCaptor<ProductDomain> productDomainArgCaptor;
+    ArgumentCaptor<ProductIdDomain> productIdDomainArgCaptor;
+
+    @Captor
+    ArgumentCaptor<Integer> quantityArgCaptor;
 
 
     @Test
@@ -61,20 +62,26 @@ class CartServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+        when(productDomainRepository.getProductById(any(ProductIdDomain.class)))
                 .thenReturn(Optional.of(productDomain));
 
-        doNothing().when(productDomainRepository).updateProductInStock(any(ProductDomain.class));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
+                .thenReturn(productDomain.getStock());
+
+        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
 
         cartService.addItemToCart(productIdDomain, cartItemsDomain);
 
-        verify(productDomainRepository).updateProductInStock(productDomainArgCaptor.capture());
-        verify(productDomainRepository, atLeastOnce()).getProductFromStock(any(ProductIdDomain.class));
-        verify(productDomainRepository, atLeastOnce()).updateProductInStock(any(ProductDomain.class));
+        verify(productDomainRepository).updateStockQuantity(
+                productIdDomainArgCaptor.capture(), quantityArgCaptor.capture());
+        verify(productDomainRepository, atLeastOnce()).getProductById(any(ProductIdDomain.class));
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(
+                any(ProductIdDomain.class), any(Integer.class));
 
-        var actualProductDomain = productDomainArgCaptor.getValue();
-        assertEquals(expectedStockQuantity, actualProductDomain.getStock());
-        assertEquals(productDomain.getUnitPrice(), actualProductDomain.getUnitPrice());
+        var actualProductIdDomain = productIdDomainArgCaptor.getValue();
+        var actualQuantity = quantityArgCaptor.getValue();
+        assertEquals(productIdDomain.getId(), actualProductIdDomain.getId());
+        assertEquals(expectedStockQuantity, actualQuantity);
 
         assertNotNull(cartItemsDomain);
         assertFalse(cartItemsDomain.isEmpty());
@@ -94,20 +101,25 @@ class CartServiceTest {
 
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+        when(productDomainRepository.getProductById(any(ProductIdDomain.class)))
                 .thenReturn(Optional.of(productDomain));
 
-        doNothing().when(productDomainRepository).updateProductInStock(any(ProductDomain.class));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
+                .thenReturn(productDomain.getStock());
+
+        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
 
         cartService.addItemToCart(productIdDomain, cartItemsDomain);
 
-        verify(productDomainRepository).updateProductInStock(productDomainArgCaptor.capture());
-        verify(productDomainRepository, atLeastOnce()).getProductFromStock(any(ProductIdDomain.class));
-        verify(productDomainRepository, atLeastOnce()).updateProductInStock(any(ProductDomain.class));
+        verify(productDomainRepository, atLeastOnce()).getProductById(any(ProductIdDomain.class));
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository).updateStockQuantity(productIdDomainArgCaptor.capture(),
+                quantityArgCaptor.capture());
 
-        var actualProductDomain = productDomainArgCaptor.getValue();
-        assertEquals(expectedStockQuantity, actualProductDomain.getStock());
-        assertEquals(productDomain.getUnitPrice(), actualProductDomain.getUnitPrice());
+        var actualQuantity = quantityArgCaptor.getValue();
+        var actualProductIdDomain = productIdDomainArgCaptor.getValue();
+        assertEquals(expectedStockQuantity, actualQuantity);
+        assertEquals(productIdDomain.getId(), actualProductIdDomain.getId());
 
         assertNotNull(cartItemsDomain);
         assertFalse(cartItemsDomain.isEmpty());
@@ -124,7 +136,7 @@ class CartServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(cartItemDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+        when(productDomainRepository.getProductById(any(ProductIdDomain.class)))
                 .thenReturn(Optional.empty());
 
         assertThrows(NotExistException.class, () -> cartService.addItemToCart(productIdDomain, cartItemsDomain));
@@ -139,7 +151,7 @@ class CartServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(cartItemDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
+        when(productDomainRepository.getProductById(any(ProductIdDomain.class)))
                 .thenReturn(Optional.of(productDomain));
 
         assertThrows(ProductNotAvailableException.class,
@@ -149,8 +161,8 @@ class CartServiceTest {
     @Test
     void deleteItemFromCartSuccessfully() {
         var cartItemDomain = CartItemDomainMother.withFixValues();
-        var productIdDomain = cartItemDomain.getProductIdDomain();
         var productDomain = ProductDomainMother.fromCartItem(cartItemDomain);
+        var productIdDomain = cartItemDomain.getProductIdDomain();
         var expectedStockQuantity = productDomain.getStock() + 1;
         var expectedCartQuantity = cartItemDomain.getQuantity() - 1;
         var expectedUnitPrice = cartItemDomain.getUnitPrice();
@@ -159,19 +171,20 @@ class CartServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
-                .thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
+                .thenReturn(productDomain.getStock());
 
-        doNothing().when(productDomainRepository).updateProductInStock(any(ProductDomain.class));
+        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
 
         cartService.deleteItemFromCart(productIdDomain, cartItemsDomain);
 
-        verify(productDomainRepository, atLeastOnce()).updateProductInStock(any(ProductDomain.class));
-        verify(productDomainRepository).updateProductInStock(productDomainArgCaptor.capture());
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository).updateStockQuantity(productIdDomainArgCaptor.capture(), quantityArgCaptor.capture());
 
-        var actualProductDomain = productDomainArgCaptor.getValue();
-        assertEquals(expectedStockQuantity, actualProductDomain.getStock());
-        assertEquals(productDomain.getUnitPrice(), actualProductDomain.getUnitPrice());
+        var actualQuantity = quantityArgCaptor.getValue();
+        var actualProductIdDomain = productIdDomainArgCaptor.getValue();
+        assertEquals(expectedStockQuantity, actualQuantity);
+        assertEquals(productIdDomain.getId(), actualProductIdDomain.getId());
 
         assertNotNull(cartItemsDomain);
         assertFalse(cartItemsDomain.isEmpty());
@@ -184,45 +197,29 @@ class CartServiceTest {
     @Test
     void deleteItemFromCartRemoveProduct() {
         var cartItemDomain = CartItemDomainMother.onlyOneInStocks();
-        var productDomain = ProductDomainMother.random();
+        var productDomain = ProductDomainMother.fromCartItem(cartItemDomain);
         var productIdDomain = new ProductIdDomain(productDomain.getProductIdDomain().getId());
         var expectedStockQuantity = productDomain.getStock() + 1;
 
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
-                .thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
+                .thenReturn(productDomain.getStock());
 
-        doNothing().when(productDomainRepository).updateProductInStock(any(ProductDomain.class));
+        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
 
         cartService.deleteItemFromCart(productIdDomain, cartItemsDomain);
 
-        verify(productDomainRepository, atLeastOnce()).updateProductInStock(any(ProductDomain.class));
-        verify(productDomainRepository).updateProductInStock(productDomainArgCaptor.capture());
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository).updateStockQuantity(productIdDomainArgCaptor.capture(), quantityArgCaptor.capture());
 
-        var actualProductDomain = productDomainArgCaptor.getValue();
-        assertEquals(expectedStockQuantity, actualProductDomain.getStock());
-        assertEquals(productDomain.getUnitPrice(), actualProductDomain.getUnitPrice());
+        var actualQuantity = quantityArgCaptor.getValue();
+        var actualProductIdDomain = productIdDomainArgCaptor.getValue();
+        assertEquals(expectedStockQuantity, actualQuantity);
+        assertEquals(productIdDomain.getId(), actualProductIdDomain.getId());
 
         assertTrue(cartItemsDomain.isEmpty());
-    }
-
-    @Test
-    void deleteItemFromCartWhenProductNotFound() {
-        var cartItemDomain = CartItemDomainMother.onlyOneInStocks();
-        var productDomain = ProductDomainMother.random();
-        var productIdDomain = new ProductIdDomain(productDomain.getProductIdDomain().getId());
-
-        ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
-        cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
-
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
-                .thenThrow(new NotExistException("The product not exist"));
-
-        assertThrows(NotExistException.class,
-                () -> cartService.deleteItemFromCart(productIdDomain, cartItemsDomain));
-
     }
 
     @Test
@@ -240,23 +237,24 @@ class CartServiceTest {
     @Test
     void deleteAllItemFromCart() {
         var cartItemDomain = CartItemDomainMother.twoOrMoreInStock();
-        var productDomain = ProductDomainMother.random();
+        var productDomain = ProductDomainMother.fromCartItem(cartItemDomain);
         var expectedStockQuantity = productDomain.getStock() + cartItemDomain.getQuantity();
 
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
-                .thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
+                .thenReturn(productDomain.getStock());
 
         cartService.deleteAllItemsFromCart(cartItemsDomain);
 
-        verify(productDomainRepository, times(1)).updateProductInStock(any(ProductDomain.class));
-        verify(productDomainRepository).updateProductInStock(productDomainArgCaptor.capture());
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository).updateStockQuantity(productIdDomainArgCaptor.capture(), quantityArgCaptor.capture());
 
-        var actualProductDomain = productDomainArgCaptor.getValue();
-        assertEquals(expectedStockQuantity, actualProductDomain.getStock());
-        assertEquals(productDomain.getUnitPrice(), actualProductDomain.getUnitPrice());
+        var actualQuantity = quantityArgCaptor.getValue();
+        var actualProductIdDomain = productIdDomainArgCaptor.getValue();
+        assertEquals(expectedStockQuantity, actualQuantity);
+        assertEquals(productDomain.getProductIdDomain().getId(), actualProductIdDomain.getId());
 
         assertTrue(cartItemsDomain.isEmpty());
     }
@@ -264,17 +262,17 @@ class CartServiceTest {
     @Test
     void deleteAllItemFromCartWhenProductNotFound() {
         var cartItemDomain = CartItemDomainMother.onlyOneInStocks();
-        var productDomain = ProductDomainMother.random();
+        var productDomain = ProductDomainMother.fromCartItem(cartItemDomain);
 
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        when(productDomainRepository.getProductFromStock(any(ProductIdDomain.class)))
-                .thenThrow(new NotExistException("The product not exist"));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
+                .thenThrow(new RuntimeException("Error getting the stock quantity"));
 
-        assertThrows(NotExistException.class,
+        assertThrows(RuntimeException.class,
                 () -> cartService.deleteAllItemsFromCart(cartItemsDomain));
-        verify(productDomainRepository, never()).updateProductInStock(any(ProductDomain.class));
+        verify(productDomainRepository, never()).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
 
         assertFalse(cartItemsDomain.isEmpty());
     }
@@ -285,6 +283,6 @@ class CartServiceTest {
 
         assertThrows(CartEmptyException.class,
                 () -> cartService.deleteAllItemsFromCart(cartItemsDomain));
-        verify(productDomainRepository, never()).updateProductInStock(any(ProductDomain.class));
+        verify(productDomainRepository, never()).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
     }
 }
