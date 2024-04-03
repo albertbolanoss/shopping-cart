@@ -38,7 +38,7 @@ public class CartPaymentService {
      * @param cart the cart items domain
      * @return the payment summary domain
      */
-    PaymentSummaryDomain calculateTotalWithFee(PaymentMethod paymentMethod,
+    public PaymentSummaryDomain calculateTotalWithFee(PaymentMethod paymentMethod,
                                                ConcurrentMap<String, CartItemDomain> cart) {
 
         PaymentTotal paymentTotal = Optional.ofNullable(paymentTotalMap.get(paymentMethod.name()))

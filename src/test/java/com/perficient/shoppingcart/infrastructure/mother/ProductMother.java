@@ -16,11 +16,11 @@ public class ProductMother {
     public static Product random() {
         return new Product(
             UUID.randomUUID().toString(),
-            FakerMother.faker.commerce().productName(),
-            FakerMother.faker.commerce().promotionCode(),
-            FakerMother.faker.commerce().material(),
-            new BigDecimal(FakerMother.faker.commerce().price()),
-            FakerMother.faker.random().nextInt(),
+            FakerMother.getFaker().commerce().productName(),
+            FakerMother.getFaker().commerce().promotionCode(),
+            FakerMother.getFaker().commerce().material(),
+            new BigDecimal(FakerMother.getFaker().commerce().price()),
+            FakerMother.getFaker().random().nextInt(),
             Boolean.TRUE
         );
     }

@@ -15,6 +15,6 @@ public class CustomerIdDomainMother {
      * @return CustomerId model instance
      */
     public static CustomerIdDomain random() {
-        return new CustomerIdDomain(FakerMother.randomHex(CUSTOMER_ID_MAX_LENGTH));
+        return new CustomerIdDomain(FakerMother.getFaker().random().hex(CUSTOMER_ID_MAX_LENGTH));
     }
 }

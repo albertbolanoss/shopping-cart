@@ -12,12 +12,12 @@ public class CustomerMother {
      */
     public static Customer random() {
         return new Customer(
-                FakerMother.randomHex(36),
-                FakerMother.randomFirstname(),
-                FakerMother.randomLastname(),
-                FakerMother.randomEmail(),
-                FakerMother.randomPassword(),
-                FakerMother.randomInternationalPhoneNumber(),
+                FakerMother.getFaker().random().hex(36),
+                FakerMother.getFaker().name().firstName(),
+                FakerMother.getFaker().name().lastName(),
+                FakerMother.getFaker().internet().emailAddress(),
+                FakerMother.getFaker().internet().password(),
+                FakerMother.getFaker().internet().username(),
                 Boolean.TRUE
         );
     }

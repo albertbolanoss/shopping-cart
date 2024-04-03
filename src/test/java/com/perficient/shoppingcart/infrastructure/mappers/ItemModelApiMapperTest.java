@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ItemModelApiMapperTest {
+class ItemModelApiMapperTest {
     @Test
     void fromDomain() {
         var cartItemDomain = CartItemDomainMother.random();
 
         ConcurrentHashMap<String, CartItemDomain> cart = new ConcurrentHashMap<>();
-        cart.put(FakerMother.faker.random().hex(36), CartItemDomainMother.random());
-        cart.put(FakerMother.faker.random().hex(36), CartItemDomainMother.random());
-        cart.put(FakerMother.faker.random().hex(36), CartItemDomainMother.random());
+        cart.put(FakerMother.getFaker().random().hex(36), CartItemDomainMother.random());
+        cart.put(FakerMother.getFaker().random().hex(36), CartItemDomainMother.random());
+        cart.put(FakerMother.getFaker().random().hex(36), CartItemDomainMother.random());
 
         var actual = ItemModelApiMapper.fromDomain(cart);
 

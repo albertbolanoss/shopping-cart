@@ -1,8 +1,8 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 
-import com.perficient.shoppingcart.application.GetCustomersByFiltersService;
-import com.perficient.shoppingcart.application.RegisterCustomerService;
+import com.perficient.shoppingcart.application.GetCustomersByFiltersApp;
+import com.perficient.shoppingcart.application.RegisterCustomerApp;
 import com.perficient.shoppingcart.application.api.controller.CustomerApi;
 import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
 import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
@@ -31,13 +31,13 @@ public class CustomerController implements CustomerApi {
      * Register customer service
      */
     @Autowired
-    private RegisterCustomerService registerCustomerService;
+    private RegisterCustomerApp registerCustomerService;
 
     /**
      * The get customers filter service
      */
     @Autowired
-    private GetCustomersByFiltersService getCustomersByFiltersService;
+    private GetCustomersByFiltersApp getCustomersByFiltersService;
 
     /**
      * Customer model assembler

@@ -38,18 +38,14 @@ public class CustomerService {
      * @param customerDomain the customer to add
      */
     public void register(@NotNull @Valid CustomerDomain customerDomain) {
+        if (customerDomain.getFirstName() == null
+                || customerDomain.getLastName() == null
+                || customerDomain.getEmail() == null)
+            throw new IllegalArgumentException("Missing required customer information (first name, last name, email)");
 
-        Optional.ofNullable(customerDomain.getFirstName())
-            .orElseThrow(() -> new IllegalArgumentException("Missing required data first name to register customer"));
-
-        Optional.ofNullable(customerDomain.getLastName())
-                .orElseThrow(() -> new IllegalArgumentException("Missing required last name to register customer"));
-
-        Optional.ofNullable(customerDomain.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Missing required email to register customer"));
 
         Optional.ofNullable(customerDomainRepository.findByEmail(customerDomain.getEmail()))
-            .ifPresent((value) -> {
+            .ifPresent(value -> {
                 var message = String.format("The customer email (%s) is already registered", value.getEmail());
                 throw new AlreadyExistException(message);
             });

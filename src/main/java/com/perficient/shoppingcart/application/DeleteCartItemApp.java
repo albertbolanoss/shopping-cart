@@ -13,11 +13,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.concurrent.ConcurrentMap;
 
 @Service
-public class DeleteCartItemService {
+public class DeleteCartItemApp {
     private final CartService cartService;
 
     @Autowired
-    public DeleteCartItemService(CartService cartService) {
+    public DeleteCartItemApp(CartService cartService) {
         this.cartService = cartService;
     }
 

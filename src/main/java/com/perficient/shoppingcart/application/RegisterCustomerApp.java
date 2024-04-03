@@ -14,7 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 @Validated
-public class RegisterCustomerService {
+public class RegisterCustomerApp {
     /**
      * The customer service domain
      */
@@ -25,7 +25,7 @@ public class RegisterCustomerService {
      * @param customerService customer service domain
      */
     @Autowired
-    public RegisterCustomerService(CustomerService customerService) {
+    public RegisterCustomerApp(CustomerService customerService) {
         this.customerService = customerService;
     }
 

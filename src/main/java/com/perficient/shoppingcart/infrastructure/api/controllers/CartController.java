@@ -1,7 +1,7 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
-import com.perficient.shoppingcart.application.AddCartItemService;
-import com.perficient.shoppingcart.application.DeleteCartItemService;
+import com.perficient.shoppingcart.application.AddCartItemApp;
+import com.perficient.shoppingcart.application.DeleteCartItemApp;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
 import com.perficient.shoppingcart.application.api.model.PaymentSummaryReq;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
@@ -25,12 +25,12 @@ public class CartController implements CartApi {
     /**
      * Add item from stock service
      */
-    private final AddCartItemService addItemFromStock;
+    private final AddCartItemApp addItemFromStock;
 
     /**
      * Delete cart item service
      */
-    private final DeleteCartItemService deleteCartItemService;
+    private final DeleteCartItemApp deleteCartItemApp;
 
     /**
      * The session cart items
@@ -38,9 +38,9 @@ public class CartController implements CartApi {
     private ConcurrentMap<String, CartItemDomain> cartItems = new ConcurrentHashMap<>();
 
     @Autowired
-    public CartController(AddCartItemService addItemFromStock, DeleteCartItemService deleteCartItemService) {
+    public CartController(AddCartItemApp addItemFromStock, DeleteCartItemApp deleteCartItemApp) {
         this.addItemFromStock = addItemFromStock;
-        this.deleteCartItemService = deleteCartItemService;
+        this.deleteCartItemApp = deleteCartItemApp;
     }
 
     /**
@@ -79,7 +79,7 @@ public class CartController implements CartApi {
     public ResponseEntity<Void> deleteItem(String productId) {
         var productIdDomain = new ProductIdDomain(productId);
 
-        deleteCartItemService.deleteItemFromCart(productIdDomain, cartItems);
+        deleteCartItemApp.deleteItemFromCart(productIdDomain, cartItems);
 
         return ResponseEntity.noContent().build();
     }
@@ -91,7 +91,7 @@ public class CartController implements CartApi {
      */
     @Override
     public ResponseEntity<Void> deleteAllItems() {
-        deleteCartItemService.deleteAllItemFromCart(cartItems);
+        deleteCartItemApp.deleteAllItemFromCart(cartItems);
 
         return ResponseEntity.noContent().build();
     }

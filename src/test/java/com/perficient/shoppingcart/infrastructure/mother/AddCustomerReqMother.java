@@ -13,11 +13,11 @@ public class AddCustomerReqMother {
      */
     public static AddCustomerReq random() {
         return new AddCustomerReq()
-                .firstName(FakerMother.randomFirstname())
-                .lastName(FakerMother.randomLastname())
-                .email(FakerMother.randomEmail())
-                .phone(FakerMother.randomInternationalPhoneNumber())
-                .password(FakerMother.randomPassword());
+                .firstName(FakerMother.getFaker().name().firstName())
+                .lastName(FakerMother.getFaker().name().lastName())
+                .email(FakerMother.getFaker().internet().emailAddress())
+                .phone(FakerMother.getFaker().phoneNumber().phoneNumberInternational())
+                .password(FakerMother.getFaker().internet().password());
     }
 
     /**
@@ -39,23 +39,23 @@ public class AddCustomerReqMother {
      */
     public static AddCustomerReq invalidMaxLength() {
         return new AddCustomerReq()
-                .firstName(FakerMother.randomText(CustomerDomainMother.FIRSTNAME_MAX_LENGTH + 1))
-                .lastName(FakerMother.randomText(CustomerDomainMother.LASTNAME_MAX_LENGTH + 1))
-                .email(FakerMother.randomText(CustomerDomainMother.EMAIL_MAX_LENGTH + 1))
-                .phone(FakerMother.randomText(CustomerDomainMother.PHONE_MAX_LENGTH + 1))
-                .password(FakerMother.randomText(CustomerDomainMother.PASSWORD_MAX_LENGTH + 1));
+                .firstName(FakerMother.getFaker().lorem().characters(CustomerDomainMother.FIRSTNAME_MAX_LENGTH + 1))
+                .lastName(FakerMother.getFaker().lorem().characters((CustomerDomainMother.LASTNAME_MAX_LENGTH + 1)))
+                .email(FakerMother.getFaker().lorem().characters((CustomerDomainMother.EMAIL_MAX_LENGTH + 1)))
+                .phone(FakerMother.getFaker().lorem().characters((CustomerDomainMother.PHONE_MAX_LENGTH + 1)))
+                .password(FakerMother.getFaker().lorem().characters((CustomerDomainMother.PASSWORD_MAX_LENGTH + 1)));
     }
 
     /**
-     * Generate a Add User Request with random data
-     * @return a instance of AddUserReq
+     * Generate an Add User Request with random data
+     * @return an instance of AddUserReq
      */
     public static AddCustomerReq invalidEmail() {
         return new AddCustomerReq()
-                .firstName(FakerMother.randomFirstname())
-                .lastName(FakerMother.randomLastname())
-                .email(FakerMother.randomUsername())
-                .phone(FakerMother.randomInternationalPhoneNumber())
-                .password(FakerMother.randomPassword());
+                .firstName(FakerMother.getFaker().name().firstName())
+                .lastName(FakerMother.getFaker().name().lastName())
+                .email(FakerMother.getFaker().internet().username())
+                .phone(FakerMother.getFaker().phoneNumber().phoneNumberInternational())
+                .password(FakerMother.getFaker().internet().password());
     }
 }

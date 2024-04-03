@@ -12,8 +12,8 @@ public class PageResponseDomainMother {
      */
     public static PageResponseDomain random() {
         return new PageResponseDomain(
-            FakerMother.faker.random().nextLong(),
-            FakerMother.faker.random().nextInt()
+            FakerMother.getFaker().random().nextLong(),
+            FakerMother.getFaker().random().nextInt()
         );
     }
 }

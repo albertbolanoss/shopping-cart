@@ -16,12 +16,12 @@ public class ProductDomainMother {
     public static ProductDomain random() {
         return new ProductDomain(
                 ProductIdDomainMother.random(),
-                FakerMother.faker.random().hex(),
-                FakerMother.faker.commerce().productName(),
-                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L)),
-                FakerMother.faker.number().numberBetween(1,100),
+                FakerMother.getFaker().random().hex(),
+                FakerMother.getFaker().commerce().productName(),
+                BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
+                FakerMother.getFaker().number().numberBetween(1,100),
                 Boolean.TRUE,
-                FakerMother.faker.commerce().productName()
+                FakerMother.getFaker().commerce().productName()
         );
     }
 
@@ -32,12 +32,12 @@ public class ProductDomainMother {
     public static ProductDomain noStockAvailable() {
         return new ProductDomain(
                 ProductIdDomainMother.random(),
-                FakerMother.faker.random().hex(),
-                FakerMother.faker.commerce().productName(),
-                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L)),
+                FakerMother.getFaker().random().hex(),
+                FakerMother.getFaker().commerce().productName(),
+                BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
                 0,
                 Boolean.TRUE,
-                FakerMother.faker.commerce().productName()
+                FakerMother.getFaker().commerce().productName()
         );
     }
 
@@ -48,12 +48,12 @@ public class ProductDomainMother {
     public static ProductDomain fromCartItem(CartItemDomain cartItemDomain) {
         return new ProductDomain(
                 cartItemDomain.getProductIdDomain(),
-                FakerMother.faker.random().hex(),
-                FakerMother.faker.commerce().productName(),
+                FakerMother.getFaker().random().hex(),
+                FakerMother.getFaker().commerce().productName(),
                 cartItemDomain.getUnitPrice(),
                 cartItemDomain.getQuantity(),
                 Boolean.TRUE,
-                FakerMother.faker.commerce().productName()
+                FakerMother.getFaker().commerce().productName()
         );
     }
 }

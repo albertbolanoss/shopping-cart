@@ -24,14 +24,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-class DeleteCartItemServiceTest {
-    private DeleteCartItemService deleteCartItemService;
+class DeleteCartItemAppTest {
+    private DeleteCartItemApp deleteCartItemApp;
     @Mock
     private CartService cartService;
 
     @BeforeEach
     void init() {
-        deleteCartItemService = new DeleteCartItemService(cartService);
+        deleteCartItemApp = new DeleteCartItemApp(cartService);
     }
 
     @Test
@@ -41,7 +41,7 @@ class DeleteCartItemServiceTest {
 
         doNothing().when(cartService).deleteItemFromCart(any(ProductIdDomain.class), any());
 
-        deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain);
+        deleteCartItemApp.deleteItemFromCart(productIdDomain, cartItemsDomain);
 
         verify(cartService, atLeastOnce()).deleteItemFromCart(any(ProductIdDomain.class), any());
     }
@@ -55,7 +55,7 @@ class DeleteCartItemServiceTest {
                 .deleteItemFromCart(any(ProductIdDomain.class), any());
 
         assertThrows(HttpClientErrorException.class,
-                () -> deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain));
+                () -> deleteCartItemApp.deleteItemFromCart(productIdDomain, cartItemsDomain));
     }
 
     @Test
@@ -68,14 +68,14 @@ class DeleteCartItemServiceTest {
 
 
         assertThrows(HttpClientErrorException.class,
-                () -> deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain));
+                () -> deleteCartItemApp.deleteItemFromCart(productIdDomain, cartItemsDomain));
     }
 
     @Test
     void deleteAllItemFromCart() {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        deleteCartItemService.deleteAllItemFromCart(cartItemsDomain);
+        deleteCartItemApp.deleteAllItemFromCart(cartItemsDomain);
 
         verify(cartService, times(1)).deleteAllItemsFromCart(any());
     }
@@ -89,7 +89,7 @@ class DeleteCartItemServiceTest {
 
 
         assertThrows(HttpClientErrorException.class,
-                () -> deleteCartItemService.deleteAllItemFromCart(cartItemsDomain));
+                () -> deleteCartItemApp.deleteAllItemFromCart(cartItemsDomain));
     }
 
     @Test
@@ -99,7 +99,7 @@ class DeleteCartItemServiceTest {
 
 
         assertThrows(HttpClientErrorException.class,
-                () -> deleteCartItemService.deleteAllItemFromCart(null));
+                () -> deleteCartItemApp.deleteAllItemFromCart(null));
     }
 
 }

@@ -47,7 +47,7 @@ public class CustomerRepositoryTest {
     void findByEmail() {
         var emailFirstCustomerEmail = firstCustomer.getEmail();
         var emailSecondCustomerEmail = secondCustomer.getEmail();
-        var unexpectedCustomerEmail = FakerMother.randomEmail();
+        var unexpectedCustomerEmail = FakerMother.getFaker().internet().emailAddress();
 
         var expectedFirstCustomer = customerRepository.findByEmail(emailFirstCustomerEmail);
         var expectedSecondCustomer = customerRepository.findByEmail(emailSecondCustomerEmail);

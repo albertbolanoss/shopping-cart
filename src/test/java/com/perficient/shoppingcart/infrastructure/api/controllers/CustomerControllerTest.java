@@ -1,8 +1,8 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.perficient.shoppingcart.application.GetCustomersByFiltersService;
-import com.perficient.shoppingcart.application.RegisterCustomerService;
+import com.perficient.shoppingcart.application.GetCustomersByFiltersApp;
+import com.perficient.shoppingcart.application.RegisterCustomerApp;
 import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerPageDomain;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
@@ -31,10 +31,10 @@ public class CustomerControllerTest {
     private ObjectMapper mapper;
 
     @MockBean
-    private RegisterCustomerService registerCustomerService;
+    private RegisterCustomerApp registerCustomerService;
 
     @MockBean
-    private GetCustomersByFiltersService getCustomersByFiltersService;
+    private GetCustomersByFiltersApp getCustomersByFiltersService;
 
     @MockBean
     private CustomerPageModelAssembler customerPageModelAssembler;

@@ -23,15 +23,15 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-class AddCartItemServiceTest {
-    private AddCartItemService addCartItemService;
+class AddCartItemAppTest {
+    private AddCartItemApp addCartItemService;
 
     @Mock
     private CartService cartService;
 
     @BeforeEach
     void init() {
-        addCartItemService = new AddCartItemService(cartService);
+        addCartItemService = new AddCartItemApp(cartService);
     }
 
     @Test

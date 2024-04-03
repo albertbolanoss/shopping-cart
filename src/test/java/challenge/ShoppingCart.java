@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.shared;
+package challenge;
 
 import com.perficient.shoppingcart.domain.valueobjects.CustomerIdDomain;
 import org.springframework.web.context.annotation.SessionScope;

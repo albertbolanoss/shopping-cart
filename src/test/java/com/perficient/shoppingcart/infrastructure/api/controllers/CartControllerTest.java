@@ -1,8 +1,8 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.perficient.shoppingcart.application.AddCartItemService;
-import com.perficient.shoppingcart.application.DeleteCartItemService;
+import com.perficient.shoppingcart.application.AddCartItemApp;
+import com.perficient.shoppingcart.application.DeleteCartItemApp;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import org.junit.jupiter.api.Test;
@@ -32,10 +32,10 @@ class CartControllerTest {
     private ObjectMapper mapper;
 
     @MockBean
-    private AddCartItemService addCartItemService;
+    private AddCartItemApp addCartItemService;
 
     @MockBean
-    private DeleteCartItemService deleteCartItemService;
+    private DeleteCartItemApp deleteCartItemApp;
 
     @Test
     void addItemToCartSuccessfully() throws Exception {
@@ -57,7 +57,7 @@ class CartControllerTest {
         var addItemURI = String.format(URI, productId);
         ConcurrentMap<String, CartItemDomain> cartItems = new ConcurrentHashMap<>();
 
-        doNothing().when(deleteCartItemService).deleteItemFromCart(any(ProductIdDomain.class), any());
+        doNothing().when(deleteCartItemApp).deleteItemFromCart(any(ProductIdDomain.class), any());
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(addItemURI)
@@ -70,7 +70,7 @@ class CartControllerTest {
     void deleteAllItems() throws Exception {
         ConcurrentMap<String, CartItemDomain> cartItems = new ConcurrentHashMap<>();
 
-        doNothing().when(deleteCartItemService).deleteAllItemFromCart(any());
+        doNothing().when(deleteCartItemApp).deleteAllItemFromCart(any());
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(URI)

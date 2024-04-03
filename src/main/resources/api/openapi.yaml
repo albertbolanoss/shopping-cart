@@ -75,6 +75,8 @@ paths:
           name: limit
           schema:
             type: integer
+            minimum: 0
+            maximum: 100
           description: The numbers of items to return
           required: true
         - in: query

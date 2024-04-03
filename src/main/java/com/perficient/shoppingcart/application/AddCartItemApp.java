@@ -16,14 +16,14 @@ import java.util.concurrent.ConcurrentMap;
  * Add cart item service application
  */
 @Service
-public class AddCartItemService {
+public class AddCartItemApp {
     /**
      * Cart service domain
      */
     private final CartService cartService;
 
     @Autowired
-    public AddCartItemService(CartService productService) {
+    public AddCartItemApp(CartService productService) {
         this.cartService = productService;
     }
 
