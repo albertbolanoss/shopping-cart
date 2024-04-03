@@ -1,13 +1,14 @@
 package com.perficient.shoppingcart.domain.services;
 
 import com.perficient.shoppingcart.domain.enumerators.PaymentMethod;
-import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
 import com.perficient.shoppingcart.domain.exceptions.PaymentMethodNotSupportedException;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
+import com.perficient.shoppingcart.domain.valueobjects.PaymentSummaryDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -34,23 +35,26 @@ public class CartPaymentService {
     /**
      *
      * @param paymentMethod the payment method enumerator
-     * @param cartItemsDomain the cart items domain
-     * @return a big decimal of the total with fee
+     * @param cart the cart items domain
+     * @return the payment summary domain
      */
-    BigDecimal calculateTotalWithFee(PaymentMethod paymentMethod,
-                                     ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-
-        Optional.ofNullable(cartItemsDomain).orElseThrow(() -> new CartEmptyException("The cart is empty"));
+    PaymentSummaryDomain calculateTotalWithFee(PaymentMethod paymentMethod,
+                                               ConcurrentMap<String, CartItemDomain> cart) {
 
         PaymentTotal paymentTotal = Optional.ofNullable(paymentTotalMap.get(paymentMethod.name()))
                 .orElseThrow(() -> new PaymentMethodNotSupportedException("The payment method is not supported yet"));
 
 
-        var cart = new ConcurrentHashMap<>(cartItemsDomain);
-        var subtotal = cart.values().stream()
+        var cartItemsDomain = new ArrayList<>(Optional.ofNullable(cart)
+                .orElse(new ConcurrentHashMap<>())
+                .values());
+
+        var subtotal = cartItemsDomain.stream()
                 .map(cartItem -> cartItem.getUnitPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return paymentTotal.calculateTotalWithFee(subtotal);
+        var total = paymentTotal.calculateTotalWithFee(subtotal);
+
+        return new PaymentSummaryDomain(total, cartItemsDomain);
     }
 }

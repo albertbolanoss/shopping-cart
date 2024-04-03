@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -129,12 +128,15 @@ public class CartService {
         cartItemsDomain.clear();
     }
 
+    /**
+     * Get the payment summary domain
+     * @param paymentMethod the payment method
+     * @param cartItemsDomain the cart items domain
+     * @return a PaymentSummaryDomain
+     */
     public PaymentSummaryDomain getPaymentSummary(PaymentMethod paymentMethod,
                                                   ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-
-        var total = paymentTotalService.calculateTotalWithFee(paymentMethod, cartItemsDomain);
-
-        return new PaymentSummaryDomain(total, new ArrayList<>());
+        return paymentTotalService.calculateTotalWithFee(paymentMethod, cartItemsDomain);
     }
 
     /**

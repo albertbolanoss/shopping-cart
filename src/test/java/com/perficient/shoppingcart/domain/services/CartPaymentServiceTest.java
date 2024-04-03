@@ -13,9 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CartPaymentServiceTest {
+class CartPaymentServiceTest {
     @Autowired
     private CartPaymentService cartPaymentTotalService;
 
@@ -28,9 +30,22 @@ public class CartPaymentServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        var total = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.VISA, cartItemsDomain);
+        var actual = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.VISA, cartItemsDomain);
 
-        assertEquals(expected, total);
+        assertEquals(expected, actual.getTotal());
+        assertFalse(actual.getCartItemDomainList().isEmpty());
+    }
+
+    @Test
+    void calculateTotalWithFeeForVisaWithEmptyCart() {
+        var expected = new BigDecimal("0");
+
+        ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
+
+        var actual = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.VISA, cartItemsDomain);
+
+        assertEquals(expected, actual.getTotal());
+        assertTrue(actual.getCartItemDomainList().isEmpty());
     }
 
     @Test
@@ -42,9 +57,10 @@ public class CartPaymentServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        var total = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.MASTERCARD, cartItemsDomain);
+        var actual = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.MASTERCARD, cartItemsDomain);
 
-        assertEquals(expected, total);
+        assertEquals(expected, actual.getTotal());
+        assertFalse(actual.getCartItemDomainList().isEmpty());
     }
 
     @Test
@@ -56,8 +72,9 @@ public class CartPaymentServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productDomain.getProductIdDomain().getId(), cartItemDomain);
 
-        var total = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.CASH, cartItemsDomain);
+        var actual = cartPaymentTotalService.calculateTotalWithFee(PaymentMethod.CASH, cartItemsDomain);
 
-        assertEquals(expected, total);
+        assertEquals(expected, actual.getTotal());
+        assertFalse(actual.getCartItemDomainList().isEmpty());
     }
 }
