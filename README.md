@@ -2,15 +2,83 @@
 
 Shopping Cart is a sample code used to validate coding best practices using the Java language.
 
-## Installation
+## Pre requirements
+- Java 17 or greater and create the home Java environment variable
+- Gradle [7.6.4](https://gradle.org/releases) or greater and create the Gradle home and Gradle Bin paths in environment variables
+- Redis Server or use an [docker image](https://hub.docker.com/_/redis)
 
-Import the project in your favorite IDE with gradle or run it with the gradle wrapper using:
-
+This project has the following configuration for redis
 ```bash
-./gradlew run
+docker pull redis
+docker run --name redis-server -d -p 6379:6379 redis --requirepass password
 ```
 
-## Usage
+## Installation
+
+This repository doesn't include the Gradle wrapper so if you prefer to run this project using the wrapper 
+you have downloaded and configured gradle and created the wrapper for the first time.
+
+```bash
+./gradle wrapper
+```
+
+## Build
+
+To build execute the following command
+```bash
+./gradlew clean build
+```
+
+## Run
+
+To build execute the following command
+```bash
+./gradlew bootRun
+```
+Then you can access to [swagger api specification](http://localhost:8080/swagger-ui/index.html):
+
+The system has preconfigured the following products (id, description)
+
+| Id | Product |
+|--|--|
+| 379fbb01-ff84-4a61-8856-afa2d52b3974 | Banana     |
+| 560a00dd-6864-49b9-b3f5-1ef420a0efca | Orange     |
+| 2f04919e-b6a8-4235-ac96-69c1659fa965 | Strawberry |
+
+The following is a list of the allowed operations in the API specification:
+
+| Method | URI                              | Description                                              |
+|--------|----------------------------------|----------------------------------------------------------|
+| POST   | /api/v1/product/{productId}/item | Add Item to Cart                                         |
+| Delete | /api/v1/product/{productId}/item | Delete an Item from Cart                                 |
+| Get    | /api/v1/product/{productId}/item | Get the Items from the Cart                              |
+| Delete | /api/v1/items                    | Delete all the Items from the Cart                       |
+| POST   | /api/v1/checkout                 | Checkout the items in the cart                           |  
+| POST   | /api/v1/customer                 | Create a new customer                                    |
+| Get    | /api/v1/customer                 | Get the customers information filter by query parameters |
+
+## Run the tests
+
+To build execute the following command
+```bash
+./gradlew bootTestRun
+```
+
+## Project folder description
+
+- src/main/resources/design: The design of system
+- .github/workflow: Github Action workflow
+- src/main/resources/application.yml: the spring application configuration
+- src/main/resources/api:  Open API Specification definition
+- src/main/resources/config/liquibase:  Liquibase database change management 
+- src/main/java/com/perficient/shoppingcart/application: the application layer
+- src/main/java/com/perficient/shoppingcart/domain: the domain layer
+- src/main/java/com/perficient/shoppingcart/infrastructure: the infrastructure layer
+- src/main/java/com/perficient/shoppingcart/shared: the shared and commons and transversal classes
+- src/test/java/com/perficient/shoppingcart: unit test and component tests
+- src/test/resources/application.yml: the spring test configuration
+
+## Challenge
 
 The exercise is used to:
 
@@ -21,13 +89,6 @@ The exercise is used to:
 * Understand the unit testing practices of the candidate by making use of unit tests that should be completed based on unit testing best practices.
 
 * Understand that the candidate knows how to build java applications using modern application frameworks like Spring, Micronaut, Quarkus, Helidon, among others by applying coding best practices, design principles, and patterns.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## Homework
 
@@ -56,3 +117,9 @@ The application should:
 1. In general, have design and architecture best practices.
 1. Make assumptions and explain them in the README.
 1. Send the code compressed in a zip file to <evaluator’s email>. Source code only.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
