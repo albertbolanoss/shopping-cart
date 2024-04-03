@@ -1,6 +1,5 @@
 package com.perficient.shoppingcart.infrastructure.repository;
 
-import com.perficient.shoppingcart.infrastructure.entities.Product;
 import com.perficient.shoppingcart.infrastructure.mother.ProductDomainMother;
 import com.perficient.shoppingcart.infrastructure.mother.ProductIdDomainMother;
 import com.perficient.shoppingcart.infrastructure.mother.ProductMother;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,22 +24,25 @@ class ProductDomainRepositoryImplTest {
     private ProductDomainRepositoryImpl productDomainRepository;
 
     @Mock
+    private ProductRepository productRepository;
+
+    @Mock
     private ProductCacheRepository productCacheRepository;
 
 
     @BeforeEach
     void init() {
-        productDomainRepository = new ProductDomainRepositoryImpl(productCacheRepository);
+        productDomainRepository = new ProductDomainRepositoryImpl(productRepository, productCacheRepository);
     }
 
     @Test
-    void getProductFromStock() {
+    void getProductById() {
         var product = ProductMother.random();
         var productIdDomain = ProductIdDomainMother.random();
 
-        when(productCacheRepository.findByIdFromCache(anyString())).thenReturn(Optional.of(product));
+        when(productRepository.getById(anyString())).thenReturn(Optional.of(product));
 
-        var actual = productDomainRepository.getProductFromStock(productIdDomain);
+        var actual = productDomainRepository.getProductById(productIdDomain);
 
         assertTrue(actual.isPresent());
 
@@ -57,8 +59,8 @@ class ProductDomainRepositoryImplTest {
     void updateProductInStock() {
         var productDomain = ProductDomainMother.random();
 
-        productDomainRepository.updateProductInStock(productDomain);
+        productDomainRepository.updateStockQuantity(productDomain.getProductIdDomain(), productDomain.getStock());
 
-        verify(productCacheRepository, times(1)).updateProductInCache(any(Product.class));
+        verify(productCacheRepository, atLeastOnce()).updateStockQuantity(anyString(), any(Integer.class));
     }
 }

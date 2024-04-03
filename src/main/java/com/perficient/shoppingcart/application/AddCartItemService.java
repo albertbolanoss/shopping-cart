@@ -32,10 +32,10 @@ public class AddCartItemService {
      * @param productIdDomain the product id domain
      * @param cartItemsDomain the customer cart items domain
      */
-    public CartItemDomain add(ProductIdDomain productIdDomain,
+    public void addItemToCart(ProductIdDomain productIdDomain,
                               ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
         try {
-            return cartService.getItemFromStock(productIdDomain, cartItemsDomain);
+            cartService.addItemToCart(productIdDomain, cartItemsDomain);
         } catch (NotExistException | ProductNotAvailableException ex) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
         }

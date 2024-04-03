@@ -15,11 +15,12 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class AddCartItemServiceTest {
@@ -37,18 +38,15 @@ class AddCartItemServiceTest {
     void addSuccessfully() {
         var productIdDomain = ProductIdDomainMother.random();
         var cartItemDomain = CartItemDomainMother.random();
-        var expectedCartItemDomain = CartItemDomainMother.random();
 
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
         cartItemsDomain.put(productIdDomain.getId(), cartItemDomain);
 
-        when(cartService.getItemFromStock(any(), any())).thenReturn(expectedCartItemDomain);
+        doNothing().when(cartService).addItemToCart(any(), any());
 
-        var actualCartItemDomain = addCartItemService.add(productIdDomain, cartItemsDomain);
+        addCartItemService.addItemToCart(productIdDomain, cartItemsDomain);
 
-        assertNotNull(actualCartItemDomain);
-        assertEquals(expectedCartItemDomain.getQuantity(), actualCartItemDomain.getQuantity());
-        assertEquals(expectedCartItemDomain.getUnitPrice(), actualCartItemDomain.getUnitPrice());
+        verify(cartService, atLeastOnce()).addItemToCart(any(), any());
     }
 
     @Test
@@ -56,9 +54,9 @@ class AddCartItemServiceTest {
         var productIdDomain = ProductIdDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        when(cartService.getItemFromStock(any(), any())).thenThrow(new NotExistException("The product not exist"));
+        doThrow(new NotExistException("The product not exist")).when(cartService).addItemToCart(any(), any());
 
-        assertThrows(HttpClientErrorException.class, () -> addCartItemService.add(productIdDomain, cartItemsDomain));
+        assertThrows(HttpClientErrorException.class, () -> addCartItemService.addItemToCart(productIdDomain, cartItemsDomain));
     }
 
     @Test
@@ -66,9 +64,8 @@ class AddCartItemServiceTest {
         var productIdDomain = ProductIdDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        when(cartService.getItemFromStock(any(), any()))
-                .thenThrow(new ProductNotAvailableException("There is not in the stock"));
+        doThrow(new ProductNotAvailableException("There is not in the stock")).when(cartService).addItemToCart(any(), any());
 
-        assertThrows(HttpClientErrorException.class, () -> addCartItemService.add(productIdDomain, cartItemsDomain));
+        assertThrows(HttpClientErrorException.class, () -> addCartItemService.addItemToCart(productIdDomain, cartItemsDomain));
     }
 }

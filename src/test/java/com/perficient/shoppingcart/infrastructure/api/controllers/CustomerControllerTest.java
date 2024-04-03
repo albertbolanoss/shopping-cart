@@ -3,7 +3,7 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perficient.shoppingcart.application.GetCustomersByFiltersService;
 import com.perficient.shoppingcart.application.RegisterCustomerService;
-import com.perficient.shoppingcart.application.api.model.GetCustomerPage;
+import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerPageDomain;
 import com.perficient.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
 import com.perficient.shoppingcart.infrastructure.api.hateoas.CustomerPageModelAssembler;
@@ -91,7 +91,7 @@ public class CustomerControllerTest {
     void getCustomers() throws Exception {
 
         var customerPageDomainMother = CustomerPageDomainMother.random();
-        GetCustomerPage getCustomerPage = new GetCustomerPage();
+        GetCustomerPageReq getCustomerPage = new GetCustomerPageReq();
 
         when(getCustomersByFiltersService.findByFilter(any(CustomerReqFilterDomain.class)))
                 .thenReturn(customerPageDomainMother);

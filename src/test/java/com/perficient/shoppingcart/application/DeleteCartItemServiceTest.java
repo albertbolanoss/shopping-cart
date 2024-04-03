@@ -15,13 +15,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class DeleteCartItemServiceTest {
@@ -39,12 +39,11 @@ class DeleteCartItemServiceTest {
         var productIdDomain = ProductIdDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        when(cartService.deleteItemFromCart(any(ProductIdDomain.class), any()))
-                .thenReturn(cartItemsDomain);
+        doNothing().when(cartService).deleteItemFromCart(any(ProductIdDomain.class), any());
 
-        var actualCart = deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain);
+        deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain);
 
-        assertNotNull(actualCart);
+        verify(cartService, atLeastOnce()).deleteItemFromCart(any(ProductIdDomain.class), any());
     }
 
     @Test
@@ -52,8 +51,8 @@ class DeleteCartItemServiceTest {
         var productIdDomain = ProductIdDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        when(cartService.deleteItemFromCart(any(ProductIdDomain.class), any()))
-                .thenThrow(new NotExistException("the product not exist"));
+        doThrow(new NotExistException("the product not exist")).when(cartService)
+                .deleteItemFromCart(any(ProductIdDomain.class), any());
 
         assertThrows(HttpClientErrorException.class,
                 () -> deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain));
@@ -64,8 +63,9 @@ class DeleteCartItemServiceTest {
         var productIdDomain = ProductIdDomainMother.random();
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
-        when(cartService.deleteItemFromCart(any(ProductIdDomain.class), any()))
-                .thenThrow(new CartEmptyException("The cart does not contain any elements"));
+        doThrow(new CartEmptyException("The cart does not contain any elements")).when(cartService)
+                .deleteItemFromCart(any(ProductIdDomain.class), any());
+
 
         assertThrows(HttpClientErrorException.class,
                 () -> deleteCartItemService.deleteItemFromCart(productIdDomain, cartItemsDomain));
@@ -77,7 +77,7 @@ class DeleteCartItemServiceTest {
 
         deleteCartItemService.deleteAllItemFromCart(cartItemsDomain);
 
-        verify(cartService, times(1)).deleteAllItemFromCart(any());
+        verify(cartService, times(1)).deleteAllItemsFromCart(any());
     }
 
     @Test
@@ -85,7 +85,7 @@ class DeleteCartItemServiceTest {
         ConcurrentMap<String, CartItemDomain> cartItemsDomain = new ConcurrentHashMap<>();
 
         doThrow(new CartEmptyException("The cart does not contain any elements"))
-                .when(cartService).deleteAllItemFromCart(any());
+                .when(cartService).deleteAllItemsFromCart(any());
 
 
         assertThrows(HttpClientErrorException.class,
@@ -95,7 +95,7 @@ class DeleteCartItemServiceTest {
     @Test
     void deleteAllItemFromCartNullable() {
         doThrow(new CartEmptyException("The cart does not contain any elements"))
-                .when(cartService).deleteAllItemFromCart(any());
+                .when(cartService).deleteAllItemsFromCart(any());
 
 
         assertThrows(HttpClientErrorException.class,
