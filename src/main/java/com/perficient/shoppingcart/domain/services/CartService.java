@@ -43,10 +43,12 @@ public class CartService {
     /**
      * Get a product items from the stock
      * @param productIdDomain the product id domain
-     * @return an updated cart item
      */
-    public CartItemDomain getItemFromStock(ProductIdDomain productIdDomain,
-                                           ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+    public void addItemToCart(ProductIdDomain productIdDomain,
+                                        ConcurrentMap<String, CartItemDomain> cart) {
+
+        cart = Optional.ofNullable(cart).orElseGet(ConcurrentHashMap::new);
+
         var productDomain = getProductFromStock(productIdDomain);
         var currentQuantityInStock = productDomain.getStock();
 
@@ -55,60 +57,66 @@ public class CartService {
                     String.format("The product (%s) is not available in the stock", productIdDomain.getId()));
         }
 
-        var newQuantityInStock = currentQuantityInStock - 1;
-        var unitPrice = productDomain.getUnitPrice();
-        var cartQuantityInCart = Optional.ofNullable(cartItemsDomain.get(productIdDomain.getId()))
-            .map(item -> item.getQuantity() + 1)
-            .orElse(1);
 
+        var cartItemDomain = Optional.ofNullable(cart.get(productIdDomain.getId()))
+            .map(item -> new CartItemDomain(
+                    item.getQuantity() + 1,
+                    item.getUnitPrice(),
+                    item.getProductIdDomain())
+            ).orElse(new CartItemDomain(
+                    1,
+                    productDomain.getUnitPrice(),
+                    productDomain.getProductIdDomain()
+            ));
+
+
+        var newQuantityInStock = currentQuantityInStock - 1;
         updateProductInStock(productDomain, newQuantityInStock);
 
-        return new CartItemDomain(cartQuantityInCart, unitPrice);
+        cart.put(productIdDomain.getId(), cartItemDomain);
     }
 
     /**
      * Delete an item from cart
      * @param productIdDomain the product id domain
      * @param cartItemsDomain the cart items domain
-     * @return the ConcurrentMap cart item domain
      */
-    public ConcurrentMap<String, CartItemDomain> deleteItemFromCart(ProductIdDomain productIdDomain,
+    public void deleteItemFromCart(ProductIdDomain productIdDomain,
                                            ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
 
-        ConcurrentMap<String, CartItemDomain> cart = cloneCartItemDomain(cartItemsDomain);
+        checkIfCartIsEmpty(cartItemsDomain);
 
         var currentProductDomain = getProductFromStock(productIdDomain);
 
         var productId = productIdDomain.getId();
-        var cartItem = Optional.ofNullable(cart.get(productId))
+        var cartItem = Optional.ofNullable(cartItemsDomain.get(productId))
                 .orElseThrow(() -> new NotExistException("The product not exist in the cart"));
 
         if (cartItem.getQuantity() > 1) {
             var quantity = cartItem.getQuantity() - 1;
-            var item = new CartItemDomain(quantity, cartItem.getUnitPrice());
+            var item = new CartItemDomain(quantity, cartItem.getUnitPrice(), cartItem.getProductIdDomain());
 
-            cart.put(productId, item);
+            cartItemsDomain.put(productId, item);
         } else {
-            cart.remove(productId);
+            cartItemsDomain.remove(productId);
         }
 
         var productStock = currentProductDomain.getStock() + 1;
         updateProductInStock(currentProductDomain, productStock);
-
-        return cart;
     }
 
     /**
      * Delete all the item from cart
      * @param cartItemsDomain the cart items domain
      */
-    public void deleteAllItemFromCart(ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-        ConcurrentMap<String, CartItemDomain> cart = cloneCartItemDomain(cartItemsDomain);
+    public void deleteAllItemsFromCart(ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
         List<ProductDomain> products = new ArrayList<>();
 
-        cart.keySet().forEach(productId -> {
+        checkIfCartIsEmpty(cartItemsDomain);
+
+        cartItemsDomain.keySet().forEach(productId -> {
             var productIdDomain = new ProductIdDomain(productId);
-            var cartItem = cart.get(productId);
+            var cartItem = cartItemsDomain.get(productId);
             var currentProductDomain = getProductFromStock(productIdDomain);
 
             var newProductStock = new ProductDomain(
@@ -124,6 +132,8 @@ public class CartService {
         });
 
         products.forEach(productDomainRepository::updateProductInStock);
+
+        cartItemsDomain.clear();
     }
 
     public PaymentSummaryDomain getPaymentSummary(PaymentMethod paymentMethod,
@@ -145,20 +155,6 @@ public class CartService {
                         String.format("The product (%s) does not exist", productIdDomain.getId())));
     }
 
-    /**
-     * Clone the cart item domain or throw exception if the cart is empty
-     * @param cartItemsDomain the cart item domain
-     * @return a ConcurrentMap of cart item domain
-     */
-    private ConcurrentMap<String, CartItemDomain> cloneCartItemDomain(
-            ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-        if (cartItemsDomain == null || cartItemsDomain.isEmpty()) {
-            throw new CartEmptyException("The cart does not contain any item");
-        }
-
-        return new ConcurrentHashMap<>(cartItemsDomain);
-    }
-
 
     /**
      * Update the product stock
@@ -176,6 +172,16 @@ public class CartService {
                 productDomain.getDescription()
         );
         productDomainRepository.updateProductInStock(newProductStock);
+    }
+
+    /**
+     * Verify if the cart is empty
+     * @param cart
+     */
+    private void checkIfCartIsEmpty(ConcurrentMap<String, CartItemDomain> cart) {
+        if (cart  == null || cart.isEmpty()) {
+            throw new CartEmptyException("The operation is not valid because The cart is empty");
+        }
     }
 
 }

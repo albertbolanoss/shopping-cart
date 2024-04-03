@@ -51,14 +51,10 @@ public class CartController implements CartApi {
     @Override
     public ResponseEntity<Void> addItem(String productId)  {
         var productIdDomain = new ProductIdDomain(productId);
-        var chartItemDomain = addItemFromStock.add(productIdDomain, cartItems);
 
-        if (chartItemDomain != null) {
-            cartItems.put(productIdDomain.getId(), chartItemDomain);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
+        addItemFromStock.addItemToCart(productIdDomain, cartItems);
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
@@ -82,9 +78,8 @@ public class CartController implements CartApi {
     @Override
     public ResponseEntity<Void> deleteItem(String productId) {
         var productIdDomain = new ProductIdDomain(productId);
-        ConcurrentHashMap<String, CartItemDomain> cart = new ConcurrentHashMap<>(cartItems);
 
-        cartItems =  deleteCartItemService.deleteItemFromCart(productIdDomain, cart);
+        deleteCartItemService.deleteItemFromCart(productIdDomain, cartItems);
 
         return ResponseEntity.noContent().build();
     }
@@ -96,10 +91,7 @@ public class CartController implements CartApi {
      */
     @Override
     public ResponseEntity<Void> deleteAllItems() {
-        ConcurrentHashMap<String, CartItemDomain> cart = new ConcurrentHashMap<>(cartItems);
-        deleteCartItemService.deleteAllItemFromCart(cart);
-
-        cartItems = new ConcurrentHashMap<>();
+        deleteCartItemService.deleteAllItemFromCart(cartItems);
 
         return ResponseEntity.noContent().build();
     }

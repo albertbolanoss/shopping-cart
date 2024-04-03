@@ -25,14 +25,13 @@ public class DeleteCartItemService {
      * Delete an item from cart
      * @param productIdDomain the prodict id domain
      * @param cartItemsDomain the cart items domain
-     * @return a ConcurrentMap  cart items domain
      */
-    public ConcurrentMap<String, CartItemDomain> deleteItemFromCart(
+    public void deleteItemFromCart(
             ProductIdDomain productIdDomain,
             ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
 
         try {
-            return cartService.deleteItemFromCart(productIdDomain, cartItemsDomain);
+            cartService.deleteItemFromCart(productIdDomain, cartItemsDomain);
         } catch (NotExistException | CartEmptyException ex) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
@@ -42,10 +41,9 @@ public class DeleteCartItemService {
      * Delete all the items from cart
      * @param cartItemsDomain the cart items domain
      */
-    public void deleteAllItemFromCart(
-            ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
+    public void deleteAllItemFromCart(ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
         try {
-            cartService.deleteAllItemFromCart(cartItemsDomain);
+            cartService.deleteAllItemsFromCart(cartItemsDomain);
         } catch (NotExistException | CartEmptyException ex) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
         }

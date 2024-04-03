@@ -5,7 +5,6 @@ import com.perficient.shoppingcart.application.AddCartItemService;
 import com.perficient.shoppingcart.application.DeleteCartItemService;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
-import com.perficient.shoppingcart.infrastructure.mother.CartItemDomainMother;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,11 +19,10 @@ import java.util.concurrent.ConcurrentMap;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CartController.class)
-public class CartControllerTest {
+class CartControllerTest {
     private final String URI = "/api/v1/product/%s/item";
 
     @Autowired
@@ -42,11 +40,9 @@ public class CartControllerTest {
     @Test
     void addItemToCartSuccessfully() throws Exception {
         var productId = UUID.randomUUID().toString();
-        var cartItemDomain = CartItemDomainMother.random();
         var addItemURI = String.format(URI, productId);
 
-        when(addCartItemService.add(any(ProductIdDomain.class), any()))
-                .thenReturn(cartItemDomain);
+        doNothing().when(addCartItemService).addItemToCart(any(ProductIdDomain.class), any());
 
         mvc.perform(MockMvcRequestBuilders
                         .post(addItemURI)
@@ -56,28 +52,12 @@ public class CartControllerTest {
     }
 
     @Test
-    void addItemToCartGetNullable() throws Exception {
-        var productId = UUID.randomUUID().toString();
-        var addItemURI = String.format(URI, productId);
-
-        when(addCartItemService.add(any(ProductIdDomain.class), any()))
-                .thenReturn(null);
-
-        mvc.perform(MockMvcRequestBuilders
-                        .post(addItemURI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void deleteItem() throws Exception {
         var productId = UUID.randomUUID().toString();
         var addItemURI = String.format(URI, productId);
         ConcurrentMap<String, CartItemDomain> cartItems = new ConcurrentHashMap<>();
 
-        when(deleteCartItemService.deleteItemFromCart(any(ProductIdDomain.class), any()))
-                .thenReturn(cartItems);
+        doNothing().when(deleteCartItemService).deleteItemFromCart(any(ProductIdDomain.class), any());
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(addItemURI)

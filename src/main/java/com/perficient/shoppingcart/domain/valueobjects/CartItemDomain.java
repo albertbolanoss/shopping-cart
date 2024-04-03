@@ -20,4 +20,9 @@ public class CartItemDomain {
      * The item unit price
      */
     private BigDecimal unitPrice;
+
+    /**
+     * The product id
+     */
+    private ProductIdDomain productIdDomain;
 }
