@@ -2,6 +2,7 @@ package com.perficient.shoppingcart.infrastructure.mappers;
 
 import com.perficient.shoppingcart.application.api.model.ItemReq;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
+import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ItemModelApiMapper {
      * @param CartItemDomain the cart items
      * @return a list of model api items
      */
-    public static List<ItemReq> fromDomain(ConcurrentMap<String, CartItemDomain> CartItemDomain) {
+    public static List<ItemReq> fromConcurrentMapCart(ConcurrentMap<String, CartItemDomain> CartItemDomain) {
         List<ItemReq> items = new ArrayList<>();
 
         if (Optional.ofNullable(CartItemDomain).isPresent()) {
@@ -36,6 +37,15 @@ public class ItemModelApiMapper {
             }
         }
         return items;
+    }
+
+    public static ItemReq fromDomain(CartItemDomain cartItemDomain) {
+        return Optional.ofNullable(cartItemDomain)
+                .map(domain -> new ItemReq()
+                        .id(Optional.ofNullable(domain.getProductIdDomain()).map(ProductIdDomain::getId).orElse(null))
+                        .unitPrice(domain.getUnitPrice())
+                        .quantity(domain.getQuantity()))
+                .orElse(null);
     }
 
 }

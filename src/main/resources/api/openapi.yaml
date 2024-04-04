@@ -250,7 +250,7 @@ paths:
       operationId: getCartItems
       parameters:
         - in: query
-          name: paymentMethod
+          name: paymentMethodText
           schema:
             type: string
           style: form
@@ -611,10 +611,10 @@ components:
       description: the pay methods.
       type: object
       properties:
-        paymentMethod:
+        paymentMethodText:
           type: string
           minLength: 1
           maxLength: 50
       required:
-        - paymentMethod
+        - paymentMethodText
 
