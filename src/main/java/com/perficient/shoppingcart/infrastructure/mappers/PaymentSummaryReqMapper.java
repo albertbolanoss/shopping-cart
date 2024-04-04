@@ -20,7 +20,7 @@ public class PaymentSummaryReqMapper {
         return Optional.ofNullable(paymentSummaryDomain)
                 .map(domain -> new PaymentSummaryReq()
                         .total(domain.getTotal())
-                        .items(Optional.ofNullable(paymentSummaryDomain.getCartItemDomainList())
+                        .items(Optional.ofNullable(paymentSummaryDomain.getCartItemDomain())
                                 .orElse(new ArrayList<>())
                                 .stream().map(ItemModelApiMapper::fromDomain)
                                 .collect(Collectors.toList())

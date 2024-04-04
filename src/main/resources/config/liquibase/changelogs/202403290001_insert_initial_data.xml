@@ -11,7 +11,7 @@
             <column name="code" value="001"/>
             <column name="description" value="Fruit"/>
             <column name="unit_price" valueNumeric="2000.00"/>
-            <column name="stock" valueNumeric="5"/>
+            <column name="stock" valueNumeric="50"/>
         </insert>
 
         <insert tableName="product">
@@ -20,7 +20,7 @@
             <column name="code" value="002"/>
             <column name="description" value="Fruit"/>
             <column name="unit_price" valueNumeric="1000.00"/>
-            <column name="stock" valueNumeric="5"/>
+            <column name="stock" valueNumeric="50"/>
         </insert>
 
         <insert tableName="product">
@@ -29,7 +29,7 @@
             <column name="code" value="003"/>
             <column name="description" value="Fruit"/>
             <column name="unit_price" valueNumeric="2000.00"/>
-            <column name="stock" valueNumeric="5"/>
+            <column name="stock" valueNumeric="50"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -1,11 +1,13 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.perficient.shoppingcart.application.AddCartItemApp;
+import com.perficient.shoppingcart.application.CartItemsCheckoutApp;
 import com.perficient.shoppingcart.application.DeleteCartItemApp;
-import com.perficient.shoppingcart.application.GetPaymentCartSummaryApp;
+import com.perficient.shoppingcart.application.GetPaymentSummaryApp;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
+import com.perficient.shoppingcart.application.api.model.CheckoutPayMethodReq;
 import com.perficient.shoppingcart.application.api.model.PaymentSummaryReq;
-import com.perficient.shoppingcart.domain.enumerators.PaymentMethod;
+import com.perficient.shoppingcart.domain.model.PaymentMethod;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mappers.PaymentSummaryReqMapper;
@@ -38,7 +40,12 @@ public class CartController implements CartApi {
     /**
      * Get payment cart summary service
      */
-    private final GetPaymentCartSummaryApp getPaymentCartSummaryApp;
+    private final GetPaymentSummaryApp getPaymentSummaryApp;
+
+    /**
+     * Cart items checkout app
+     */
+    private final CartItemsCheckoutApp cartItemsCheckoutApp;
 
     /**
      * The session cart items
@@ -47,10 +54,11 @@ public class CartController implements CartApi {
 
     @Autowired
     public CartController(AddCartItemApp addItemFromStock, DeleteCartItemApp deleteCartItemApp,
-                          GetPaymentCartSummaryApp getPaymentCartSummaryApp) {
+                          GetPaymentSummaryApp getPaymentSummaryApp, CartItemsCheckoutApp cartItemsCheckoutApp) {
         this.addItemFromStock = addItemFromStock;
         this.deleteCartItemApp = deleteCartItemApp;
-        this.getPaymentCartSummaryApp = getPaymentCartSummaryApp;
+        this.getPaymentSummaryApp = getPaymentSummaryApp;
+        this.cartItemsCheckoutApp = cartItemsCheckoutApp;
     }
 
     /**
@@ -74,14 +82,10 @@ public class CartController implements CartApi {
     @Override
     public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethodText) {
 
-        var paymentMethod = Arrays.stream(PaymentMethod.values())
-                .filter(value -> value.name().equals(paymentMethodText))
-                .findFirst()
-                .orElseThrow(() -> new HttpClientErrorException(
-                        HttpStatus.BAD_REQUEST, "The payment method is no supported yet"));
-
+        var paymentMethod = getPaymentMethodFromText(paymentMethodText);
+        var cartItemsDomain = cartItems.values().stream().toList();
         var paymentSummaryReq = PaymentSummaryReqMapper.fromDomain(
-                getPaymentCartSummaryApp.getPaymentSummary(paymentMethod, cartItems));
+                getPaymentSummaryApp.getPaymentSummary(paymentMethod, cartItemsDomain));
 
         return ResponseEntity.ok(paymentSummaryReq);
     }
@@ -110,6 +114,30 @@ public class CartController implements CartApi {
         deleteCartItemApp.deleteAllItemFromCart(cartItems);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<PaymentSummaryReq> checkout(CheckoutPayMethodReq checkoutPayMethodReq) {
+        var paymentMethod = getPaymentMethodFromText(checkoutPayMethodReq.getPaymentMethodText());
+        var cartItemsDomain = cartItems.values().stream().toList();
+
+        cartItemsCheckoutApp.checkout(paymentMethod, cartItemsDomain);
+        cartItems.clear();
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    /**
+     * Get the payment method from text
+     * @param paymentMethodText the payment method in text format
+     * @return a Pay Method enum
+     */
+    private PaymentMethod getPaymentMethodFromText(String paymentMethodText) {
+        return Arrays.stream(PaymentMethod.values())
+                .filter(value -> value.name().equals(paymentMethodText))
+                .findFirst()
+                .orElseThrow(() -> new HttpClientErrorException(
+                        HttpStatus.BAD_REQUEST, "The payment method is no supported yet"));
     }
 
 }

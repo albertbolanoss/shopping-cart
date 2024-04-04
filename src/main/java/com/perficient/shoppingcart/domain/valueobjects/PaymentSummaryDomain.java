@@ -17,5 +17,5 @@ public class PaymentSummaryDomain {
     /**
      * The cart items domain
      */
-    private List<CartItemDomain> cartItemDomainList;
+    private List<CartItemDomain> cartItemDomain;
 }

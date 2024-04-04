@@ -1,12 +1,10 @@
 package com.perficient.shoppingcart.domain.services;
 
-import com.perficient.shoppingcart.domain.enumerators.PaymentMethod;
 import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
 import com.perficient.shoppingcart.domain.exceptions.NotExistException;
 import com.perficient.shoppingcart.domain.exceptions.ProductNotAvailableException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
-import com.perficient.shoppingcart.domain.valueobjects.PaymentSummaryDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,17 +124,6 @@ public class CartService {
         });
 
         cartItemsDomain.clear();
-    }
-
-    /**
-     * Get the payment summary domain
-     * @param paymentMethod the payment method
-     * @param cartItemsDomain the cart items domain
-     * @return a PaymentSummaryDomain
-     */
-    public PaymentSummaryDomain getPaymentSummary(PaymentMethod paymentMethod,
-                                                  ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-        return paymentTotalService.calculateTotalWithFee(paymentMethod, cartItemsDomain);
     }
 
     /**

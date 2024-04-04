@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PaymentTotalCashServiceTest {
-    private PaymentTotalCashService paymentTotalCashService;
+class PaymentSummaryCashServiceTest {
+    private PaymentSummaryCashService paymentTotalCashService;
 
     @BeforeEach
     void init() {
-        paymentTotalCashService = new PaymentTotalCashService();
+        paymentTotalCashService = new PaymentSummaryCashService();
     }
 
     @Test

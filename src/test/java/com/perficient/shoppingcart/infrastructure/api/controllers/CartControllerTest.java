@@ -2,9 +2,10 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perficient.shoppingcart.application.AddCartItemApp;
+import com.perficient.shoppingcart.application.CartItemsCheckoutApp;
 import com.perficient.shoppingcart.application.DeleteCartItemApp;
-import com.perficient.shoppingcart.application.GetPaymentCartSummaryApp;
-import com.perficient.shoppingcart.domain.enumerators.PaymentMethod;
+import com.perficient.shoppingcart.application.GetPaymentSummaryApp;
+import com.perficient.shoppingcart.domain.model.PaymentMethod;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mother.PaymentSummaryDomainMother;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,10 @@ class CartControllerTest {
     private DeleteCartItemApp deleteCartItemApp;
 
     @MockBean
-    private GetPaymentCartSummaryApp getPaymentCartSummaryApp;
+    private GetPaymentSummaryApp getPaymentSummaryApp;
+
+    @MockBean
+    private CartItemsCheckoutApp cartItemsCheckoutApp;
 
     @Test
     void addItemToCartSuccessfully() throws Exception {
@@ -87,10 +91,10 @@ class CartControllerTest {
     @Test
     void getCartItems() throws Exception {
         var paymentSummaryDomain = PaymentSummaryDomainMother.random();
-        var cartItemDomain = paymentSummaryDomain.getCartItemDomainList().stream().findFirst()
+        var cartItemDomain = paymentSummaryDomain.getCartItemDomain().stream().findFirst()
                 .orElse(null);
 
-        when(getPaymentCartSummaryApp.getPaymentSummary(any(PaymentMethod.class), any()))
+        when(getPaymentSummaryApp.getPaymentSummary(any(PaymentMethod.class), any()))
                 .thenReturn(paymentSummaryDomain);
 
         assert cartItemDomain != null;
