@@ -1,52 +1,33 @@
 package com.perficient.shoppingcart.application;
 
 import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
-import com.perficient.shoppingcart.domain.exceptions.NotExistException;
-import com.perficient.shoppingcart.domain.services.CartService;
+import com.perficient.shoppingcart.domain.model.Cart;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeleteCartItemApp {
-    private final CartService cartService;
-
-    @Autowired
-    public DeleteCartItemApp(CartService cartService) {
-        this.cartService = cartService;
-    }
-
     /**
      * Delete an item from cart
      * @param productIdDomain the prodict id domain
      * @param cartItemsDomain the cart items domain
+     * @return a optional of cart item
      */
-    public void deleteItemFromCart(
-            ProductIdDomain productIdDomain,
-            ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-
+    public Optional<CartItemDomain> deleteItem(ProductIdDomain productIdDomain, List<CartItemDomain> cartItemsDomain) {
         try {
-            cartService.deleteItemFromCart(productIdDomain, cartItemsDomain);
-        } catch (NotExistException | CartEmptyException ex) {
+            var cart = new Cart(cartItemsDomain);
+
+            return cart.removeItem(productIdDomain);
+        } catch (CartEmptyException ex) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
-    }
 
-    /**
-     * Delete all the items from cart
-     * @param cartItemsDomain the cart items domain
-     */
-    public void deleteAllItemFromCart(ConcurrentMap<String, CartItemDomain> cartItemsDomain) {
-        try {
-            cartService.deleteAllItemsFromCart(cartItemsDomain);
-        } catch (NotExistException | CartEmptyException ex) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
-        }
     }
 
 }
