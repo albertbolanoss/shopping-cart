@@ -6,12 +6,14 @@ import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.PaymentSummaryDomain;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
 @Service
-public class CartItemsCheckoutApp {
+public class CartCheckoutApp {
     /**
      * The get payment summary service
      */
@@ -23,8 +25,8 @@ public class CartItemsCheckoutApp {
     private final ProductDomainRepository productDomainRepository;
 
     @Autowired
-    public CartItemsCheckoutApp(GetPaymentSummaryApp getPaymentSummaryApp,
-                                ProductDomainRepository productDomainRepository) {
+    public CartCheckoutApp(GetPaymentSummaryApp getPaymentSummaryApp,
+                           ProductDomainRepository productDomainRepository) {
         this.getPaymentSummaryApp = getPaymentSummaryApp;
         this.productDomainRepository = productDomainRepository;
     }
@@ -37,18 +39,18 @@ public class CartItemsCheckoutApp {
      */
     public PaymentSummaryDomain checkout(PaymentMethod paymentMethod, List<CartItemDomain> cartItemsDomain) {
         if (cartItemsDomain == null || cartItemsDomain.isEmpty()) {
-            throw new CartEmptyException("The operation is not valid because The cart is empty");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,
+                    "The operation is not valid because The cart is empty");
         }
+
         var paymentSummaryDomain =  getPaymentSummaryApp.getPaymentSummary(paymentMethod, cartItemsDomain);
+        var paymentSummaryItems = paymentSummaryDomain.getCartItemDomain();
 
-        paymentSummaryDomain.getCartItemDomain().stream().map(cartItemDomain -> {
-            var productIdDomain = cartItemDomain.getProductIdDomain();
-            var currentQuantity =  productDomainRepository.getStockQuantity(productIdDomain);
-            var newStockQuantity =  currentQuantity - cartItemDomain.getQuantity();
-
-            return  new CartItemDomain(newStockQuantity, cartItemDomain.getUnitPrice(), productIdDomain);
-        }).forEach(cartItemDomain -> productDomainRepository.updateStockQuantity(
-                cartItemDomain.getProductIdDomain(), cartItemDomain.getQuantity()));
+        try {
+            productDomainRepository.updateStockQuantity(paymentSummaryItems);
+        } catch (CartEmptyException ex) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
 
         return paymentSummaryDomain;
     }

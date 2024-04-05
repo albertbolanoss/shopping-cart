@@ -1,16 +1,17 @@
 package com.perficient.shoppingcart.application;
 
-import com.perficient.shoppingcart.domain.exceptions.CartEmptyException;
+import com.perficient.shoppingcart.domain.exceptions.NotAvailableInStockException;
 import com.perficient.shoppingcart.domain.model.PaymentMethod;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
-import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mother.CartItemDomainMother;
 import com.perficient.shoppingcart.infrastructure.mother.PaymentSummaryDomainMother;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class CartItemsCheckoutAppTest {
     @InjectMocks
-    private CartItemsCheckoutApp cartItemsCheckoutApp;
+    private CartCheckoutApp cartCheckoutApp;
 
     @Mock
     private GetPaymentSummaryApp getPaymentSummaryApp;
@@ -47,17 +49,11 @@ class CartItemsCheckoutAppTest {
         when(getPaymentSummaryApp.getPaymentSummary(any(PaymentMethod.class), any()))
                 .thenReturn(expectedPaymentSummary);
 
-        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
-                .thenReturn(200)
-                .thenReturn(200)
-                .thenReturn(200);
+        doNothing().when(productDomainRepository).updateStockQuantity(any());
 
-        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        var paymentSummary = cartCheckoutApp.checkout(paymentMethod, cartItemsDomain);
 
-        var paymentSummary = cartItemsCheckoutApp.checkout(paymentMethod, cartItemsDomain);
-
-        verify(productDomainRepository, times(3))
-                .updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any());
 
         assertNotNull(paymentSummary);
         assertNotNull(paymentSummary.getTotal());
@@ -77,17 +73,11 @@ class CartItemsCheckoutAppTest {
         when(getPaymentSummaryApp.getPaymentSummary(any(PaymentMethod.class), any()))
                 .thenReturn(expectedPaymentSummary);
 
-        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
-                .thenReturn(200)
-                .thenReturn(200)
-                .thenReturn(200);
+        doNothing().when(productDomainRepository).updateStockQuantity(any());
 
-        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        var paymentSummary = cartCheckoutApp.checkout(paymentMethod, cartItemsDomain);
 
-        var paymentSummary = cartItemsCheckoutApp.checkout(paymentMethod, cartItemsDomain);
-
-        verify(productDomainRepository, times(3))
-                .updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any());
 
         assertNotNull(paymentSummary);
         assertNotNull(paymentSummary.getTotal());
@@ -107,17 +97,11 @@ class CartItemsCheckoutAppTest {
         when(getPaymentSummaryApp.getPaymentSummary(any(PaymentMethod.class), any()))
                 .thenReturn(expectedPaymentSummary);
 
-        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class)))
-                .thenReturn(200)
-                .thenReturn(200)
-                .thenReturn(200);
+        doNothing().when(productDomainRepository).updateStockQuantity(any());
 
-        doNothing().when(productDomainRepository).updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        var paymentSummary = cartCheckoutApp.checkout(paymentMethod, cartItemsDomain);
 
-        var paymentSummary = cartItemsCheckoutApp.checkout(paymentMethod, cartItemsDomain);
-
-        verify(productDomainRepository, times(3))
-                .updateStockQuantity(any(ProductIdDomain.class), any(Integer.class));
+        verify(productDomainRepository, atLeastOnce()).updateStockQuantity(any());
 
         assertNotNull(paymentSummary);
         assertNotNull(paymentSummary.getTotal());
@@ -130,7 +114,27 @@ class CartItemsCheckoutAppTest {
         var paymentMethod = PaymentMethod.VISA;
         List<CartItemDomain> cartItemsDomain = new ArrayList<>();
 
-        assertThrows(CartEmptyException.class, () -> cartItemsCheckoutApp.checkout(paymentMethod, cartItemsDomain));
+        assertThrows(HttpClientErrorException.class, () -> cartCheckoutApp.checkout(paymentMethod, cartItemsDomain));
+    }
+
+    @Test
+    void checkoutNotAvailableInStock() {
+        var paymentMethod = PaymentMethod.MASTERCARD;
+        var cartItemsDomain = List.of(
+                CartItemDomainMother.random(),
+                CartItemDomainMother.random(),
+                CartItemDomainMother.random());
+        var expectedPaymentSummary = PaymentSummaryDomainMother.random();
+        var objectError = new ObjectError("field", "mensaje de error");
+        var allErrors = List.of(objectError);
+
+        when(getPaymentSummaryApp.getPaymentSummary(any(PaymentMethod.class), any()))
+                .thenReturn(expectedPaymentSummary);
+
+        doThrow(new NotAvailableInStockException("NotAvailableInStockException", allErrors))
+                .when(productDomainRepository).updateStockQuantity(any());
+
+        assertThrows(NotAvailableInStockException.class, () -> cartCheckoutApp.checkout(paymentMethod, cartItemsDomain));
     }
 
 }

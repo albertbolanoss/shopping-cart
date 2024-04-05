@@ -2,7 +2,7 @@ package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perficient.shoppingcart.application.AddCartItemApp;
-import com.perficient.shoppingcart.application.CartItemsCheckoutApp;
+import com.perficient.shoppingcart.application.CartCheckoutApp;
 import com.perficient.shoppingcart.application.DeleteCartItemApp;
 import com.perficient.shoppingcart.application.GetPaymentSummaryApp;
 import com.perficient.shoppingcart.domain.model.PaymentMethod;
@@ -50,7 +50,7 @@ class CartControllerTest {
     private GetPaymentSummaryApp getPaymentSummaryApp;
 
     @MockBean
-    private CartItemsCheckoutApp cartItemsCheckoutApp;
+    private CartCheckoutApp cartCheckoutApp;
 
     @Test
     void addItemWhenIsSuccessfully() throws Exception {

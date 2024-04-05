@@ -1,7 +1,7 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
 import com.perficient.shoppingcart.application.AddCartItemApp;
-import com.perficient.shoppingcart.application.CartItemsCheckoutApp;
+import com.perficient.shoppingcart.application.CartCheckoutApp;
 import com.perficient.shoppingcart.application.DeleteCartItemApp;
 import com.perficient.shoppingcart.application.GetPaymentSummaryApp;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
@@ -45,7 +45,7 @@ public class CartController implements CartApi {
     /**
      * Cart items checkout app
      */
-    private final CartItemsCheckoutApp cartItemsCheckoutApp;
+    private final CartCheckoutApp cartCheckoutApp;
 
     /**
      * The session cart items
@@ -54,11 +54,11 @@ public class CartController implements CartApi {
 
     @Autowired
     public CartController(AddCartItemApp addItemFromStock, DeleteCartItemApp deleteCartItemApp,
-                          GetPaymentSummaryApp getPaymentSummaryApp, CartItemsCheckoutApp cartItemsCheckoutApp) {
+                          GetPaymentSummaryApp getPaymentSummaryApp, CartCheckoutApp cartCheckoutApp) {
         this.addCartItemApp = addItemFromStock;
         this.deleteCartItemApp = deleteCartItemApp;
         this.getPaymentSummaryApp = getPaymentSummaryApp;
-        this.cartItemsCheckoutApp = cartItemsCheckoutApp;
+        this.cartCheckoutApp = cartCheckoutApp;
     }
 
     /**
@@ -128,7 +128,7 @@ public class CartController implements CartApi {
         var paymentMethod = getPaymentMethodFromText(checkoutPayMethodReq.getPaymentMethodText());
         var cartItemsDomain = cartItems.values().stream().toList();
 
-        cartItemsCheckoutApp.checkout(paymentMethod, cartItemsDomain);
+        cartCheckoutApp.checkout(paymentMethod, cartItemsDomain);
         cartItems.clear();
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -141,7 +141,7 @@ public class CartController implements CartApi {
      */
     private PaymentMethod getPaymentMethodFromText(String paymentMethodText) {
         return Arrays.stream(PaymentMethod.values())
-                .filter(value -> value.name().equals(paymentMethodText))
+                .filter(value -> value.name().equalsIgnoreCase(paymentMethodText))
                 .findFirst()
                 .orElseThrow(() -> new HttpClientErrorException(
                         HttpStatus.BAD_REQUEST, "The payment method is no supported yet"));
