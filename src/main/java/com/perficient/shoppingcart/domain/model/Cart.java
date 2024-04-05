@@ -7,7 +7,6 @@ import com.perficient.shoppingcart.domain.valueobjects.PaymentSummaryDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Cart {

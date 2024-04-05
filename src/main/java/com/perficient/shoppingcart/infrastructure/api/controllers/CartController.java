@@ -20,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -68,11 +69,12 @@ public class CartController implements CartApi {
      */
     @Override
     public ResponseEntity<Void> addItem(String productId)  {
-        var productIdDomain = new ProductIdDomain(productId);
+        var id = Optional.ofNullable(productId).map(String::trim).orElse(null);
+        var productIdDomain = new ProductIdDomain(id);
         var cartItemsDomain = cartItems.values().stream().toList();
         var cartItemDomain = addCartItemApp.addItem(productIdDomain, cartItemsDomain);
 
-        cartItems.put(productId, cartItemDomain);
+        cartItems.put(id, cartItemDomain);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -83,7 +85,6 @@ public class CartController implements CartApi {
      */
     @Override
     public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethodText) {
-
         var paymentMethod = getPaymentMethodFromText(paymentMethodText);
         var cartItemsDomain = cartItems.values().stream().toList();
         var paymentSummaryReq = PaymentSummaryReqMapper.fromDomain(
@@ -99,13 +100,14 @@ public class CartController implements CartApi {
      */
     @Override
     public ResponseEntity<Void> deleteItem(String productId) {
-        var productIdDomain = new ProductIdDomain(productId);
+        var id = Optional.ofNullable(productId).map(String::trim).orElse(null);
+        var productIdDomain = new ProductIdDomain(id);
         var cartItemsDomain = cartItems.values().stream().toList();
 
         deleteCartItemApp.deleteItem(productIdDomain, cartItemsDomain)
                 .ifPresentOrElse(
-                        item -> cartItems.put(productId, item),
-                        () -> cartItems.remove(productId)
+                        item -> cartItems.put(id, item),
+                        () -> cartItems.remove(id)
                 );
 
         return ResponseEntity.noContent().build();
@@ -128,10 +130,11 @@ public class CartController implements CartApi {
         var paymentMethod = getPaymentMethodFromText(checkoutPayMethodReq.getPaymentMethodText());
         var cartItemsDomain = cartItems.values().stream().toList();
 
-        cartCheckoutApp.checkout(paymentMethod, cartItemsDomain);
+        var paymentSummary =  PaymentSummaryReqMapper.fromDomain(
+                cartCheckoutApp.checkout(paymentMethod, cartItemsDomain));
         cartItems.clear();
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok(paymentSummary);
     }
 
     /**

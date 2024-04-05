@@ -5,6 +5,7 @@ import com.perficient.shoppingcart.application.AddCartItemApp;
 import com.perficient.shoppingcart.application.CartCheckoutApp;
 import com.perficient.shoppingcart.application.DeleteCartItemApp;
 import com.perficient.shoppingcart.application.GetPaymentSummaryApp;
+import com.perficient.shoppingcart.application.api.model.CheckoutPayMethodReq;
 import com.perficient.shoppingcart.domain.model.PaymentMethod;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.perficient.shoppingcart.infrastructure.mother.CartItemDomainMother;
@@ -33,6 +34,8 @@ class CartControllerTest {
     private final String PRODUCT_ITEM_URI = "/api/v1/product/%s/item";
 
     private final String ITEMS_URI = "/api/v1/items";
+
+    private final String CHECKOUT_URI = "/api/v1/checkout";
 
     @Autowired
     private MockMvc mvc;
@@ -97,6 +100,21 @@ class CartControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+
+    @Test
+    void deleteItemWhenDeleteProduct() throws Exception {
+        var productId = UUID.randomUUID().toString();
+        var addItemURI = String.format(PRODUCT_ITEM_URI, productId);
+
+        when(deleteCartItemApp.deleteItem(any(ProductIdDomain.class), any())).thenReturn(Optional.empty());
+
+        mvc.perform(MockMvcRequestBuilders
+                        .delete(addItemURI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
     @Test
     void getCartItems() throws Exception {
         var paymentSummaryDomain = PaymentSummaryDomainMother.random();
@@ -110,6 +128,36 @@ class CartControllerTest {
         mvc.perform(MockMvcRequestBuilders
                         .get(ITEMS_URI)
                         .queryParam("paymentMethodText", "VISA")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.total").value(paymentSummaryDomain.getTotal()))
+                .andExpect(jsonPath("$.items[*].id").exists())
+                .andExpect(jsonPath("$.items[*].quantity").exists())
+                .andExpect(jsonPath("$.items[*].unitPrice").exists());
+    }
+
+    @Test
+    void deleteAllItems() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                        .delete(ITEMS_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void checkout() throws Exception {
+
+        var addCustomerReq = new CheckoutPayMethodReq().paymentMethodText("CASH");
+        var paymentSummaryDomain = PaymentSummaryDomainMother.random();
+
+        when(cartCheckoutApp.checkout(any(PaymentMethod.class), any())).thenReturn(paymentSummaryDomain);
+
+        mvc.perform(MockMvcRequestBuilders
+                        .post(CHECKOUT_URI)
+                        .content(mapper.writeValueAsString(addCustomerReq))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

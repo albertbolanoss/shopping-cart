@@ -101,6 +101,20 @@ The scope of this application is to allow shopping cart transactions, the operat
 ### Actor User Case
 ![Shopping Cart Actor](src/main/resources/design/Shopping_cart_Actor.png)
 
+## Technologies
+
+This project implemented the use of the following technologies
+
+- Open API Specification (OAS) to API specification generate code,and document and Swagger interface
+- Liquibase (database change management)
+- H2 Database (in memory)
+- Redis
+- Lombok
+- spring-boot-starter-web
+- spring-boot-starter-data-jpa
+- Gradle
+- Github action workflow (to run CI in Github)
+
 
 ## Challenge
 

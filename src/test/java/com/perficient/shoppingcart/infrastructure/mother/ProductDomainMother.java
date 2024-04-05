@@ -20,8 +20,7 @@ public class ProductDomainMother {
                 FakerMother.getFaker().commerce().productName(),
                 BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
                 FakerMother.getFaker().number().numberBetween(1,100),
-                Boolean.TRUE,
-                FakerMother.getFaker().commerce().productName()
+                Boolean.TRUE
         );
     }
 
@@ -36,8 +35,7 @@ public class ProductDomainMother {
                 FakerMother.getFaker().commerce().productName(),
                 BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
                 0,
-                Boolean.TRUE,
-                FakerMother.getFaker().commerce().productName()
+                Boolean.TRUE
         );
     }
 
@@ -52,8 +50,7 @@ public class ProductDomainMother {
                 FakerMother.getFaker().commerce().productName(),
                 cartItemDomain.getUnitPrice(),
                 cartItemDomain.getQuantity(),
-                Boolean.TRUE,
-                FakerMother.getFaker().commerce().productName()
+                Boolean.TRUE
         );
     }
 }

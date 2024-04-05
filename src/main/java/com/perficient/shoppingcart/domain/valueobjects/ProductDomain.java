@@ -3,7 +3,6 @@ package com.perficient.shoppingcart.domain.valueobjects;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -11,7 +10,6 @@ import java.math.BigDecimal;
  * Represent a domain product
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class ProductDomain {
     /**
@@ -43,8 +41,4 @@ public class ProductDomain {
      */
     private Boolean active;
 
-    /**
-     * The product description
-     */
-    private String description;
 }
