@@ -1,5 +1,6 @@
 package com.perficient.shoppingcart.application;
 
+import com.perficient.shoppingcart.domain.exceptions.NotAvailableInStockException;
 import com.perficient.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
@@ -45,6 +46,7 @@ class AddCartItemAppTest {
         );
 
         when(productDomainRepository.getProductById(any(ProductIdDomain.class))).thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class))).thenReturn(200);
 
         var newItem = addCartItemService.addItem(productIdDomain, cartItemsDomain);
 
@@ -63,6 +65,7 @@ class AddCartItemAppTest {
         var expectedItemsQuantity = cartItemDomain.getQuantity() + 1;
 
         when(productDomainRepository.getProductById(any(ProductIdDomain.class))).thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class))).thenReturn(200);
 
         var newItem = addCartItemService.addItem(productIdDomain, cartItemsDomain);
 
@@ -80,6 +83,7 @@ class AddCartItemAppTest {
         List<CartItemDomain> cartItemsDomain = new ArrayList<>();
 
         when(productDomainRepository.getProductById(any(ProductIdDomain.class))).thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class))).thenReturn(200);
 
         var newItem = addCartItemService.addItem(productIdDomain, cartItemsDomain);
 
@@ -99,6 +103,23 @@ class AddCartItemAppTest {
         when(productDomainRepository.getProductById(any(ProductIdDomain.class))).thenReturn(Optional.empty());
 
         assertThrows(HttpClientErrorException.class, () -> addCartItemService.addItem(productIdDomain, cartItemsDomain));
+    }
+
+    @Test
+    void addItemWhenNotAvailableInStock() {
+        var productDomain = ProductDomainMother.random();
+        var productIdDomain = ProductIdDomainMother.random();
+        var cartItemsDomain = List.of(
+                CartItemDomainMother.random(),
+                CartItemDomainMother.random(),
+                CartItemDomainMother.random()
+        );
+
+        when(productDomainRepository.getProductById(any(ProductIdDomain.class))).thenReturn(Optional.of(productDomain));
+        when(productDomainRepository.getStockQuantity(any(ProductIdDomain.class))).thenReturn(0);
+
+
+        assertThrows(NotAvailableInStockException.class, () -> addCartItemService.addItem(productIdDomain, cartItemsDomain));
     }
 
 
