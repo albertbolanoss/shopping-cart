@@ -60,11 +60,13 @@ class ProductDomainRepositoryImplTest {
     }
 
     @Test
-    void updateProductInStock() {
+    void updateProductInStockWhenIsAvailable() {
         var cartItemsDomain = List.of(CartItemDomainMother.random(),
                 CartItemDomainMother.random(), CartItemDomainMother.random());
+        var product = ProductMother.random();
         var quantity = 200;
 
+        when(productRepository.getById(anyString())).thenReturn(Optional.of(product));
         when(productCacheRepository.getStockQuantity(anyString())).thenReturn(quantity);
         when(productCacheRepository.updateStockQuantity(anyString(), any(Integer.class))).thenReturn(quantity);
 
@@ -112,4 +114,5 @@ class ProductDomainRepositoryImplTest {
 
         verify(productCacheRepository, atLeastOnce()).getStockQuantity(anyString());
     }
+
 }

@@ -33,4 +33,12 @@ springdoc:
 
 logging:
   level:
-    org.springframework.cache: DEBUG
+    logging:
+      level:
+        root: INFO
+    org:
+      springframework:
+        cache: INFO
+    com:
+      perficient:
+        shoppingcart: INFO

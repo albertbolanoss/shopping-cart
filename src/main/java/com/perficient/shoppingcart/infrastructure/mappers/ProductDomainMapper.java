@@ -24,8 +24,7 @@ public class ProductDomainMapper {
                         entity.getName(),
                         entity.getUnitPrice(),
                         entity.getStock(),
-                        entity.isActive(),
-                        entity.getDescription()
+                        entity.isActive()
                 )).orElse(null);
     }
 }

@@ -2,7 +2,6 @@ package com.perficient.shoppingcart.domain.valueobjects;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -10,7 +9,6 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-@Builder
 public class CustomerDomain {
     /**
      * First name max length
