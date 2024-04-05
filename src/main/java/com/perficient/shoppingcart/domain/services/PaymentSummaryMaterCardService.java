@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * To calculate the payment total service with visa
  */
 @Service("MASTERCARD")
-public class PaymentTotalMaterCardService implements PaymentTotal {
+public class PaymentSummaryMaterCardService implements PaymentSummaryService {
     private final BigDecimal FACTOR = new BigDecimal("0.04");
 
     private final BigDecimal ADDITIONAL = new BigDecimal(800);

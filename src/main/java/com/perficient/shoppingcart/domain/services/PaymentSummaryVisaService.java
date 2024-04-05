@@ -10,7 +10,7 @@ import java.math.RoundingMode;
  * To calculate the payment total service with visa
  */
 @Service("VISA")
-public class PaymentTotalVisaService implements PaymentTotal {
+public class PaymentSummaryVisaService implements PaymentSummaryService {
     /**
      * Calculate the total with fee using VISA
      * @param subtotal the subtotal without fee

@@ -75,6 +75,8 @@ paths:
           name: limit
           schema:
             type: integer
+            minimum: 0
+            maximum: 100
           description: The numbers of items to return
           required: true
         - in: query
@@ -248,7 +250,7 @@ paths:
       operationId: getCartItems
       parameters:
         - in: query
-          name: paymentMethod
+          name: paymentMethodText
           schema:
             type: string
           style: form
@@ -609,10 +611,10 @@ components:
       description: the pay methods.
       type: object
       properties:
-        paymentMethod:
+        paymentMethodText:
           type: string
           minLength: 1
           maxLength: 50
       required:
-        - paymentMethod
+        - paymentMethodText
 

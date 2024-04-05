@@ -14,9 +14,9 @@ public class CustomerReqFilterDomainMother {
      */
     public static CustomerReqFilterDomain random() {
         return new CustomerReqFilterDomain(
-            FakerMother.randomFirstname(),
-            FakerMother.randomLastname(),
-            FakerMother.randomEmail(),
+            FakerMother.getFaker().name().firstName(),
+            FakerMother.getFaker().name().lastName(),
+            FakerMother.getFaker().internet().emailAddress(),
             0,
             100,
             Arrays.asList("field1_desc","field2_desc")

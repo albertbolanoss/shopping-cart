@@ -48,7 +48,7 @@ public class RestApiErrorHandler {
 
     @ExceptionHandler(HttpMessageNotWritableException.class)
     public ResponseEntity<Error> handleHttpMessageNotWritableException(HttpServletRequest request) {
-        var httpStatus = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+        var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         Error error = new Error(
                 ErrorCode.HTTP_MESSAGE_NOT_WRITABLE.getErrCode(),
                 ErrorCode.HTTP_MESSAGE_NOT_WRITABLE.getErrMsgKey(),
@@ -61,7 +61,7 @@ public class RestApiErrorHandler {
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ResponseEntity<Error> handleHttpMediaTypeNotAcceptableException(HttpServletRequest request) {
-        var httpStatus = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+        var httpStatus = HttpStatus.NOT_ACCEPTABLE;
         Error error = new Error(
                 ErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE.getErrCode(),
                 ErrorCode.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE.getErrMsgKey(),
@@ -74,7 +74,7 @@ public class RestApiErrorHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Error> handleHttpMessageNotReadableException(HttpServletRequest request) {
-        var httpStatus = HttpStatus.NOT_ACCEPTABLE;
+        var httpStatus = HttpStatus.BAD_REQUEST;
         Error error = new Error(
                 ErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrCode(),
                 ErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrMsgKey(),
@@ -87,7 +87,7 @@ public class RestApiErrorHandler {
 
     @ExceptionHandler(JsonParseException.class)
     public ResponseEntity<Error> handleJsonParseException(HttpServletRequest request) {
-        var httpStatus = HttpStatus.NOT_ACCEPTABLE;
+        var httpStatus = HttpStatus.BAD_REQUEST;
         Error error = new Error(
                 ErrorCode.JSON_PARSE_ERROR.getErrCode(),
                 ErrorCode.JSON_PARSE_ERROR.getErrMsgKey(),

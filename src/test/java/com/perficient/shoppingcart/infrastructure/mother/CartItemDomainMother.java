@@ -14,8 +14,8 @@ public class CartItemDomainMother {
      */
     public static CartItemDomain random() {
         return new CartItemDomain(
-                FakerMother.faker.number().numberBetween(1,100),
-                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L)),
+                FakerMother.getFaker().number().numberBetween(1,100),
+                BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
                 ProductIdDomainMother.random()
 
         );
@@ -27,8 +27,8 @@ public class CartItemDomainMother {
      */
     public static CartItemDomain twoOrMoreInStock() {
         return new CartItemDomain(
-                FakerMother.faker.number().numberBetween(2,50),
-                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L)),
+                FakerMother.getFaker().number().numberBetween(2,50),
+                BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
                 ProductIdDomainMother.random()
         );
     }
@@ -40,7 +40,7 @@ public class CartItemDomainMother {
     public static CartItemDomain onlyOneInStocks() {
         return new CartItemDomain(
                 1,
-                BigDecimal.valueOf(FakerMother.faker.number().randomDouble(6, 100L, 5000L)),
+                BigDecimal.valueOf(FakerMother.getFaker().number().randomDouble(6, 100L, 5000L)),
                 ProductIdDomainMother.random()
         );
     }

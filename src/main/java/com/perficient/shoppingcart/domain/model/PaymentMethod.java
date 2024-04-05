@@ -1,4 +1,4 @@
-package com.perficient.shoppingcart.domain.enumerators;
+package com.perficient.shoppingcart.domain.model;
 
 /**
  * The available payment methods

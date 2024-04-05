@@ -7,20 +7,20 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PaymentTotalMasterCardServiceTest {
-    private PaymentTotalMaterCardService paymentTotalMaterCardService;
+class PaymentSummaryVisaServiceTest {
+    private PaymentSummaryVisaService paymentTotalVisaService;
 
     @BeforeEach
     void init() {
-        paymentTotalMaterCardService = new PaymentTotalMaterCardService();
+        paymentTotalVisaService = new PaymentSummaryVisaService();
     }
 
     @Test
     void calculateTotalWithFee() {
         var subtotal =  new BigDecimal("18542.5645475");
-        var expected = new BigDecimal("20084.267129400");
+        var expected = new BigDecimal("9203.1967310");
 
-        var total = paymentTotalMaterCardService.calculateTotalWithFee(subtotal);
+        var total = paymentTotalVisaService.calculateTotalWithFee(subtotal);
 
         assertEquals(expected, total);
     }

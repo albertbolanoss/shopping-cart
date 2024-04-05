@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * To calculate the payment total service with cash
  */
 @Service("CASH")
-public class PaymentTotalCashService implements PaymentTotal {
+public class PaymentSummaryCashService implements PaymentSummaryService {
     private final BigDecimal FACTOR = new BigDecimal("1.2");
     /**
      * Calculate the total with fee using cash

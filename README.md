@@ -66,17 +66,41 @@ To build execute the following command
 
 ## Project folder description
 
-- src/main/resources/design: The design of system
-- .github/workflow: Github Action workflow
-- src/main/resources/application.yml: the spring application configuration
-- src/main/resources/api:  Open API Specification definition
-- src/main/resources/config/liquibase:  Liquibase database change management 
-- src/main/java/com/perficient/shoppingcart/application: the application layer
-- src/main/java/com/perficient/shoppingcart/domain: the domain layer
-- src/main/java/com/perficient/shoppingcart/infrastructure: the infrastructure layer
-- src/main/java/com/perficient/shoppingcart/shared: the shared and commons and transversal classes
-- src/test/java/com/perficient/shoppingcart: unit test and component tests
-- src/test/resources/application.yml: the spring test configuration
+- src/main/resources/design: The design of system.
+- .github/workflow: Github Action workflow.
+- src/main/resources/application.yml: the spring application configuration.
+- src/main/resources/api:  Open API Specification definition.
+- src/main/resources/config/liquibase:  Liquibase database change management.
+- src/main/java/com/perficient/shoppingcart/application: the application layer.
+- src/main/java/com/perficient/shoppingcart/domain: the domain layer.
+- src/main/java/com/perficient/shoppingcart/infrastructure: the infrastructure layer.
+- src/test/java/com/perficient/shoppingcart: unit test and component tests.
+- src/test/resources/application.yml: the spring test configuration.
+- src/test/java/challenge: it contains the initial class of the challenge (See the next session for more information).
+
+## Design
+
+
+### Scope
+The scope of this application is to allow shopping cart transactions, the operations that can be performed with the shopping cart are.
+
+- Add item
+- Remove an item
+- Get the total amount with discount and details with a payment method.
+- Remove all items
+- Control, manage the availability of items in stock.
+- Store checkout information and generate an event to the dispatch department.
+
+### Global Architecture (Microservices) 
+
+![Global Architecture](src/main/resources/design/Global_architecture.png)
+
+### E-commerce shipping cart architecture
+![Shopping Cart Architecture](src/main/resources/design/Shopping_cart_architecture.png)
+
+### Actor User Case
+![Shopping Cart Actor](src/main/resources/design/Shopping_cart_Actor.png)
+
 
 ## Challenge
 
@@ -104,7 +128,7 @@ Total shopping cart: 13,000.00
 
 Total payment: 14,060.00
 
-The logic for the total and the total payment is given by the class com.perficient.shoppingcart.shared.ShoppingCart.
+The logic for the total and the total payment is given by the class com.perficient.shoppingcart.challenge.ShoppingCart.
 The application should:
 
 1. Expose the operations through a Rest API that follows the Rest API best practices.

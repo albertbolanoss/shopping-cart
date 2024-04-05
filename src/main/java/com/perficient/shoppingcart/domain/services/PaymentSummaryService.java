@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * To calculate the payment total service
  */
-public interface PaymentTotal {
+public interface PaymentSummaryService {
 
     /**
      * Calculate the total to pay with fee

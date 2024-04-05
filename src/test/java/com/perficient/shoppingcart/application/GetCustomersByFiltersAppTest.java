@@ -14,15 +14,15 @@ import static org.mockito.Mockito.verify;
 
 
 @SpringBootTest
-class GetCustomersByFiltersServiceTest {
-    private GetCustomersByFiltersService getCustomersByFiltersService;
+class GetCustomersByFiltersAppTest {
+    private GetCustomersByFiltersApp getCustomersByFiltersService;
 
     @Mock
     private CustomerService customerService;
 
     @BeforeEach
     void init() {
-        getCustomersByFiltersService = new GetCustomersByFiltersService(customerService);
+        getCustomersByFiltersService = new GetCustomersByFiltersApp(customerService);
     }
 
     @Test

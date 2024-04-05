@@ -1,20 +1,25 @@
 package com.perficient.shoppingcart.infrastructure.api.controllers;
 
-import com.perficient.shoppingcart.application.AddCartItemService;
-import com.perficient.shoppingcart.application.DeleteCartItemService;
+import com.perficient.shoppingcart.application.AddCartItemApp;
+import com.perficient.shoppingcart.application.CartCheckoutApp;
+import com.perficient.shoppingcart.application.DeleteCartItemApp;
+import com.perficient.shoppingcart.application.GetPaymentSummaryApp;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
+import com.perficient.shoppingcart.application.api.model.CheckoutPayMethodReq;
 import com.perficient.shoppingcart.application.api.model.PaymentSummaryReq;
+import com.perficient.shoppingcart.domain.model.PaymentMethod;
 import com.perficient.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.perficient.shoppingcart.domain.valueobjects.ProductIdDomain;
-import com.perficient.shoppingcart.infrastructure.mappers.ItemModelApiMapper;
+import com.perficient.shoppingcart.infrastructure.mappers.PaymentSummaryReqMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -25,12 +30,22 @@ public class CartController implements CartApi {
     /**
      * Add item from stock service
      */
-    private final AddCartItemService addItemFromStock;
+    private final AddCartItemApp addCartItemApp;
 
     /**
      * Delete cart item service
      */
-    private final DeleteCartItemService deleteCartItemService;
+    private final DeleteCartItemApp deleteCartItemApp;
+
+    /**
+     * Get payment cart summary service
+     */
+    private final GetPaymentSummaryApp getPaymentSummaryApp;
+
+    /**
+     * Cart items checkout app
+     */
+    private final CartCheckoutApp cartCheckoutApp;
 
     /**
      * The session cart items
@@ -38,9 +53,12 @@ public class CartController implements CartApi {
     private ConcurrentMap<String, CartItemDomain> cartItems = new ConcurrentHashMap<>();
 
     @Autowired
-    public CartController(AddCartItemService addItemFromStock, DeleteCartItemService deleteCartItemService) {
-        this.addItemFromStock = addItemFromStock;
-        this.deleteCartItemService = deleteCartItemService;
+    public CartController(AddCartItemApp addItemFromStock, DeleteCartItemApp deleteCartItemApp,
+                          GetPaymentSummaryApp getPaymentSummaryApp, CartCheckoutApp cartCheckoutApp) {
+        this.addCartItemApp = addItemFromStock;
+        this.deleteCartItemApp = deleteCartItemApp;
+        this.getPaymentSummaryApp = getPaymentSummaryApp;
+        this.cartCheckoutApp = cartCheckoutApp;
     }
 
     /**
@@ -51,8 +69,10 @@ public class CartController implements CartApi {
     @Override
     public ResponseEntity<Void> addItem(String productId)  {
         var productIdDomain = new ProductIdDomain(productId);
+        var cartItemsDomain = cartItems.values().stream().toList();
+        var cartItemDomain = addCartItemApp.addItem(productIdDomain, cartItemsDomain);
 
-        addItemFromStock.addItemToCart(productIdDomain, cartItems);
+        cartItems.put(productId, cartItemDomain);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -62,12 +82,14 @@ public class CartController implements CartApi {
      * @return a list api model items
      */
     @Override
-    public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethod) {
-        PaymentSummaryReq paymentSummary = new PaymentSummaryReq()
-                .items(ItemModelApiMapper.fromDomain(cartItems))
-                .total(new BigDecimal(0));
+    public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethodText) {
 
-        return ResponseEntity.ok(paymentSummary);
+        var paymentMethod = getPaymentMethodFromText(paymentMethodText);
+        var cartItemsDomain = cartItems.values().stream().toList();
+        var paymentSummaryReq = PaymentSummaryReqMapper.fromDomain(
+                getPaymentSummaryApp.getPaymentSummary(paymentMethod, cartItemsDomain));
+
+        return ResponseEntity.ok(paymentSummaryReq);
     }
 
     /**
@@ -78,8 +100,13 @@ public class CartController implements CartApi {
     @Override
     public ResponseEntity<Void> deleteItem(String productId) {
         var productIdDomain = new ProductIdDomain(productId);
+        var cartItemsDomain = cartItems.values().stream().toList();
 
-        deleteCartItemService.deleteItemFromCart(productIdDomain, cartItems);
+        deleteCartItemApp.deleteItem(productIdDomain, cartItemsDomain)
+                .ifPresentOrElse(
+                        item -> cartItems.put(productId, item),
+                        () -> cartItems.remove(productId)
+                );
 
         return ResponseEntity.noContent().build();
     }
@@ -91,9 +118,33 @@ public class CartController implements CartApi {
      */
     @Override
     public ResponseEntity<Void> deleteAllItems() {
-        deleteCartItemService.deleteAllItemFromCart(cartItems);
+        cartItems.clear();
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<PaymentSummaryReq> checkout(CheckoutPayMethodReq checkoutPayMethodReq) {
+        var paymentMethod = getPaymentMethodFromText(checkoutPayMethodReq.getPaymentMethodText());
+        var cartItemsDomain = cartItems.values().stream().toList();
+
+        cartCheckoutApp.checkout(paymentMethod, cartItemsDomain);
+        cartItems.clear();
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    /**
+     * Get the payment method from text
+     * @param paymentMethodText the payment method in text format
+     * @return a Pay Method enum
+     */
+    private PaymentMethod getPaymentMethodFromText(String paymentMethodText) {
+        return Arrays.stream(PaymentMethod.values())
+                .filter(value -> value.name().equalsIgnoreCase(paymentMethodText))
+                .findFirst()
+                .orElseThrow(() -> new HttpClientErrorException(
+                        HttpStatus.BAD_REQUEST, "The payment method is no supported yet"));
     }
 
 }

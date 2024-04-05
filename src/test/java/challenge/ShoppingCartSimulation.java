@@ -1,6 +1,4 @@
-package com.perficient.shoppingcart.shared;
-
-import com.perficient.shoppingcart.shared.ShoppingCart;
+package challenge;
 
 import java.math.BigDecimal;
 
