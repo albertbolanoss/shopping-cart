@@ -82,36 +82,37 @@ To build execute the following command
 
 The scope of this application is to allow shopping cart transactions as well as create purchase orders and manage products and their stock and the administration of system users.
 
-### Current design and architecture (implemented so far)
+The current implementation defines a monolith type architecture (not scalable).  In the next steps a distributed and scalable architecture will be defined.
 
-#### Actor user cases
+### Actor user cases
+
 ![Shopping Cart Actor](src/main/resources/design/Shopping_cart_Actor.png)
 
-#### Current application architecture Styles
+### E-commerce application architecture style
 
-- Monolith (not scalable))
+- N layers
 
-![Global Architecture](src/main/resources/design/Global_architecture.png)
+![Shopping Cart Architecture](src/main/resources/design/Eccomerce_Architecture_v1.drawio.png)
 
-#### Current application architecture patterns
+### E-commerce application architecture patterns
 
 - Hexagonal
 
-![Shopping Cart Architecture](src/main/resources/design/Shopping_cart_architecture.png)
+![Shopping Cart Architecture](src/main/resources/design/Shopping_cart_hexagonal_arc_pattern.png)
 
-#### Current application design patterns
+### E-commerce application design patterns
 
 - Strategy
 - Dependency Injection
 
-#### Development software methodology
+### Development software methodology
 
 - Domain Driver Design software development methodology
 
 
-### Next Steps 
+## Next Steps 
 
-### Next Step application architecture styles (scalable, distributed)
+### Next Step E-commerce application architecture styles (scalable, distributed)
 
 Enables more scalability of shipping cart services and management of products and purchase orders.
 This solution includes the following architecture styles:
@@ -120,12 +121,12 @@ This solution includes the following architecture styles:
 - Event Driver.
 
 
-![Shopping Cart Architecture](src/main/resources/design/Eccomerce cart-Architecture v2.drawio.png)
+![Shopping Cart Architecture](src/main/resources/design/Eccomerce_Architecture_v2.drawio.png)
 
 
-### Next Step application architecture patterns
+### Next Step E-commerce application architecture patterns
 
-- CQRS (architecture pattern)
+-  CQRS (Command Query Responsibility Segregation) to write product stock
 
 
 ## Technologies used or to be used
