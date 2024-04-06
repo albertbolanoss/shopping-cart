@@ -1,6 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.mother;
 
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerIdDomain;
+import com.ecommerce.customer.domain.valueobjects.CustomerIdDomain;
 
 /**
  * Generate Customer Id Data

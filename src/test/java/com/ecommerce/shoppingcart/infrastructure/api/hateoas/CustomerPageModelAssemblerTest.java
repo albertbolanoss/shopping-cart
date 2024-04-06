@@ -1,5 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.api.hateoas;
 
+import com.ecommerce.customer.infrastructure.api.hateoas.CustomerPageModelAssembler;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerPageDomainMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

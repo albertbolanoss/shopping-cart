@@ -1,7 +1,7 @@
 package com.ecommerce.shoppingcart.infrastructure.mother;
 
 
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerPageDomain;
+import com.ecommerce.customer.domain.valueobjects.CustomerPageDomain;
 
 import java.util.Arrays;
 

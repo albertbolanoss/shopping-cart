@@ -1,8 +1,9 @@
 package com.ecommerce.shoppingcart.application;
 
-import com.ecommerce.shoppingcart.domain.exceptions.AlreadyExistException;
-import com.ecommerce.shoppingcart.domain.services.CustomerService;
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerDomain;
+import com.ecommerce.customer.application.RegisterCustomerApp;
+import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
+import com.ecommerce.customer.domain.services.CustomerService;
+import com.ecommerce.customer.domain.valueobjects.CustomerDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerDomainMother;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

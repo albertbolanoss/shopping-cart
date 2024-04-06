@@ -1,6 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.mother;
 
-import com.ecommerce.shoppingcart.domain.valueobjects.PageResponseDomain;
+import com.ecommerce.shared.domain.valueobjects.PageResponseDomain;
 
 /**
  * Generate data for Page Response Domain

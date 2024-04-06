@@ -1,6 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.mother;
 
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
+import com.ecommerce.customer.domain.valueobjects.CustomerReqFilterDomain;
 
 import java.util.Arrays;
 

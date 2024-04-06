@@ -1,8 +1,10 @@
 package com.ecommerce.shoppingcart.infrastructure.repository;
 
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
-import com.ecommerce.shoppingcart.infrastructure.api.pageable.PageRequestCreator;
-import com.ecommerce.shoppingcart.infrastructure.entities.Customer;
+import com.ecommerce.customer.infrastructure.repository.CustomerDomainRepositoryImpl;
+import com.ecommerce.customer.infrastructure.repository.CustomerRepository;
+import com.ecommerce.customer.domain.valueobjects.CustomerReqFilterDomain;
+import com.ecommerce.shared.api.pageable.PageRequestCreator;
+import com.ecommerce.customer.infrastructure.entities.Customer;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerDomainMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerMother;
 import org.junit.jupiter.api.Test;

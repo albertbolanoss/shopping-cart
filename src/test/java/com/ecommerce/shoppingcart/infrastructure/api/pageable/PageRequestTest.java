@@ -1,6 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.api.pageable;
 
-import com.ecommerce.shoppingcart.infrastructure.api.pageable.PageRequestCreator;
+import com.ecommerce.shared.api.pageable.PageRequestCreator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

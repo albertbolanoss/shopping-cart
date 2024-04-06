@@ -1,7 +1,8 @@
 package com.ecommerce.shoppingcart.application;
 
-import com.ecommerce.shoppingcart.domain.services.CustomerService;
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
+import com.ecommerce.customer.application.GetCustomersByFiltersApp;
+import com.ecommerce.customer.domain.services.CustomerService;
+import com.ecommerce.customer.domain.valueobjects.CustomerReqFilterDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerReqFilterDomainMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

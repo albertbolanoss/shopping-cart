@@ -1,13 +1,14 @@
 package com.ecommerce.shoppingcart.infrastructure.api.controllers;
 
+import com.ecommerce.customer.infrastructure.api.controllers.CustomerController;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerPageDomainMother;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ecommerce.shoppingcart.application.GetCustomersByFiltersApp;
-import com.ecommerce.shoppingcart.application.RegisterCustomerApp;
+import com.ecommerce.customer.application.GetCustomersByFiltersApp;
+import com.ecommerce.customer.application.RegisterCustomerApp;
 import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerPageDomain;
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerReqFilterDomain;
-import com.ecommerce.shoppingcart.infrastructure.api.hateoas.CustomerPageModelAssembler;
+import com.ecommerce.customer.domain.valueobjects.CustomerPageDomain;
+import com.ecommerce.customer.domain.valueobjects.CustomerReqFilterDomain;
+import com.ecommerce.customer.infrastructure.api.hateoas.CustomerPageModelAssembler;
 import com.ecommerce.shoppingcart.infrastructure.mother.AddCustomerReqMother;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

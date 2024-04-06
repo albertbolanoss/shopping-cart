@@ -1,7 +1,8 @@
 package com.ecommerce.shoppingcart.infrastructure.repository;
 
-import com.ecommerce.shoppingcart.infrastructure.api.pageable.PageRequestCreator;
-import com.ecommerce.shoppingcart.infrastructure.entities.Customer;
+import com.ecommerce.customer.infrastructure.repository.CustomerRepository;
+import com.ecommerce.shared.api.pageable.PageRequestCreator;
+import com.ecommerce.customer.infrastructure.entities.Customer;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.FakerMother;
 import org.junit.jupiter.api.AfterEach;

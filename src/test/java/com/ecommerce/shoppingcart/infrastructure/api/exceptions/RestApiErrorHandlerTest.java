@@ -1,7 +1,7 @@
 package com.ecommerce.shoppingcart.infrastructure.api.exceptions;
 
-import com.ecommerce.shoppingcart.infrastructure.api.exceptions.ErrorCode;
-import com.ecommerce.shoppingcart.infrastructure.api.exceptions.RestApiErrorHandler;
+import com.ecommerce.shared.api.exceptions.ErrorCode;
+import com.ecommerce.shared.api.exceptions.RestApiErrorHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

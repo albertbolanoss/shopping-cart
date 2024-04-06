@@ -1,6 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.mother;
 
-import com.ecommerce.shoppingcart.infrastructure.entities.Customer;
+import com.ecommerce.customer.infrastructure.entities.Customer;
 
 /**
  * Generate customer entity data

@@ -1,10 +1,10 @@
 package com.ecommerce.shoppingcart.services;
 
-import com.ecommerce.shoppingcart.domain.exceptions.AlreadyExistException;
-import com.ecommerce.shoppingcart.domain.repositories.CustomerDomainRepository;
-import com.ecommerce.shoppingcart.domain.services.CustomerService;
-import com.ecommerce.shoppingcart.domain.valueobjects.CustomerPageDomain;
-import com.ecommerce.shoppingcart.domain.valueobjects.PageResponseDomain;
+import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
+import com.ecommerce.customer.domain.repositories.CustomerDomainRepository;
+import com.ecommerce.customer.domain.services.CustomerService;
+import com.ecommerce.customer.domain.valueobjects.CustomerPageDomain;
+import com.ecommerce.shared.domain.valueobjects.PageResponseDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerDomainMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerReqFilterDomainMother;
 import org.junit.jupiter.api.Test;

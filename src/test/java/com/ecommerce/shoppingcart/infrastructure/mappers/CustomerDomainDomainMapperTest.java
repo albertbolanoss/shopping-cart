@@ -1,5 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.mappers;
 
+import com.ecommerce.customer.infrastructure.mappers.CustomerDomainMapper;
 import com.ecommerce.shoppingcart.infrastructure.mother.CustomerMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.AddCustomerReqMother;
 import org.junit.jupiter.api.Test;
