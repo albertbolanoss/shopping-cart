@@ -1,6 +1,6 @@
 package challenge;
 
-import com.perficient.shoppingcart.domain.valueobjects.CustomerIdDomain;
+import com.ecommerce.customer.domain.valueobjects.CustomerIdDomain;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.math.BigDecimal;
