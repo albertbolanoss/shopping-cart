@@ -80,51 +80,65 @@ To build execute the following command
 
 ## Design
 
+The scope of this application is to allow shopping cart transactions as well as create purchase orders and manage products and their stock and the administration of system users.
 
-### Scope
-The scope of this application is to allow shopping cart transactions, the operations that can be performed with the shopping cart are.
+### Current design and architecture (implemented so far)
 
-- Add item
-- Remove an item
-- Get the total amount with discount and details with a payment method.
-- Remove all items
-- Control, manage the availability of items in stock.
-- Store checkout information and generate an event to the dispatch department.
+#### Actor user cases
+![Shopping Cart Actor](src/main/resources/design/Shopping_cart_Actor.png)
 
-### Global Architecture (Microservices) 
+#### Current application architecture Styles
+
+- Monolith (not scalable))
 
 ![Global Architecture](src/main/resources/design/Global_architecture.png)
 
-### E-commerce shipping cart architecture (currently)
+#### Current application architecture patterns
+
+- Hexagonal
+
 ![Shopping Cart Architecture](src/main/resources/design/Shopping_cart_architecture.png)
 
-### E-commerce shipping cart architecture (next step)
+#### Current application design patterns
 
-![Shopping Cart Architecture](src/main/resources/design/Eccomerce cart-Architecture v2.drawio.png)
+- Strategy
+- Dependency Injection
 
-Enables more scalability of shipping cart services and management of products and purchase orders.
-This solution includes the following concepts
-- Macro service (architecture style)
-- Event Driver (architecture style)
-- CQRS (architecture pattern)
-  -Hexagonal (architecture pattern)
-- Strategy design pattern
-- Dependency Injection design pattern
+#### Development software methodology
+
 - Domain Driver Design software development methodology
 
 
+### Next Steps 
 
-### Actor User Case
-![Shopping Cart Actor](src/main/resources/design/Shopping_cart_Actor.png)
+### Next Step application architecture styles (scalable, distributed)
 
-## Technologies
+Enables more scalability of shipping cart services and management of products and purchase orders.
+This solution includes the following architecture styles:
+
+- Macro service.
+- Event Driver.
+
+
+![Shopping Cart Architecture](src/main/resources/design/Eccomerce cart-Architecture v2.drawio.png)
+
+
+### Next Step application architecture patterns
+
+- CQRS (architecture pattern)
+
+
+## Technologies used or to be used
 
 This project implemented the use of the following technologies
 
 - Open API Specification (OAS) to API specification generate code,and document and Swagger interface
 - Liquibase (database change management)
-- H2 Database (in memory)
+- H2 Database for application
+- H2 Database for test (not yet implemented)
 - Redis
+- Mysql (not yet implemented)
+- Kafka (not yet implemented)
 - Lombok
 - spring-boot-starter-web
 - spring-boot-starter-data-jpa
@@ -132,7 +146,7 @@ This project implemented the use of the following technologies
 - Github action workflow (to run CI in Github)
 
 
-## Challenge
+## Initial Challenge
 
 The exercise is used to:
 
