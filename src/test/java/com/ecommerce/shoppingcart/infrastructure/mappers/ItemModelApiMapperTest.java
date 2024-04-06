@@ -2,7 +2,7 @@ package com.ecommerce.shoppingcart.infrastructure.mappers;
 
 import com.ecommerce.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CartItemDomainMother;
-import com.ecommerce.shoppingcart.infrastructure.mother.FakerMother;
+import com.ecommerce.shared.infrastructure.mother.FakerMother;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,6 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.repository;
 
-import com.ecommerce.shoppingcart.infrastructure.mother.FakerMother;
+import com.ecommerce.shared.infrastructure.mother.FakerMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.ProductMother;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

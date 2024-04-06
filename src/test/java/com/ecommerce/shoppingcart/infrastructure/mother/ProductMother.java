@@ -1,5 +1,6 @@
 package com.ecommerce.shoppingcart.infrastructure.mother;
 
+import com.ecommerce.shared.infrastructure.mother.FakerMother;
 import com.ecommerce.shoppingcart.infrastructure.entities.Product;
 
 import java.math.BigDecimal;
