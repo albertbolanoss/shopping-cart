@@ -90,13 +90,10 @@ The current implementation defines a monolith type architecture (not scalable). 
 
 ### E-commerce application architecture style
 
-- N layers
+- Hexagonal
+- Domain partitioning
 
 ![Shopping Cart Architecture](src/main/resources/design/Eccomerce_Architecture_v1.drawio.png)
-
-### E-commerce application architecture patterns
-
-- Hexagonal
 
 ![Shopping Cart Architecture](src/main/resources/design/Shopping_cart_hexagonal_arc_pattern.png)
 
