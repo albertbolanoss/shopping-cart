@@ -1,7 +1,7 @@
 package com.ecommerce.customer.infrastructure.mother;
 
 import com.ecommerce.shared.infrastructure.mother.FakerMother;
-import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
+import com.perficient.shoppingcart.application.api.model.AddUserReq;
 
 /**
  * Generate data for Add user request instances
@@ -12,8 +12,8 @@ public class AddCustomerReqMother {
      * Generate a Add User Request with random data
      * @return a instance of AddUserReq
      */
-    public static AddCustomerReq random() {
-        return new AddCustomerReq()
+    public static AddUserReq random() {
+        return new AddUserReq()
                 .firstName(FakerMother.getFaker().name().firstName())
                 .lastName(FakerMother.getFaker().name().lastName())
                 .email(FakerMother.getFaker().internet().emailAddress())
@@ -25,8 +25,8 @@ public class AddCustomerReqMother {
      * Generate a Add User Request with random data
      * @return a instance of AddUserReq
      */
-    public static AddCustomerReq nullable() {
-        return new AddCustomerReq()
+    public static AddUserReq nullable() {
+        return new AddUserReq()
                 .firstName(null)
                 .lastName(null)
                 .email(null)
@@ -38,8 +38,8 @@ public class AddCustomerReqMother {
      * Generate a Add User Request with random data
      * @return a instance of AddUserReq
      */
-    public static AddCustomerReq invalidMaxLength() {
-        return new AddCustomerReq()
+    public static AddUserReq invalidMaxLength() {
+        return new AddUserReq()
                 .firstName(FakerMother.getFaker().lorem().characters(CustomerDomainMother.FIRSTNAME_MAX_LENGTH + 1))
                 .lastName(FakerMother.getFaker().lorem().characters((CustomerDomainMother.LASTNAME_MAX_LENGTH + 1)))
                 .email(FakerMother.getFaker().lorem().characters((CustomerDomainMother.EMAIL_MAX_LENGTH + 1)))
@@ -51,8 +51,8 @@ public class AddCustomerReqMother {
      * Generate an Add User Request with random data
      * @return an instance of AddUserReq
      */
-    public static AddCustomerReq invalidEmail() {
-        return new AddCustomerReq()
+    public static AddUserReq invalidEmail() {
+        return new AddUserReq()
                 .firstName(FakerMother.getFaker().name().firstName())
                 .lastName(FakerMother.getFaker().name().lastName())
                 .email(FakerMother.getFaker().internet().username())

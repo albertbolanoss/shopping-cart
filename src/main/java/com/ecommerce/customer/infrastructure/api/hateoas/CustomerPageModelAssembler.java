@@ -1,9 +1,9 @@
 package com.ecommerce.customer.infrastructure.api.hateoas;
 
 import com.ecommerce.customer.infrastructure.api.controllers.CustomerController;
-import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
 import com.ecommerce.customer.domain.valueobjects.CustomerPageDomain;
 import com.ecommerce.customer.infrastructure.mappers.CustomerApiModelMapper;
+import com.perficient.shoppingcart.application.api.model.GetUsersPageReq;
 import lombok.SneakyThrows;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -15,15 +15,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class CustomerPageModelAssembler extends
-        RepresentationModelAssemblerSupport<CustomerPageDomain, GetCustomerPageReq> {
+        RepresentationModelAssemblerSupport<CustomerPageDomain, GetUsersPageReq> {
 
     public CustomerPageModelAssembler() {
-        super(CustomerController.class, GetCustomerPageReq.class);
+        super(CustomerController.class, GetUsersPageReq.class);
     }
 
     @SneakyThrows
     @Override
-    public GetCustomerPageReq toModel(CustomerPageDomain customerPageDomain) {
+    public GetUsersPageReq toModel(CustomerPageDomain customerPageDomain) {
         var id = UUID.randomUUID().toString();
         var resource = createModelWithId(id, customerPageDomain);
         var content = customerPageDomain.getCustomerDomains().stream()
@@ -43,7 +43,7 @@ public class CustomerPageModelAssembler extends
 
         resource.add(
                 linkTo(methodOn(CustomerController.class)
-                    .getCustomers(filters.getPageNumber(), filters.getPageSize(),
+                    .getUsers(filters.getPageNumber(), filters.getPageSize(),
                             filters.getFirstName(), filters.getLastName(),
                             filters.getEmail(), filters.getSort())
                 ).withSelfRel());

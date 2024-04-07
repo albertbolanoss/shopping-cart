@@ -19,7 +19,7 @@ externalDocs:
 servers:
   - url: https://ecommerce.swagger.io/v2
 tags:
-  - name: Customer
+  - name: User
     description: Operations about customer
   - name: Cart
     description: Operations about shopping cart
@@ -29,21 +29,23 @@ tags:
     description: Operations about products
   - name: PaymentMethod
     description: Operations about products
+  - name: Authentication
+    description: Operations about authentication
 
 paths:
-  /api/v1/customer:
+  /api/v1/user:
     post:
-      tags: [Customer]
-      summary: Register a new customer.
-      description: Register a new customer to the E-Commerce App.
-      operationId: createCustomer
+      tags: [ User ]
+      summary: Register a new user.
+      description: Register a new user to the E-Commerce App.
+      operationId: createUser
       requestBody:
         required: true
-        description: New Customer
+        description: To create a new users
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddCustomerReq'
+              $ref: '#/components/schemas/AddUserReq'
       responses:
         201:
           description: Customer created successfuly
@@ -60,10 +62,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorReq'
     get:
-      tags: [ Customer ]
-      summary: Get the customers that match with the filters.
-      description: Get the customers from E-Commerce App.
-      operationId: getCustomers
+      tags: [ User ]
+      summary: Get the users that match with the filters.
+      description: Get the users from E-Commerce App.
+      operationId: getUsers
       parameters:
         - in: query
           name: offset
@@ -116,7 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCustomerPageReq'
+                $ref: '#/components/schemas/GetUsersPageReq'
 
   /api/v1/product:
     post:
@@ -344,9 +346,75 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorReq'
 
+  /api/v1/auth/token:
+    post:
+      tags: [ Authentication ]
+      summary: Signin the customer (user)
+      description: Signin the customer (user) that generates the JWT (access token) and refresh token, which can be used for accessing APIs.
+      operationId: signIn
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SignInReq'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInReq'
+      responses:
+        200:
+          description: For user sign-in. Once successful, user receives the access and refresh token.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SignedInUser'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignedInUser'
+    delete:
+      tags: [ Authentication ]
+      summary: Signouts the customer (user)
+      description: Signouts the customer (user). It removes the refresh token from DB. Last issued JWT should be removed from client end that if not removed last for given expiration time.
+      operationId: signOut
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+      responses:
+        202:
+          description: Accepts the request for logout.
+
+  /api/v1/auth/token/refresh:
+    post:
+      tags: [ Authentication ]
+      summary: Provides new JWT based on valid refresh token.
+      description: Provides new JWT based on valid refresh token.
+      operationId: getAccessToken
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+      responses:
+        200:
+          description: For successful operation.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SignedInUser'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignedInUser'
+
 components:
   schemas:
-    AddCustomerReq:
+    AddUserReq:
       description: Request object for new customer registration.
       type: object
       properties:
@@ -469,7 +537,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-    CustomerReq:
+    UserReq:
       description: The customer object.
       type: object
       properties:
@@ -550,7 +618,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-    GetCustomerPageReq:
+    GetUsersPageReq:
       description: The page customer object.
       type: object
       properties:
@@ -574,39 +642,7 @@ components:
           description: Collection of items in cart.
           type: array
           items:
-            $ref: '#/components/schemas/CustomerReq'
-    GetCustomersReq:
-      description: The get customers parameters.
-      type: object
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: The page size
-        limit:
-          type: integer
-          format: int32
-          description: The total pages
-        firstName:
-          type: string
-          minLength: 1
-          maxLength: 125
-        lastName:
-          type: string
-          minLength: 1
-          maxLength: 125
-        email:
-          type: string
-          format: email
-          minLength: 1
-          maxLength: 255
-        sort:
-          type: array
-          items:
-            type: string
-      required:
-        - offset
-        - limit
+            $ref: '#/components/schemas/UserReq'
     CheckoutPayMethodReq:
       description: the pay methods.
       type: object
@@ -617,4 +653,36 @@ components:
           maxLength: 50
       required:
         - paymentMethodText
-
+    SignedInUser:
+      description: Signed-in user information
+      type: object
+      properties:
+        refreshToken:
+          description: Refresh Token
+          type: string
+        accessToken:
+          description: JWT Token aka access token
+          type: string
+        username:
+          description: User Name
+          type: string
+        userId:
+          description: User Identifier
+          type: string
+    RefreshToken:
+      description: Contains the refresh token
+      type: object
+      properties:
+        refreshToken:
+          description: Refresh Token
+          type: string
+    SignInReq:
+      description: Request body for Sign-in
+      type: object
+      properties:
+        username:
+          description: username of the User
+          type: string
+        password:
+          description: password of the User
+          type: string

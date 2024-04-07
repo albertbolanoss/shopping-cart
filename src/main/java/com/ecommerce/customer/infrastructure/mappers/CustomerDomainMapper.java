@@ -1,14 +1,14 @@
 package com.ecommerce.customer.infrastructure.mappers;
 
-import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
 import com.ecommerce.customer.domain.valueobjects.CustomerDomain;
 import com.ecommerce.customer.domain.valueobjects.CustomerIdDomain;
 import com.ecommerce.customer.infrastructure.entities.Customer;
+import com.perficient.shoppingcart.application.api.model.AddUserReq;
 
 import java.util.Optional;
 
 public class CustomerDomainMapper {
-    public static CustomerDomain convertFromARequest(AddCustomerReq addUserReq) {
+    public static CustomerDomain convertFromARequest(AddUserReq addUserReq) {
         return Optional.ofNullable(addUserReq)
             .map(addCustomerReq ->
                     new CustomerDomain(new CustomerIdDomain(null),

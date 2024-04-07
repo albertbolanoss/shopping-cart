@@ -3,12 +3,12 @@ package com.ecommerce.customer.infrastructure.api.controllers;
 
 import com.ecommerce.customer.application.GetCustomersByFiltersApp;
 import com.ecommerce.customer.application.RegisterCustomerApp;
-import com.perficient.shoppingcart.application.api.controller.CustomerApi;
-import com.perficient.shoppingcart.application.api.model.AddCustomerReq;
-import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
 import com.ecommerce.customer.domain.valueobjects.CustomerReqFilterDomain;
 import com.ecommerce.customer.infrastructure.api.hateoas.CustomerPageModelAssembler;
 import com.ecommerce.customer.infrastructure.mappers.CustomerDomainMapper;
+import com.perficient.shoppingcart.application.api.controller.UserApi;
+import com.perficient.shoppingcart.application.api.model.AddUserReq;
+import com.perficient.shoppingcart.application.api.model.GetUsersPageReq;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,38 +26,44 @@ import static org.springframework.http.ResponseEntity.notFound;
  */
 @RestController
 @Validated
-public class CustomerController implements CustomerApi {
+public class CustomerController implements UserApi {
     /**
      * Register customer service
      */
-    @Autowired
-    private RegisterCustomerApp registerCustomerService;
+    private final RegisterCustomerApp registerCustomerService;
 
     /**
      * The get customers filter service
      */
-    @Autowired
-    private GetCustomersByFiltersApp getCustomersByFiltersService;
+    private final GetCustomersByFiltersApp getCustomersByFiltersService;
 
     /**
      * Customer model assembler
      */
+    private final CustomerPageModelAssembler customerPageModelAssembler;
+
     @Autowired
-    private CustomerPageModelAssembler customerPageModelAssembler;
+    public CustomerController(RegisterCustomerApp registerCustomerService, GetCustomersByFiltersApp getCustomersByFiltersService, CustomerPageModelAssembler customerPageModelAssembler) {
+        this.registerCustomerService = registerCustomerService;
+        this.getCustomersByFiltersService = getCustomersByFiltersService;
+        this.customerPageModelAssembler = customerPageModelAssembler;
+    }
 
     /**
      * Register a new customer
      * @param addCustomerReq New Customer (required)
      * @return a response entity
      */
-    public ResponseEntity<Void> createCustomer(@Valid AddCustomerReq addCustomerReq) {
+    @Override
+    public ResponseEntity<Void> createUser(@Valid AddUserReq addCustomerReq) {
         var customer = CustomerDomainMapper.convertFromARequest(addCustomerReq);
         registerCustomerService.register(customer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public ResponseEntity<GetCustomerPageReq> getCustomers(Integer offset, Integer limit, String firstName,
-                                                           String lastName, String email, List<String> sort) {
+    @Override
+    public ResponseEntity<GetUsersPageReq> getUsers(Integer offset, Integer limit, String firstName,
+                                                        String lastName, String email, List<String> sort) {
 
         CustomerReqFilterDomain customerDomain = new CustomerReqFilterDomain(
                 firstName, lastName, email, offset, limit, sort);

@@ -8,7 +8,7 @@ import com.ecommerce.customer.infrastructure.api.hateoas.CustomerPageModelAssemb
 import com.ecommerce.customer.infrastructure.mother.AddCustomerReqMother;
 import com.ecommerce.customer.infrastructure.mother.CustomerPageDomainMother;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.perficient.shoppingcart.application.api.model.GetCustomerPageReq;
+import com.perficient.shoppingcart.application.api.model.GetUsersPageReq;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,8 +22,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerController.class)
-public class CustomerControllerTest {
-    private final String URI = "/api/v1/customer";
+class CustomerControllerTest {
+    private final String URI = "/api/v1/user";
     @Autowired
     private MockMvc mvc;
 
@@ -91,7 +91,7 @@ public class CustomerControllerTest {
     void getCustomers() throws Exception {
 
         var customerPageDomainMother = CustomerPageDomainMother.random();
-        GetCustomerPageReq getCustomerPage = new GetCustomerPageReq();
+        GetUsersPageReq getCustomerPage = new GetUsersPageReq();
 
         when(getCustomersByFiltersService.findByFilter(any(CustomerReqFilterDomain.class)))
                 .thenReturn(customerPageDomainMother);
