@@ -1,7 +1,7 @@
 package com.ecommerce.user.application;
 
 import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
-import com.ecommerce.user.domain.services.UserService;
+import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserDomain;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -16,17 +16,17 @@ import org.springframework.web.client.HttpClientErrorException;
 @Validated
 public class RegisterUserApp {
     /**
-     * The customer service domain
+     * The user domain repository
      */
-    private final UserService userService;
+    private  final UserDomainRepository userDomainRepository;
 
     /**
      *
      * @param userService customer service domain
      */
     @Autowired
-    public RegisterUserApp(UserService userService) {
-        this.userService = userService;
+    public RegisterUserApp(UserDomainRepository userDomainRepository) {
+        this.userDomainRepository = userDomainRepository;
     }
 
     /**
@@ -35,7 +35,7 @@ public class RegisterUserApp {
      */
     public void register(@NotNull @Valid UserDomain userDomain) {
         try {
-            userService.register(userDomain);
+            userDomainRepository.save(userDomain);
         } catch (AlreadyExistException ex) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT, ex.getMessage());
         } catch (ConstraintViolationException | IllegalArgumentException ex) {

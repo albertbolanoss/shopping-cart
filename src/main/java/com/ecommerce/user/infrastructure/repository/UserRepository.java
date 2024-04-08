@@ -21,4 +21,5 @@ public interface UserRepository extends CrudRepository<User, UUID> {
             " AND (:lastName IS NULL OR c.lastName LIKE %:lastName%)" +
             " AND (:email IS NULL OR c.email LIKE %:email%)")
     Page<User> findByCustomersByFirstNameLastNameEmail(String firstName, String lastName, String email, Pageable pageable);
+
 }

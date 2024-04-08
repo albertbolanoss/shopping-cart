@@ -1,6 +1,6 @@
 package com.ecommerce.user.application;
 
-import com.ecommerce.user.domain.services.UserService;
+import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserReqFilterDomain;
 import com.ecommerce.user.infrastructure.mother.UserReqFilterDomainMother;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +19,11 @@ class GetUsersByFiltersAppTest {
     private GetUsersByFiltersApp getUsersByFiltersApp;
 
     @Mock
-    private UserService userService;
+    private UserDomainRepository userDomainRepository;
 
     @BeforeEach
     void init() {
-        getUsersByFiltersApp = new GetUsersByFiltersApp(userService);
+        getUsersByFiltersApp = new GetUsersByFiltersApp(userDomainRepository);
     }
 
     @Test
@@ -32,7 +32,7 @@ class GetUsersByFiltersAppTest {
 
         getUsersByFiltersApp.findByFilter(customerReqFilterDomain);
 
-        verify(userService, times(1))
+        verify(userDomainRepository, times(1))
                 .findByFilters(any(UserReqFilterDomain.class));
 
     }

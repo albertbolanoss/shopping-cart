@@ -1,6 +1,6 @@
 package com.ecommerce.user.application;
 
-import com.ecommerce.user.domain.services.UserService;
+import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserPageDomain;
 import com.ecommerce.user.domain.valueobjects.UserReqFilterDomain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetUsersByFiltersApp {
     /**
-     * The customer service domain
+     * The user domain repository
      */
-    private final UserService userService;
+    private final UserDomainRepository userDomainRepository;
 
     /**
      *
-     * @param userService customer service domain
+     * @param userDomainRepository user domain repository
      */
     @Autowired
-    public GetUsersByFiltersApp(UserService userService) {
-        this.userService = userService;
+    public GetUsersByFiltersApp(UserDomainRepository userDomainRepository) {
+        this.userDomainRepository = userDomainRepository;
     }
 
     public UserPageDomain findByFilter(UserReqFilterDomain userReqFilterDomain) {
-        return userService.findByFilters(userReqFilterDomain);
+        return userDomainRepository.findByFilters(userReqFilterDomain);
     }
 }
