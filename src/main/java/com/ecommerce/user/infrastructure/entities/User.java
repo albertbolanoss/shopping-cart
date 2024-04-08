@@ -1,46 +1,42 @@
-package com.ecommerce.shoppingcart.infrastructure.entities;
+package com.ecommerce.user.infrastructure.entities;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Entity
-@Table(name = "ec_product")
+@Table(name = "ec_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
-public class Product implements Serializable {
+public class User {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
-    @Column(name = "name", length = 150)
-    private String name;
+    @Column(name = "firstName", length = 125)
+    private String firstName;
 
-    @Column(name = "code", length = 100)
-    private String code;
+    @Column(name = "lastName", length = 125)
+    private String lastName;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "unit_price")
-    private BigDecimal unitPrice;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "stock")
-    private int stock;
+    @Column(name = "phone", length = 40)
+    private String phone;
 
     @Column(name="active")
     private boolean active;

@@ -1,6 +1,6 @@
 package challenge;
 
-import com.ecommerce.customer.domain.valueobjects.CustomerIdDomain;
+import com.ecommerce.user.domain.valueobjects.UserIdDomain;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.math.BigDecimal;
@@ -69,7 +69,7 @@ public class ShoppingCart {
 
     @SessionScope
     public static class Cart {
-        private CustomerIdDomain customerIdDomain;
+        private UserIdDomain userIdDomain;
 
         public record Item(int quantity, String product, BigDecimal unitPrice) {}
 
