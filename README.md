@@ -47,15 +47,15 @@ The system has preconfigured the following products (id, description)
 
 The following is a list of the allowed operations in the API specification:
 
-| Method | URI                              | Description                                              |
-|--------|----------------------------------|----------------------------------------------------------|
-| POST   | /api/v1/product/{productId}/item | Add Item to Cart                                         |
-| Delete | /api/v1/product/{productId}/item | Delete an Item from Cart                                 |
-| Get    | /api/v1/product/{productId}/item | Get the Items from the Cart                              |
-| Delete | /api/v1/items                    | Delete all the Items from the Cart                       |
-| POST   | /api/v1/checkout                 | Checkout the items in the cart                           |  
-| POST   | /api/v1/customer                 | Create a new customer                                    |
-| Get    | /api/v1/customer                 | Get the customers information filter by query parameters |
+| Method | URI                              | Description                                         |
+|--------|----------------------------------|-----------------------------------------------------|
+| POST   | /api/v1/product/{productId}/item | Add Item to Cart                                    |
+| Delete | /api/v1/product/{productId}/item | Delete an Item from Cart                            |
+| Get    | /api/v1/product/{productId}/item | Get the Items from the Cart                         |
+| Delete | /api/v1/items                    | Delete all the Items from the Cart                  |
+| POST   | /api/v1/checkout                 | Checkout the items in the cart                      |  
+| POST   | /api/v1/user                 | Create a new user                                   |
+| Get    | /api/v1/user                 | Get the user information filter by query parameters |
 
 ## Run the tests
 

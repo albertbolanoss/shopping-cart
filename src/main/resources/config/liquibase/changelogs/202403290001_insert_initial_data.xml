@@ -5,7 +5,7 @@
 
 
     <changeSet id="insert_initial_data" author="luis.bolanoss">
-        <insert tableName="product">
+        <insert tableName="ec_product">
             <column name="id" value="379fbb01-ff84-4a61-8856-afa2d52b3974"/>
             <column name="name" value="Banana"/>
             <column name="code" value="001"/>
@@ -14,7 +14,7 @@
             <column name="stock" valueNumeric="50"/>
         </insert>
 
-        <insert tableName="product">
+        <insert tableName="ec_product">
             <column name="id" value="560a00dd-6864-49b9-b3f5-1ef420a0efca"/>
             <column name="name" value="Orange"/>
             <column name="code" value="002"/>
@@ -23,7 +23,7 @@
             <column name="stock" valueNumeric="50"/>
         </insert>
 
-        <insert tableName="product">
+        <insert tableName="ec_product">
             <column name="id" value="2f04919e-b6a8-4235-ac96-69c1659fa965"/>
             <column name="name" value="Strawberry"/>
             <column name="code" value="003"/>
