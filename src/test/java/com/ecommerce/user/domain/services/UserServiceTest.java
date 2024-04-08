@@ -1,18 +1,17 @@
 package com.ecommerce.user.domain.services;
 
 import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
+import com.ecommerce.shared.domain.valueobjects.PageResponseDomain;
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserPageDomain;
-import com.ecommerce.shared.domain.valueobjects.PageResponseDomain;
 import com.ecommerce.user.infrastructure.mother.UserDomainMother;
 import com.ecommerce.user.infrastructure.mother.UserReqFilterDomainMother;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -27,9 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
-public class UserServiceTest {
-    @InjectMocks
+class UserServiceTest {
     private UserService userService;
 
     @Mock
@@ -38,42 +35,47 @@ public class UserServiceTest {
     @Captor
     ArgumentCaptor<String> emailArgCaptor;
 
+    @BeforeEach
+    void init() {
+        userService = new UserService(userDomainRepository);
+    }
+
     @Test
     void registerSuccessfully() {
-        var expectedCustomerDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewCustomer();
 
         when(userDomainRepository.findByEmail(anyString())).thenReturn(null);
 
-        userService.register(expectedCustomerDomain);
+        userService.register(expectedUserDomain);
 
         verify(userDomainRepository).findByEmail(emailArgCaptor.capture());
         var actualEmail = emailArgCaptor.getValue();
 
-        assertEquals(expectedCustomerDomain.getEmail(), actualEmail);
+        assertEquals(expectedUserDomain.getEmail(), actualEmail);
     }
 
     @Test
     void registerThrowAlreadyExistException() {
-        var expectedCustomerDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewCustomer();
 
-        when(userDomainRepository.findByEmail(anyString())).thenReturn(expectedCustomerDomain);
+        when(userDomainRepository.findByEmail(anyString())).thenReturn(expectedUserDomain);
 
         assertThrows(AlreadyExistException.class,
-                () -> userService.register(expectedCustomerDomain));
+                () -> userService.register(expectedUserDomain));
     }
 
     @Test
     void findByFilters() {
         var customerReqFilterDomain = UserReqFilterDomainMother.random();
         var pageResponseDomain = new PageResponseDomain(1, 1);
-        var customers = Arrays.asList(
+        var users = Arrays.asList(
                 UserDomainMother.random(),
                 UserDomainMother.random(),
                 UserDomainMother.random()
         );
-        var customerPageDomain = new UserPageDomain(customers, pageResponseDomain, customerReqFilterDomain);
+        var userPageDomain = new UserPageDomain(users, pageResponseDomain, customerReqFilterDomain);
 
-        when(userDomainRepository.findByFilters(any())).thenReturn(customerPageDomain);
+        when(userDomainRepository.findByFilters(any())).thenReturn(userPageDomain);
 
         var actual = userService.findByFilters(customerReqFilterDomain);
 
@@ -85,13 +87,13 @@ public class UserServiceTest {
 
     @Test
     void findByFiltersNoFoundRecords() {
-        var customerReqFilterDomain = UserReqFilterDomainMother.random();
+        var userReqFilterDomain = UserReqFilterDomainMother.random();
         var pageResponseDomain = new PageResponseDomain(0, 0);
-        var customerPageDomain = new UserPageDomain(new ArrayList<>(), pageResponseDomain, customerReqFilterDomain);
+        var userPageDomain = new UserPageDomain(new ArrayList<>(), pageResponseDomain, userReqFilterDomain);
 
-        when(userDomainRepository.findByFilters(any())).thenReturn(customerPageDomain);
+        when(userDomainRepository.findByFilters(any())).thenReturn(userPageDomain);
 
-        var actual = userService.findByFilters(customerReqFilterDomain);
+        var actual = userService.findByFilters(userReqFilterDomain);
 
         assertNotNull(actual);
     }

@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="00000000000000_create_table_user_token" author="luis.bolanoss">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ec_user_token"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ec_user_token">
+            <column name="id" type="varchar(36)" autoIncrement="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="refresh_token" type="varchar(128)">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet  author="luis.bolanoss"  id="00000000000000_primary_key_table_user">
+        <addPrimaryKey  columnNames="id"
+                        constraintName="user_token_pk"
+                        tableName="ec_user_token"/>
+    </changeSet>
+
+    <changeSet  author="luis.bolanoss"  id="00000000000000_foreign_key_userToken_user">
+        <addForeignKeyConstraint  baseColumnNames="user_id"
+                                  baseTableName="ec_user_token"
+                                  constraintName="fk_userToken_user"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableName="ec_user"/>
+    </changeSet>
+
+</databaseChangeLog>

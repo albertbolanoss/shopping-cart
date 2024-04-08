@@ -9,8 +9,9 @@ import com.ecommerce.shoppingcart.infrastructure.mother.ProductDomainMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.ProductIdDomainMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AddCartItemAppTest {
     private AddCartItemApp addCartItemService;
 

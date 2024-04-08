@@ -1,6 +1,5 @@
 package com.ecommerce.shoppingcart.domain.services;
 
-import com.ecommerce.shoppingcart.domain.services.PaymentSummaryMaterCardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

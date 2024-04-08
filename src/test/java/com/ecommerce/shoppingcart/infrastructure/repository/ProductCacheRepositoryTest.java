@@ -2,10 +2,11 @@ package com.ecommerce.shoppingcart.infrastructure.repository;
 
 import com.ecommerce.shared.infrastructure.mother.FakerMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.ProductMother;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -13,12 +14,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {ProductCacheRepository.class})
+@ExtendWith(MockitoExtension.class)
 class ProductCacheRepositoryTest {
-    @Autowired
     private ProductCacheRepository productCacheRepository;
-    @MockBean
+    @Mock
     private ProductRepository productRepository;
+
+    @BeforeEach
+    void init() {
+        productCacheRepository = new ProductCacheRepository(productRepository);
+    }
 
     @Test
     void getStockQuantityWhenProductIsFound() {
@@ -48,8 +53,6 @@ class ProductCacheRepositoryTest {
     void updateStockQuantityWhenProductIsPresent() {
         var product = ProductMother.random();
         var expectedStockQuantity = product.getStock();
-
-        when(productRepository.getById(anyString())).thenReturn(Optional.of(product));
 
         var actualStockQuantity = productCacheRepository.updateStockQuantity(product.getId(), product.getStock());
 

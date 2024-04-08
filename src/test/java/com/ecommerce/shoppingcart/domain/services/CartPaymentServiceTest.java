@@ -1,20 +1,30 @@
 package com.ecommerce.shoppingcart.domain.services;
 
 import com.ecommerce.shoppingcart.domain.model.PaymentMethod;
-import com.ecommerce.shoppingcart.domain.services.CartPaymentService;
-import com.ecommerce.shoppingcart.domain.services.PaymentSummaryCashService;
-import com.ecommerce.shoppingcart.domain.services.PaymentSummaryMaterCardService;
-import com.ecommerce.shoppingcart.domain.services.PaymentSummaryVisaService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class CartPaymentServiceTest {
-    @Autowired
     private CartPaymentService cartPaymentTotalService;
+    @Mock
+    private PaymentSummaryVisaService paymentTotalVisaService;
+    @Mock
+    private PaymentSummaryMaterCardService paymentTotalMaterCardService;
+    @Mock
+    private PaymentSummaryCashService paymentTotalCashService;
+
+    @BeforeEach
+    void init() {
+        cartPaymentTotalService = new CartPaymentService(paymentTotalVisaService,
+                paymentTotalMaterCardService, paymentTotalCashService);
+    }
+
 
    @Test
     void getPaymentSummaryVisaService() {

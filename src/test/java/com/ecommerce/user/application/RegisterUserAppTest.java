@@ -5,12 +5,13 @@ import com.ecommerce.user.domain.services.UserService;
 import com.ecommerce.user.domain.valueobjects.UserDomain;
 import com.ecommerce.user.infrastructure.mother.UserDomainMother;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,9 +20,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class RegisterUserAppTest {
-    @InjectMocks
     private RegisterUserApp registerUserApp;
 
     @Mock
@@ -30,27 +30,32 @@ class RegisterUserAppTest {
     @Captor
     ArgumentCaptor<UserDomain> userDomainArgCaptor;
 
+    @BeforeEach
+    void init() {
+        registerUserApp = new RegisterUserApp(userService);
+    }
+
     @Test
     void register() {
-        var expetedCustomerDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewCustomer();
 
-        registerUserApp.register(expetedCustomerDomain);
+        registerUserApp.register(expectedUserDomain);
 
         verify(userService).register(userDomainArgCaptor.capture());
         UserDomain actualUserDomain = userDomainArgCaptor.getValue();
 
-        assertEquals(expetedCustomerDomain, actualUserDomain);
+        assertEquals(expectedUserDomain, actualUserDomain);
     }
 
     @Test
     void registerShouldThrowHttpClientErrorExceptionWithAlreadyExist() {
-        var expetedCustomerDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewCustomer();
 
         doThrow(new AlreadyExistException("customer already exist"))
                 .when(userService).register(any(UserDomain.class));
 
         assertThrows(HttpClientErrorException.class,
-                () -> registerUserApp.register(expetedCustomerDomain));
+                () -> registerUserApp.register(expectedUserDomain));
     }
 
     @Test

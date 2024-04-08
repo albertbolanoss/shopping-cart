@@ -84,7 +84,7 @@ public class CartController implements CartApi {
      * @return a list api model items
      */
     @Override
-    public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethodText) {
+        public ResponseEntity<PaymentSummaryReq> getCartItems(String paymentMethodText) {
         var paymentMethod = getPaymentMethodFromText(paymentMethodText);
         var cartItemsDomain = cartItems.values().stream().toList();
         var paymentSummaryReq = PaymentSummaryReqMapper.fromDomain(

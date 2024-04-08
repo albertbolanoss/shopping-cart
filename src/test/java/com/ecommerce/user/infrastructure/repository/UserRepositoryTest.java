@@ -1,15 +1,16 @@
 package com.ecommerce.user.infrastructure.repository;
 
-import com.ecommerce.user.infrastructure.entities.User;
-import com.ecommerce.user.infrastructure.mother.UserMother;
 import com.ecommerce.shared.api.pageable.PageRequestCreator;
 import com.ecommerce.shared.infrastructure.mother.FakerMother;
+import com.ecommerce.user.infrastructure.entities.User;
+import com.ecommerce.user.infrastructure.mother.UserMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 
@@ -17,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-public class UserRepositoryTest {
+@DataJpaTest
+@ActiveProfiles("test")
+class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 

@@ -1,13 +1,13 @@
 package com.ecommerce.shared.api.exceptions;
 
-import com.ecommerce.shared.api.exceptions.ErrorCode;
-import com.ecommerce.shared.api.exceptions.RestApiErrorHandler;
 import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
@@ -19,15 +19,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
 class RestApiErrorHandlerTest  {
-    @InjectMocks
     private RestApiErrorHandler restApiErrorHandler;
 
     @Mock
+    private MessageSource messageSource;
+    @Mock
     private HttpServletRequest httpServletRequest;
-
     private final String RequestURL = "http://host/api/v1/myResource";
+
+    @BeforeEach
+    void init() {
+        restApiErrorHandler = new RestApiErrorHandler(messageSource);
+    }
+
     @Test
     void handleHttpMediaTypeNotSupportedException() {
         var HTTPMethod = "GET";

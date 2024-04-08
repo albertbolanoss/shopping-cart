@@ -24,6 +24,14 @@ spring:
       password: password
       timeout: 60000
 
+app:
+  security:
+    jwt:
+      keystore-location: jwt-keystore.jks
+      keystore-password: password
+      key-alias: jwt-sign-key
+      private-key-passphrase: passwords
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

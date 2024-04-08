@@ -10,4 +10,7 @@
 
     <include file="classpath:config/liquibase/changelogs/202403290001_insert_initial_data.xml"
              relativeToChangelogFile="false" />
+
+    <include file="classpath:config/liquibase/changelogs/202404070001_initial_user_token_table.xml"
+             relativeToChangelogFile="false" />
 </databaseChangeLog>

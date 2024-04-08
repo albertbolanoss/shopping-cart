@@ -4,19 +4,18 @@ import com.ecommerce.shoppingcart.domain.model.PaymentMethod;
 import com.ecommerce.shoppingcart.domain.services.CartPaymentService;
 import com.ecommerce.shoppingcart.domain.services.PaymentSummaryCashService;
 import com.ecommerce.shoppingcart.domain.services.PaymentSummaryMaterCardService;
-import com.ecommerce.shoppingcart.domain.services.PaymentSummaryService;
 import com.ecommerce.shoppingcart.domain.services.PaymentSummaryVisaService;
 import com.ecommerce.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CartItemDomainMother;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,15 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class GetPaymentSummaryAppTest {
     @InjectMocks
     private GetPaymentSummaryApp getPaymentSummaryApp;
     @Mock
     private CartPaymentService cartPaymentService;
-
-    private Map<String, PaymentSummaryService> paymentSummaryService;
-
 
     @Test
     void getPaymentSummaryWithVisa() {

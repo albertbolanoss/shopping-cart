@@ -55,7 +55,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
     implementation "org.springframework.boot:spring-boot-starter-cache:$springVersion"
     implementation "org.springframework.boot:spring-boot-starter-data-redis:$springVersion"
-
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'com.auth0:java-jwt:4.3.0'
 
     // OpenAPI
     swaggerCodegen 'org.openapitools:openapi-generator-cli:6.2.1'
@@ -72,15 +74,16 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-    // H2 Driver
-    runtimeOnly 'com.h2database:h2:2.2.224'
+    // Mysql Driver
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
 
     // Liquibase Migration
     implementation 'org.liquibase:liquibase-core:4.26.0'
 
     implementation 'net.datafaker:datafaker:2.1.0'
 
-
+    // H2 Driver
+    testImplementation  'com.h2database:h2:2.2.224'
 
 }
 

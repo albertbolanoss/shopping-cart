@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class ShoppingCarApplicationTest {
-    private ShoppingCarApplication shoppingCarApplication;
+class AppConfigTest {
+    private AppConfig appConfig;
 
     @BeforeEach
     void init() {
-        shoppingCarApplication = new ShoppingCarApplication();
+        appConfig = new AppConfig();
     }
 
     @Test
     void shallowEtagHeaderFilter() {
-        var shallowEtagHeaderFilter = shoppingCarApplication.shallowEtagHeaderFilter();
+        var shallowEtagHeaderFilter = appConfig.shallowEtagHeaderFilter();
 
         assertNotNull(shallowEtagHeaderFilter);
     }

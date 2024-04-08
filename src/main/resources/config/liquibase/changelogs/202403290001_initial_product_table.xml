@@ -41,4 +41,10 @@
                 constraintName="unq_code_product"
                 tableName="ec_product"/>
     </changeSet>
+
+    <changeSet  author="luis.bolanoss"  id="00000000000000_primary_key_table_product">
+        <addPrimaryKey  columnNames="id"
+                        constraintName="product_pk"
+                        tableName="ec_product"/>
+    </changeSet>
 </databaseChangeLog>

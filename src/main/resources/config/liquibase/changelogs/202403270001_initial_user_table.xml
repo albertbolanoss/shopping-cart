@@ -39,4 +39,10 @@
                 constraintName="unq_user_email"
                 tableName="ec_user"/>
     </changeSet>
+
+    <changeSet  author="luis.bolanoss"  id="00000000000000_primary_key_table_user">
+        <addPrimaryKey  columnNames="id"
+                        constraintName="user_pk"
+                        tableName="ec_user"/>
+    </changeSet>
 </databaseChangeLog>

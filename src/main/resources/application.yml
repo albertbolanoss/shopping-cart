@@ -8,11 +8,11 @@ spring:
       overrideNone: true
       overrideSystemProperties: false
   datasource:
-    url: jdbc:h2:mem:TestDataBase;DATABASE_TO_UPPER=FALSE #jdbc:h2:file:./TestDataBase;DATABASE_TO_UPPER=FALSE
-    name: comm
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/ecart
+    name: ecart
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
   jpa:
     properties:
       hibernate:
@@ -27,6 +27,15 @@ spring:
       port: 6379
       password: password
       timeout: 60000
+
+app:
+  security:
+    jwt:
+      keystore-location: jwt-keystore.jks
+      keystore-password: password
+      key-alias: jwt-sign-key
+      private-key-passphrase: password
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -40,5 +49,4 @@ logging:
       springframework:
         cache: INFO
     com:
-      perficient:
-        shoppingcart: INFO
+      ecommerce: INFO

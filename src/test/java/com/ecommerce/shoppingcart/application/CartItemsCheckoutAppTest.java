@@ -6,10 +6,11 @@ import com.ecommerce.shoppingcart.domain.repositories.ProductDomainRepository;
 import com.ecommerce.shoppingcart.domain.valueobjects.CartItemDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CartItemDomainMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.PaymentSummaryDomainMother;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -26,9 +27,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class CartItemsCheckoutAppTest {
-    @InjectMocks
     private CartCheckoutApp cartCheckoutApp;
 
     @Mock
@@ -36,6 +36,11 @@ class CartItemsCheckoutAppTest {
 
     @Mock
     private ProductDomainRepository productDomainRepository;
+
+    @BeforeEach
+    void init() {
+        cartCheckoutApp = new CartCheckoutApp(getPaymentSummaryApp, productDomainRepository);
+    }
 
     @Test
     void checkoutWithVisa() {

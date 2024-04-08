@@ -5,12 +5,15 @@ Shopping Cart is a sample code used to validate coding best practices using the 
 ## Pre requirements
 - Java 17 or greater and create the home Java environment variable
 - Gradle [7.6.4](https://gradle.org/releases) or greater and create the Gradle home and Gradle Bin paths in environment variables
-- Redis Server or use an [docker image](https://hub.docker.com/_/redis)
+- Redis Server or use a [docker image](https://hub.docker.com/_/redis)
+- Mysql Database or use a [docker image](https://hub.docker.com/_/mysql)
 
 This project has the following configuration for redis
 ```bash
-docker pull redis
 docker run --name redis-server -d -p 6379:6379 redis --requirepass password
+```
+```bash
+docker run -d -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=ecart mysql:8.3.0
 ```
 
 ## Installation
@@ -143,6 +146,19 @@ This project implemented the use of the following technologies
 - Gradle
 - Github action workflow (to run CI in Github)
 
+
+## Other commands
+
+### How generating the public/private keys
+
+```bash
+keytool -genkey -alias "jwt-sign-key" -keyalg RSA -keystore jwt-keystore.jks -keysize 4096
+```
+The generated key store should be placed under the src/main/resources directory.
+
+IMPORTANT NOTE
+
+Public/private keys are valid only for 90 days from the time they are generated. Therefore, make sure that you create a new set of public/private keys before you run this chapter’s code.
 
 ## Initial Challenge
 

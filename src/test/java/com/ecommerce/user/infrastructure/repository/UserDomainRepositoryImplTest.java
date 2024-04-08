@@ -1,16 +1,17 @@
 package com.ecommerce.user.infrastructure.repository;
 
+import com.ecommerce.shared.api.pageable.PageRequestCreator;
 import com.ecommerce.user.domain.valueobjects.UserReqFilterDomain;
 import com.ecommerce.user.infrastructure.entities.User;
 import com.ecommerce.user.infrastructure.mother.UserDomainMother;
 import com.ecommerce.user.infrastructure.mother.UserMother;
-import com.ecommerce.shared.api.pageable.PageRequestCreator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.Arrays;
@@ -26,9 +27,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class UserDomainRepositoryImplTest {
-    @InjectMocks
     private UserDomainRepositoryImpl userDomainRepositoryImpl;
 
     @Mock
@@ -36,6 +36,11 @@ class UserDomainRepositoryImplTest {
 
     @Captor
     ArgumentCaptor<User> userEntityArgCaptor;
+
+    @BeforeEach
+    void init() {
+        userDomainRepositoryImpl = new UserDomainRepositoryImpl(userRepository);
+    }
 
     @Test
     void save() {
