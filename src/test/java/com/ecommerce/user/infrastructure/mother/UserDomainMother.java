@@ -48,7 +48,7 @@ public class UserDomainMother {
      * Generate a random Customer model without id and active
      * @return a customer model instance
      */
-    public static UserDomain randomNewCustomer() {
+    public static UserDomain randomNewUser() {
         return new UserDomain(
             null,
             FakerMother.getFaker().name().firstName(),

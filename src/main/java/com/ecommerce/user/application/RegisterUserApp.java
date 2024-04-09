@@ -1,6 +1,7 @@
 package com.ecommerce.user.application;
 
 import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
+import com.ecommerce.user.domain.model.UserModel;
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserDomain;
 import jakarta.validation.ConstraintViolationException;
@@ -22,7 +23,7 @@ public class RegisterUserApp {
 
     /**
      *
-     * @param userService customer service domain
+     * @param userDomainRepository user domain repository
      */
     @Autowired
     public RegisterUserApp(UserDomainRepository userDomainRepository) {
@@ -35,7 +36,9 @@ public class RegisterUserApp {
      */
     public void register(@NotNull @Valid UserDomain userDomain) {
         try {
-            userDomainRepository.save(userDomain);
+            var userModel = new UserModel(userDomain, userDomainRepository);
+            userModel.register();
+
         } catch (AlreadyExistException ex) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT, ex.getMessage());
         } catch (ConstraintViolationException | IllegalArgumentException ex) {

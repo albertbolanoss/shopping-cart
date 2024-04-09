@@ -37,7 +37,7 @@ class RegisterUserAppTest {
 
     @Test
     void register() {
-        var expectedUserDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewUser();
 
         registerUserApp.register(expectedUserDomain);
 
@@ -49,7 +49,7 @@ class RegisterUserAppTest {
 
     @Test
     void registerShouldThrowHttpClientErrorExceptionWithAlreadyExist() {
-        var expectedUserDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewUser();
 
         doThrow(new AlreadyExistException("customer already exist"))
                 .when(userDomainRepository).save(any(UserDomain.class));
@@ -60,7 +60,7 @@ class RegisterUserAppTest {
 
     @Test
     void registerShouldThrowHttpClientErrorExceptionWithConstraintViolation() {
-        var expectedUserDomain = UserDomainMother.randomNewCustomer();
+        var expectedUserDomain = UserDomainMother.randomNewUser();
 
         doThrow(new ConstraintViolationException(null))
                 .when(userDomainRepository).save(any(UserDomain.class));

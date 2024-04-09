@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Optional;
+
 
 /**
  * Customer domain repository implementation
@@ -51,10 +53,9 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
      * @return a customer domain
      */
     @Override
-    public UserDomain findByEmail(String email) {
+    public Optional<UserDomain> findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .map(UserDomainMapper::convertFromEntity)
-                .orElse(null);
+                .map(UserDomainMapper::convertFromEntity);
     }
 
     @Override

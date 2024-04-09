@@ -18,8 +18,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserDomainRepositoryImplTest {
+class UserModelRepositoryImplTest {
     private UserDomainRepositoryImpl userDomainRepositoryImpl;
 
     @Mock
@@ -44,7 +45,7 @@ class UserDomainRepositoryImplTest {
 
     @Test
     void save() {
-        var userDomain = UserDomainMother.randomNewCustomer();
+        var userDomain = UserDomainMother.randomNewUser();
         userDomainRepositoryImpl.save(userDomain);
 
         verify(userRepository).save(userEntityArgCaptor.capture());
@@ -62,8 +63,8 @@ class UserDomainRepositoryImplTest {
 
         var actual = userDomainRepositoryImpl.findByEmail(user.getEmail());
 
-        assertNotNull(actual);
-        assertEquals(user.getEmail(), actual.getEmail());
+        assertTrue(actual.isPresent());
+        assertEquals(user.getEmail(), actual.get().getEmail());
     }
 
     @Test
@@ -74,7 +75,7 @@ class UserDomainRepositoryImplTest {
 
         var actual = userDomainRepositoryImpl.findByEmail(user.getEmail());
 
-        assertNull(actual);
+        assertFalse(actual.isPresent());
     }
 
     @Test

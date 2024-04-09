@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,11 +43,20 @@ public class UserController implements UserApi {
      */
     private final UserPageModelAssembler userPageModelAssembler;
 
+    /**
+     * Password encoder
+     */
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserController(RegisterUserApp registerCustomerService, GetUsersByFiltersApp getCustomersByFiltersService, UserPageModelAssembler userPageModelAssembler) {
+    public UserController(RegisterUserApp registerCustomerService,
+                          GetUsersByFiltersApp getCustomersByFiltersService,
+                          UserPageModelAssembler userPageModelAssembler,
+                          PasswordEncoder passwordEncoder) {
         this.registerCustomerService = registerCustomerService;
         this.getCustomersByFiltersService = getCustomersByFiltersService;
         this.userPageModelAssembler = userPageModelAssembler;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -56,7 +66,8 @@ public class UserController implements UserApi {
      */
     @Override
     public ResponseEntity<Void> createUser(@Valid AddUserReq addCustomerReq) {
-        var customer = UserDomainMapper.convertFromARequest(addCustomerReq);
+        var encodePassword = passwordEncoder.encode(addCustomerReq.getPassword());
+        var customer = UserDomainMapper.convertFromARequest(addCustomerReq.password(encodePassword));
         registerCustomerService.register(customer);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

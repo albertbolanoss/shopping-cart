@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class UserDomainEntityMapperTest {
+public class UserModelEntityMapperTest {
     @Test
     void convertFromDomain() {
-        var customer = UserDomainMother.randomNewCustomer();
+        var customer = UserDomainMother.randomNewUser();
 
         var actual = UserEntityMapper.convertFromDomain(customer);
 
