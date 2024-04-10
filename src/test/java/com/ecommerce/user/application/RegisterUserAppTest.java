@@ -1,10 +1,8 @@
 package com.ecommerce.user.application;
 
-import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserDomain;
 import com.ecommerce.user.infrastructure.mother.UserDomainMother;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +10,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterUserAppTest {
@@ -50,22 +51,22 @@ class RegisterUserAppTest {
     @Test
     void registerShouldThrowHttpClientErrorExceptionWithAlreadyExist() {
         var expectedUserDomain = UserDomainMother.randomNewUser();
+        var userDomain = UserDomainMother.random();
 
-        doThrow(new AlreadyExistException("customer already exist"))
-                .when(userDomainRepository).save(any(UserDomain.class));
+        when(userDomainRepository.findByEmail(anyString())).thenReturn(Optional.of(userDomain));
 
-        assertThrows(HttpClientErrorException.class,
+        HttpClientErrorException thrown = assertThrows(HttpClientErrorException.class,
                 () -> registerUserApp.register(expectedUserDomain));
+
+        assertEquals(HttpStatus.CONFLICT, thrown.getStatusCode());
     }
 
     @Test
     void registerShouldThrowHttpClientErrorExceptionWithConstraintViolation() {
-        var expectedUserDomain = UserDomainMother.randomNewUser();
+        var userDomain = UserDomainMother.nullableNewCustomer();
 
-        doThrow(new ConstraintViolationException(null))
-                .when(userDomainRepository).save(any(UserDomain.class));
 
         assertThrows(HttpClientErrorException.class,
-                () -> registerUserApp.register(expectedUserDomain));
+                () -> registerUserApp.register(null));
     }
 }

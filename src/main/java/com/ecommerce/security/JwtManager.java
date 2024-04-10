@@ -17,7 +17,6 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 public class JwtManager {
-
   private final RSAPrivateKey privateKey;
   private final RSAPublicKey publicKey;
 

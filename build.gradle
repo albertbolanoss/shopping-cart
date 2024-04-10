@@ -83,7 +83,7 @@ dependencies {
     implementation 'net.datafaker:datafaker:2.1.0'
 
     // H2 Driver
-    testImplementation  'com.h2database:h2:2.2.224'
+    implementation  'com.h2database:h2:2.2.224'
 
 }
 

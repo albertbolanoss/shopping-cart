@@ -9,7 +9,6 @@ import com.ecommerce.user.infrastructure.mappers.UserDomainMapper;
 import com.perficient.shoppingcart.application.api.controller.UserApi;
 import com.perficient.shoppingcart.application.api.model.AddUserReq;
 import com.perficient.shoppingcart.application.api.model.GetUsersPageReq;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,16 +64,17 @@ public class UserController implements UserApi {
      * @return a response entity
      */
     @Override
-    public ResponseEntity<Void> createUser(@Valid AddUserReq addCustomerReq) {
+    public ResponseEntity<Void> createUser(AddUserReq addCustomerReq) {
         var encodePassword = passwordEncoder.encode(addCustomerReq.getPassword());
-        var customer = UserDomainMapper.convertFromARequest(addCustomerReq.password(encodePassword));
-        registerCustomerService.register(customer);
+        var userDomain = UserDomainMapper.convertFromARequest(addCustomerReq.password(encodePassword));
+        registerCustomerService.register(userDomain);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<GetUsersPageReq> getUsers(Integer offset, Integer limit, String firstName,
-                                                        String lastName, String email, List<String> sort) {
+    public ResponseEntity<GetUsersPageReq> getUsers(Integer offset, Integer limit,
+                                                    String firstName, String lastName,
+                                                    String email, List<String> sort) {
 
         UserReqFilterDomain customerDomain = new UserReqFilterDomain(
                 firstName, lastName, email, offset, limit, sort);

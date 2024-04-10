@@ -1,6 +1,6 @@
 package com.ecommerce.user.domain.model;
 
-import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
+import com.ecommerce.user.domain.exceptions.UserAlreadyExist;
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
 import com.ecommerce.user.domain.valueobjects.UserDomain;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class UserModel {
         var existUser =  userDomainRepository.findByEmail(userDomain.getEmail());
 
         if (existUser.isPresent()) {
-            throw new AlreadyExistException("The user's email address is already registered");
+            throw new UserAlreadyExist(userDomain.getEmail());
         }
 
         userDomainRepository.save(userDomain);

@@ -24,12 +24,12 @@ public class AppConfig {
     public PasswordEncoder passwordEncoder() {
         Map<String, PasswordEncoder> encoders =
                 Map.of(
-                        ENCODER_ID,
-                        new BCryptPasswordEncoder(),
-                        "pbkdf2",
-                        Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8(),
-                        "scrypt",
-                        SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
-        return new DelegatingPasswordEncoder(ENCODER_ID, encoders);
+                        ENCODER_ID, new BCryptPasswordEncoder(),
+                        "pbkdf2", Pbkdf2PasswordEncoder.
+                                defaultsForSpringSecurity_v5_8(),
+                        "scrypt", SCryptPasswordEncoder
+                                .defaultsForSpringSecurity_v5_8());
+        return new DelegatingPasswordEncoder
+                (ENCODER_ID, encoders);
     }
 }
