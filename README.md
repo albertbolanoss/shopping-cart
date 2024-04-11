@@ -161,7 +161,7 @@ IMPORTANT NOTE
 
 Public/private keys are valid only for 90 days from the time they are generated. Therefore, make sure that you create a new set of public/private keys before you run this chapter’s code.
 
-### How generate self signed certificate
+### How generate self-signed certificate
 ```bash
 keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore keystore.jks -validity 3650
 keytool -exportcert -alias mykey -keystore keystore.jks -rfc -file certificate.crt

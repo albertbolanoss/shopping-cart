@@ -1,4 +1,4 @@
-package com.ecommerce.security;
+package com.ecommerce.shared.infrastructure.config.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -11,16 +11,14 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 
-import static com.ecommerce.security.Constants.EXPIRATION_TIME;
-import static com.ecommerce.security.Constants.ROLE_CLAIM;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class JwtManager {
+public class JWTCreator {
   private final RSAPrivateKey privateKey;
   private final RSAPublicKey publicKey;
 
-  public JwtManager(@Lazy RSAPrivateKey privateKey, @Lazy RSAPublicKey publicKey) {
+  public JWTCreator(@Lazy RSAPrivateKey privateKey, @Lazy RSAPublicKey publicKey) {
     this.privateKey = privateKey;
     this.publicKey = publicKey;
   }
@@ -31,12 +29,12 @@ public class JwtManager {
         .withIssuer("Modern API Development with Spring and Spring Boot")
         .withSubject(principal.getUsername())
         .withClaim(
-            ROLE_CLAIM,
+            SecurityConstant.ROLE_CLAIM,
             principal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(toList()))
         .withIssuedAt(new Date(now))
-        .withExpiresAt(new Date(now + EXPIRATION_TIME))
+        .withExpiresAt(new Date(now + SecurityConstant.EXPIRATION_TIME))
         .sign(Algorithm.RSA256(publicKey, privateKey));
   }
 }

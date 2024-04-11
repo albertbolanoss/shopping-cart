@@ -1,4 +1,4 @@
-package com.ecommerce;
+package com.ecommerce.shared.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,19 +7,13 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
-import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import java.util.Map;
 
-import static com.ecommerce.security.Constants.ENCODER_ID;
+import static com.ecommerce.shared.infrastructure.config.security.SecurityConstant.ENCODER_ID;
 
 @Configuration
-public class AppConfig {
-    @Bean
-    public ShallowEtagHeaderFilter shallowEtagHeaderFilter() {
-        return new ShallowEtagHeaderFilter();
-    }
-
+public class EncryptConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         Map<String, PasswordEncoder> encoders =

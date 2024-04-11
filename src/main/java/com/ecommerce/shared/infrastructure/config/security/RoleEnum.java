@@ -1,4 +1,4 @@
-package com.ecommerce.security;
+package com.ecommerce.shared.infrastructure.config.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
