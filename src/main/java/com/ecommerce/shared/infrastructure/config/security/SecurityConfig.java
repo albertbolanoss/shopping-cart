@@ -51,17 +51,18 @@ public class SecurityConfig {
       .authorizeHttpRequests(req ->
         req.requestMatchers(toH2Console()).permitAll()
           .requestMatchers(new AntPathRequestMatcher(
-                  SecurityConstant.TOKEN_URL, HttpMethod.GET.name())).permitAll()
+                  Constant.TOKEN_URL, HttpMethod.GET.name())).permitAll()
           .requestMatchers(new AntPathRequestMatcher(
-                  SecurityConstant.TOKEN_URL, HttpMethod.POST.name())).permitAll()
+                  Constant.TOKEN_URL, HttpMethod.POST.name())).permitAll()
           .requestMatchers(new AntPathRequestMatcher(
-                  SecurityConstant.TOKEN_URL, HttpMethod.DELETE.name())).permitAll()
+                  Constant.TOKEN_URL, HttpMethod.DELETE.name())).permitAll()
           .requestMatchers(new AntPathRequestMatcher(
-                  SecurityConstant.SIGNUP_URL, HttpMethod.POST.name())).permitAll()
+                  Constant.SIGNUP_URL, HttpMethod.POST.name())).permitAll()
           .requestMatchers(new AntPathRequestMatcher(
-                  SecurityConstant.REFRESH_URL, HttpMethod.POST.name())).permitAll()
-          .requestMatchers("/api/v1/user/**")
-                  .hasAuthority(RoleEnum.ADMIN.getAuthority())
+                  Constant.REFRESH_URL, HttpMethod.POST.name())).permitAll()
+          .requestMatchers(new AntPathRequestMatcher(
+                  Constant.REFRESH_URL, HttpMethod.POST.name())).permitAll()
+          .requestMatchers("/api/v1/user/**").permitAll()
           .anyRequest().authenticated()
       )
       .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository())
@@ -79,8 +80,8 @@ public class SecurityConfig {
   private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
     JwtGrantedAuthoritiesConverter authorityConverter =
             new JwtGrantedAuthoritiesConverter();
-    authorityConverter.setAuthorityPrefix(SecurityConstant.AUTHORITY_PREFIX);
-    authorityConverter.setAuthoritiesClaimName(SecurityConstant.ROLE_CLAIM);
+    authorityConverter.setAuthorityPrefix(Constant.AUTHORITY_PREFIX);
+    authorityConverter.setAuthoritiesClaimName(Constant.ROLE_CLAIM);
     JwtAuthenticationConverter converter =
             new JwtAuthenticationConverter();
     converter.setJwtGrantedAuthoritiesConverter(authorityConverter);

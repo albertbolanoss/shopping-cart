@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController implements AuthenticationApi {
 
     @GetMapping("/api/v1/auth/token")
-    public CsrfToken health(CsrfToken csrfToken) {
+    public CsrfToken getCsrfToken(CsrfToken csrfToken) {
         return csrfToken;
     }
 

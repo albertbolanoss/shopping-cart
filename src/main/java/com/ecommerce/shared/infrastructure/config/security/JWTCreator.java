@@ -29,12 +29,12 @@ public class JWTCreator {
         .withIssuer("Modern API Development with Spring and Spring Boot")
         .withSubject(principal.getUsername())
         .withClaim(
-            SecurityConstant.ROLE_CLAIM,
+            Constant.ROLE_CLAIM,
             principal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(toList()))
         .withIssuedAt(new Date(now))
-        .withExpiresAt(new Date(now + SecurityConstant.EXPIRATION_TIME))
+        .withExpiresAt(new Date(now + Constant.EXPIRATION_TIME))
         .sign(Algorithm.RSA256(publicKey, privateKey));
   }
 }
