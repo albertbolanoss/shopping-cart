@@ -62,8 +62,7 @@ public class SecurityConfig {
                   Constant.REFRESH_URL, HttpMethod.POST.name())).permitAll()
           .requestMatchers(new AntPathRequestMatcher(
                   Constant.REFRESH_URL, HttpMethod.POST.name())).permitAll()
-          .requestMatchers("/api/v1/user/**").permitAll()
-          .anyRequest().authenticated()
+          .anyRequest().permitAll()
       )
       .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository())
         .ignoringRequestMatchers(toH2Console())

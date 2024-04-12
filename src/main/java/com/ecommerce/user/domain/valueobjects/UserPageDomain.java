@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class UserPageDomain {
-    private List<UserDomain> userDomains;
+    private List<NewUserDomain> newUserDomains;
     private PageResponseDomain pageResponseDomain;
     private UserReqFilterDomain userReqFilterDomain;
 }

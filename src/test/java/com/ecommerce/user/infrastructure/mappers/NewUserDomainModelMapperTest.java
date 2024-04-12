@@ -1,7 +1,7 @@
 package com.ecommerce.user.infrastructure.mappers;
 
-import com.ecommerce.user.infrastructure.mother.UserMother;
 import com.ecommerce.user.infrastructure.mother.AddUserReqMother;
+import com.ecommerce.user.infrastructure.mother.UserMother;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,17 +9,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class UserDomainModelMapperTest {
+class NewUserDomainModelMapperTest {
 
     @Test
     void convertFromAddUserReq() {
         var addUserReq = AddUserReqMother.random();
 
-        var actual = UserDomainMapper.convertFromARequest(addUserReq);
+        var actual = NewUserDomainMapper.convertFromAddUserReq(addUserReq);
 
         assertNotNull(actual);
-        assertNotNull(actual.getCustomerId());
-        assertNull(actual.getCustomerId().getId());
         assertTrue(actual.getActive());
         assertEquals(addUserReq.getEmail(), actual.getEmail());
         assertEquals(addUserReq.getPassword(), actual.getPassword());
@@ -30,7 +28,7 @@ class UserDomainModelMapperTest {
 
     @Test
     void convertFromAddUserReqNullable() {
-        var actual = UserDomainMapper.convertFromARequest(null);
+        var actual = NewUserDomainMapper.convertFromAddUserReq(null);
 
         assertNull(actual);
     }
@@ -38,11 +36,9 @@ class UserDomainModelMapperTest {
     @Test
     void convertFromAddUserReqValuesNullables() {
         var addUserReq = AddUserReqMother.nullable();
-        var actual = UserDomainMapper.convertFromARequest(addUserReq);
+        var actual = NewUserDomainMapper.convertFromAddUserReq(addUserReq);
 
         assertNotNull(actual);
-        assertNotNull(actual.getCustomerId());
-        assertNull(actual.getCustomerId().getId());
         assertNull(actual.getEmail());
         assertNull(actual.getPassword());
         assertNull(actual.getLastName());
@@ -55,11 +51,9 @@ class UserDomainModelMapperTest {
     void convertFromEntity() {
         var customer = UserMother.random();
 
-        var actual = UserDomainMapper.convertFromEntity(customer);
+        var actual = NewUserDomainMapper.convertFromEntity(customer);
 
         assertNotNull(actual);
-        assertNotNull(actual.getCustomerId());
-        assertEquals(customer.getId(), actual.getCustomerId().getId());
         assertEquals(customer.isActive(), actual.getActive());
         assertEquals(customer.getEmail(), actual.getEmail());
         assertEquals(customer.getPassword(), actual.getPassword());
@@ -70,7 +64,7 @@ class UserDomainModelMapperTest {
 
     @Test
     void convertFromEntityNullable() {
-        var actual = UserDomainMapper.convertFromEntity(null);
+        var actual = NewUserDomainMapper.convertFromEntity(null);
 
         assertNull(actual);
     }
@@ -79,11 +73,9 @@ class UserDomainModelMapperTest {
     void convertFromEntityValuesNullables() {
         var customer = UserMother.nullable();
 
-        var actual = UserDomainMapper.convertFromEntity(customer);
+        var actual = NewUserDomainMapper.convertFromEntity(customer);
 
         assertNotNull(actual);
-        assertNotNull(actual.getCustomerId());
-        assertNull(actual.getCustomerId().getId());
         assertNull(actual.getEmail());
         assertNull(actual.getPassword());
         assertNull(actual.getLastName());

@@ -1,6 +1,6 @@
 package com.ecommerce.user.infrastructure.mother;
 
-import com.ecommerce.user.domain.valueobjects.UserDomain;
+import com.ecommerce.user.domain.valueobjects.NewUserDomain;
 import com.ecommerce.shared.infrastructure.mother.FakerMother;
 
 /**
@@ -32,9 +32,8 @@ public class UserDomainMother {
      * Generate a random Customer model without id and active
      * @return a customer model instance
      */
-    public static UserDomain random() {
-        return new UserDomain(
-                UserIdDomainMother.random(),
+    public static NewUserDomain random() {
+        return new NewUserDomain(
                 FakerMother.getFaker().name().firstName(),
                 FakerMother.getFaker().name().lastName(),
                 FakerMother.getFaker().internet().emailAddress(),
@@ -48,9 +47,8 @@ public class UserDomainMother {
      * Generate a random Customer model without id and active
      * @return a customer model instance
      */
-    public static UserDomain randomNewUser() {
-        return new UserDomain(
-            null,
+    public static NewUserDomain randomNewUser() {
+        return new NewUserDomain(
             FakerMother.getFaker().name().firstName(),
             FakerMother.getFaker().name().lastName(),
             FakerMother.getFaker().internet().emailAddress(),
@@ -64,9 +62,8 @@ public class UserDomainMother {
      * Generate a customer with all properties nullables
      * @return a customer model instance
      */
-    public static UserDomain nullableNewCustomer() {
-        return new UserDomain(
-                null,
+    public static NewUserDomain nullableNewCustomer() {
+        return new NewUserDomain(
                 null,
                 null,
                 null,
@@ -80,9 +77,8 @@ public class UserDomainMother {
      * Generate a customer with invalids max length
      * @return a customer model instance
      */
-    public static UserDomain invalidMaxLengthNewCustomer() {
-        return new UserDomain(
-                null,
+    public static NewUserDomain invalidMaxLengthNewCustomer() {
+        return new NewUserDomain(
                 FakerMother.getFaker().lorem().characters(FIRSTNAME_MAX_LENGTH + 1),
                 FakerMother.getFaker().lorem().characters(LASTNAME_MAX_LENGTH + 1),
                 FakerMother.getFaker().lorem().characters(EMAIL_MAX_LENGTH + 1),
@@ -96,9 +92,8 @@ public class UserDomainMother {
      * Generate a random Customer model with invalid email
      * @return a customer model instance
      */
-    public static UserDomain invalidEmailNewCustomer() {
-        return new UserDomain(
-                null,
+    public static NewUserDomain invalidEmailNewCustomer() {
+        return new NewUserDomain(
                 FakerMother.getFaker().name().firstName(),
                 FakerMother.getFaker().name().lastName(),
                 FakerMother.getFaker().internet().username(),

@@ -1,7 +1,7 @@
 package com.ecommerce.user.application;
 
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
-import com.ecommerce.user.domain.valueobjects.UserDomain;
+import com.ecommerce.user.domain.valueobjects.NewUserDomain;
 import com.ecommerce.user.infrastructure.mother.UserDomainMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class RegisterUserAppTest {
     private UserDomainRepository userDomainRepository;;
 
     @Captor
-    ArgumentCaptor<UserDomain> userDomainArgCaptor;
+    ArgumentCaptor<NewUserDomain> userDomainArgCaptor;
 
     @BeforeEach
     void init() {
@@ -43,9 +43,9 @@ class RegisterUserAppTest {
         registerUserApp.register(expectedUserDomain);
 
         verify(userDomainRepository).save(userDomainArgCaptor.capture());
-        UserDomain actualUserDomain = userDomainArgCaptor.getValue();
+        NewUserDomain actualNewUserDomain = userDomainArgCaptor.getValue();
 
-        assertEquals(expectedUserDomain, actualUserDomain);
+        assertEquals(expectedUserDomain, actualNewUserDomain);
     }
 
     @Test

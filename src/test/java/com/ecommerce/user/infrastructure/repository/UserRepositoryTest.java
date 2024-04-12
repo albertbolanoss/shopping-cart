@@ -68,7 +68,7 @@ class UserRepositoryTest {
         var email = secondUser.getEmail();
 
         var pageable = PageRequest.of(0, 10);
-        var users = userRepository.findByCustomersByFirstNameLastNameEmail(firstName, lastName, email, pageable);
+        var users = userRepository.findByFirstNameLastNameEmail(firstName, lastName, email, pageable);
 
         assertFalse(users.isEmpty());
     }
@@ -80,7 +80,7 @@ class UserRepositoryTest {
         var email = "";
 
         var pageable = PageRequest.of(0, 10);
-        var users = userRepository.findByCustomersByFirstNameLastNameEmail(firstName, lastName, email, pageable);
+        var users = userRepository.findByFirstNameLastNameEmail(firstName, lastName, email, pageable);
 
         assertFalse(users.isEmpty());
     }
@@ -91,7 +91,7 @@ class UserRepositoryTest {
         var lastName = secondUser.getLastName();
 
         var pageable = PageRequest.of(0, 10);
-        var users = userRepository.findByCustomersByFirstNameLastNameEmail(firstName, lastName, null, pageable);
+        var users = userRepository.findByFirstNameLastNameEmail(firstName, lastName, null, pageable);
 
         assertFalse(users.isEmpty());
     }
@@ -103,7 +103,7 @@ class UserRepositoryTest {
         var email = secondUser.getEmail();
 
         var pageable = PageRequest.of(0, 10);
-        var users = userRepository.findByCustomersByFirstNameLastNameEmail(firstName, lastName, email, pageable);
+        var users = userRepository.findByFirstNameLastNameEmail(firstName, lastName, email, pageable);
 
         assertFalse(users.isEmpty());
     }
@@ -114,7 +114,7 @@ class UserRepositoryTest {
 
         var pageable = PageRequest.of(0, 10);
         var users = userRepository
-                .findByCustomersByFirstNameLastNameEmail(null, null, email, pageable);
+                .findByFirstNameLastNameEmail(null, null, email, pageable);
 
         assertFalse(users.isEmpty());
     }
@@ -125,7 +125,7 @@ class UserRepositoryTest {
 
         var pageable = PageRequestCreator.create(1, 2, sortFieldWithDirection);
         var users = userRepository
-                .findByCustomersByFirstNameLastNameEmail(null, null, null, pageable);
+                .findByFirstNameLastNameEmail(null, null, null, pageable);
 
         assertFalse(users.isEmpty());
         assertFalse(users.getContent().isEmpty());

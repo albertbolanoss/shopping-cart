@@ -26,7 +26,7 @@ public class UserPageModelAssembler extends
     public GetUsersPageReq toModel(UserPageDomain userPageDomain) {
         var id = UUID.randomUUID().toString();
         var resource = createModelWithId(id, userPageDomain);
-        var content = userPageDomain.getUserDomains().stream()
+        var content = userPageDomain.getNewUserDomains().stream()
                 .map(UserApiModelMapper::convertFromDomain)
                 .toList();
 

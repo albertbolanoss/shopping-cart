@@ -3,7 +3,7 @@ package com.ecommerce.user.application;
 import com.ecommerce.shared.domain.exceptions.AlreadyExistException;
 import com.ecommerce.user.domain.model.UserModel;
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
-import com.ecommerce.user.domain.valueobjects.UserDomain;
+import com.ecommerce.user.domain.valueobjects.NewUserDomain;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -32,11 +32,11 @@ public class RegisterUserApp {
 
     /**
      * Register a customer domain
-     * @param userDomain the customer to register
+     * @param newUserDomain the customer to register
      */
-    public void register(@NotNull @Valid UserDomain userDomain) {
+    public void register(@NotNull @Valid NewUserDomain newUserDomain) {
         try {
-            var userModel = new UserModel(userDomain, userDomainRepository);
+            var userModel = new UserModel(newUserDomain, userDomainRepository);
             userModel.register();
 
         } catch (AlreadyExistException ex) {

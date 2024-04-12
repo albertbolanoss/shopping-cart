@@ -3,10 +3,10 @@ package com.ecommerce.user.infrastructure.repository;
 import com.ecommerce.shared.api.pageable.PageRequestCreator;
 import com.ecommerce.shared.domain.valueobjects.PageResponseDomain;
 import com.ecommerce.user.domain.repositories.UserDomainRepository;
-import com.ecommerce.user.domain.valueobjects.UserDomain;
+import com.ecommerce.user.domain.valueobjects.NewUserDomain;
 import com.ecommerce.user.domain.valueobjects.UserPageDomain;
 import com.ecommerce.user.domain.valueobjects.UserReqFilterDomain;
-import com.ecommerce.user.infrastructure.mappers.UserDomainMapper;
+import com.ecommerce.user.infrastructure.mappers.NewUserDomainMapper;
 import com.ecommerce.user.infrastructure.mappers.UserEntityMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -39,11 +39,11 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
 
     /**
      * Save a customer domain in database
-     * @param userDomain the customer domain
+     * @param newUserDomain the customer domain
      */
     @Override
-    public void save(UserDomain userDomain) {
-        var customerEntity = UserEntityMapper.convertFromDomain(userDomain);
+    public void save(NewUserDomain newUserDomain) {
+        var customerEntity = UserEntityMapper.convertFromDomain(newUserDomain);
         userRepository.save(customerEntity);
     }
 
@@ -53,9 +53,9 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
      * @return a customer domain
      */
     @Override
-    public Optional<UserDomain> findByEmail(String email) {
+    public Optional<NewUserDomain> findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .map(UserDomainMapper::convertFromEntity);
+                .map(NewUserDomainMapper::convertFromEntity);
     }
 
     @Override
@@ -65,14 +65,14 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
                 userReqFilterDomain.getPageSize(),
                 userReqFilterDomain.getSort()
         );
-        var customerPageable = userRepository.findByCustomersByFirstNameLastNameEmail(
+        var customerPageable = userRepository.findByFirstNameLastNameEmail(
                 userReqFilterDomain.getFirstName(),
                 userReqFilterDomain.getLastName(),
                 userReqFilterDomain.getEmail(),
                 pageRequest
         );
         var customers = customerPageable.getContent()
-                .stream().map(UserDomainMapper::convertFromEntity)
+                .stream().map(NewUserDomainMapper::convertFromEntity)
                 .toList();
 
         var pageResponseDomain = new PageResponseDomain(customerPageable.getTotalElements(),

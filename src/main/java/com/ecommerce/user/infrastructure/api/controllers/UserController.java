@@ -5,7 +5,7 @@ import com.ecommerce.user.application.GetUsersByFiltersApp;
 import com.ecommerce.user.application.RegisterUserApp;
 import com.ecommerce.user.domain.valueobjects.UserReqFilterDomain;
 import com.ecommerce.user.infrastructure.api.hateoas.UserPageModelAssembler;
-import com.ecommerce.user.infrastructure.mappers.UserDomainMapper;
+import com.ecommerce.user.infrastructure.mappers.NewUserDomainMapper;
 import com.perficient.shoppingcart.application.api.controller.UserApi;
 import com.perficient.shoppingcart.application.api.model.AddUserReq;
 import com.perficient.shoppingcart.application.api.model.GetUsersPageReq;
@@ -66,7 +66,7 @@ public class UserController implements UserApi {
     @Override
     public ResponseEntity<Void> createUser(AddUserReq addCustomerReq) {
         var encodePassword = passwordEncoder.encode(addCustomerReq.getPassword());
-        var userDomain = UserDomainMapper.convertFromARequest(addCustomerReq.password(encodePassword));
+        var userDomain = NewUserDomainMapper.convertFromAddUserReq(addCustomerReq.password(encodePassword));
         registerCustomerService.register(userDomain);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

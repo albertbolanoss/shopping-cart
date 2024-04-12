@@ -93,7 +93,7 @@ class UserModelRepositoryImplTest {
         var userReqFilterDomain = new UserReqFilterDomain(
                 "firstName", "lastName", "email", pageNumber, pageSize, sort);
 
-        when(userRepository.findByCustomersByFirstNameLastNameEmail(anyString(),anyString(),anyString(), any()))
+        when(userRepository.findByFirstNameLastNameEmail(anyString(),anyString(),anyString(), any()))
                 .thenReturn(usersPage);
 
         var userDomainRepositoryImpl = new UserDomainRepositoryImpl(userRepository);
