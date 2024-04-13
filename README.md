@@ -143,6 +143,26 @@ This project implemented the use of the following technologies
 - Gradle
 - Github action workflow (to run CI in Github)
 
+## Other commands
+
+### How generating the public/private keys
+
+```bash
+keytool -genkey -alias "jwt-sign-key" -keyalg RSA -keystore jwt-keystore.jks -keysize 4096
+```
+
+The generated key store should be placed under the src/main/resources directory.
+
+IMPORTANT NOTE
+
+Public/private keys are valid only for 90 days from the time they are generated. Therefore, make sure that you create a new set of public/private keys before you run this chapter’s code.
+
+### How generate self-signed certificate
+```bash
+keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore keystore.jks -validity 3650
+keytool -exportcert -alias mykey -keystore keystore.jks -rfc -file certificate.crt
+keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype JKS -deststoretype PKCS12
+```
 
 ## Initial Challenge
 

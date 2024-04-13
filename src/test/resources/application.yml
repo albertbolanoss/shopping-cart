@@ -27,3 +27,10 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+config:
+  security:
+    jwt:
+      issue: "E-commerce Cart Shopping"
+      expiration: 900000
+      claim: "roles"
