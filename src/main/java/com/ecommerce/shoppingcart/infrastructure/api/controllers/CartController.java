@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.annotation.SessionScope;
@@ -135,6 +136,16 @@ public class CartController implements CartApi {
         cartItems.clear();
 
         return ResponseEntity.ok(paymentSummary);
+    }
+
+    @GetMapping("/api/v1/test")
+    public String getTest() {
+        return "Test";
+    }
+
+    @GetMapping("/api/v1/test2")
+    public String getTest2() {
+        return "Test2";
     }
 
     /**
