@@ -42,8 +42,7 @@ public class JWTConfig {
     return JWT.create()
         .withIssuer(jwtProperties.getIssue())
         .withSubject(principal.getUsername())
-        .withClaim(
-            jwtProperties.getClaim(),
+        .withClaim(jwtProperties.getClaim(),
             principal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                     .toList())

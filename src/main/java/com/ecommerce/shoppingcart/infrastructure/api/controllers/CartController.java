@@ -5,17 +5,16 @@ import com.ecommerce.shoppingcart.application.CartCheckoutApp;
 import com.ecommerce.shoppingcart.application.DeleteCartItemApp;
 import com.ecommerce.shoppingcart.application.GetPaymentSummaryApp;
 import com.ecommerce.shoppingcart.domain.model.PaymentMethod;
+import com.ecommerce.shoppingcart.domain.valueobjects.CartItemDomain;
+import com.ecommerce.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.ecommerce.shoppingcart.infrastructure.mappers.PaymentSummaryReqMapper;
 import com.perficient.shoppingcart.application.api.controller.CartApi;
 import com.perficient.shoppingcart.application.api.model.CheckoutPayMethodReq;
 import com.perficient.shoppingcart.application.api.model.PaymentSummaryReq;
-import com.ecommerce.shoppingcart.domain.valueobjects.CartItemDomain;
-import com.ecommerce.shoppingcart.domain.valueobjects.ProductIdDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.annotation.SessionScope;
@@ -136,16 +135,6 @@ public class CartController implements CartApi {
         cartItems.clear();
 
         return ResponseEntity.ok(paymentSummary);
-    }
-
-    @GetMapping("/api/v1/test")
-    public String getTest() {
-        return "Test";
-    }
-
-    @GetMapping("/api/v1/test2")
-    public String getTest2() {
-        return "Test2";
     }
 
     /**

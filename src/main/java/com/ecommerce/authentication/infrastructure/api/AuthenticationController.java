@@ -1,5 +1,6 @@
 package com.ecommerce.authentication.infrastructure.api;
 
+import com.ecommerce.shared.infrastructure.config.Authority;
 import com.ecommerce.shared.infrastructure.config.JWTConfig;
 import com.perficient.shoppingcart.application.api.controller.AuthenticationApi;
 import com.perficient.shoppingcart.application.api.model.SignInReq;
@@ -25,7 +26,7 @@ public class AuthenticationController implements AuthenticationApi {
             org.springframework.security.core.userdetails.User.builder()
                 .username(signInReq.getUsername())
                 .password(signInReq.getPassword())
-                .authorities("ADMIN")
+                .authorities(Authority.CART.name(), Authority.CART_READ.name(), Authority.CART_WRITE.name())
                 .build()
         );
 

@@ -3,12 +3,15 @@ package com.ecommerce.shared.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +22,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     public static final String ROLE_CLAIM = "roles";
     public static final String AUTHORITY_PREFIX = "ROLE_";
+
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -26,10 +32,21 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    req.requestMatchers(HttpMethod.GET, "/api/v1/test").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/auth/token").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/user").permitAll();
 
-                    req.requestMatchers(HttpMethod.GET, "/api/v1/test2").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/product/*/item")
+                            .hasAnyRole(Authority.getWriteAuthorities(Authority.CART));
+                    req.requestMatchers(HttpMethod.DELETE, "/api/v1/product/*/item")
+                            .hasAnyRole(Authority.getWriteAuthorities(Authority.CART));
+                    req.requestMatchers(HttpMethod.DELETE, "/api/v1/items")
+                            .hasAnyRole(Authority.getWriteAuthorities(Authority.CART));
+
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/items")
+                            .hasAnyRole(Authority.getReadAuthorities(Authority.CART));
+
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/user")
+                            .hasAnyRole(Authority.getReadAuthorities(Authority.ADMIN));
 
                     req.anyRequest().denyAll();
                 })
@@ -40,13 +57,14 @@ public class SecurityConfig {
                 .build();
     }
 
-    private JwtAuthenticationConverter getJwtAuthenticationConverter() {
+    private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
         var authorityConverter = new JwtGrantedAuthoritiesConverter();
         authorityConverter.setAuthorityPrefix(AUTHORITY_PREFIX);
         authorityConverter.setAuthoritiesClaimName(ROLE_CLAIM);
 
         var converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(authorityConverter);
+
         return converter;
     }
 
