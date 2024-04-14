@@ -46,3 +46,7 @@ target
 
 ### H2 Database file
 *.db
+
+#
+*.crt
+keystore.jks

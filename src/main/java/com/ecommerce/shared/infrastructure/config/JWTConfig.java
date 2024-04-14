@@ -39,7 +39,6 @@ public class JWTConfig {
 
   public String create(UserDetails principal) {
     final long now = System.currentTimeMillis();
-    ;
     return JWT.create()
         .withIssuer(jwtProperties.getIssue())
         .withSubject(principal.getUsername())

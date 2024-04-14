@@ -28,6 +28,14 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+app:
+  security:
+    jwt:
+      keystore-location: jwt-keystore.jks
+      keystore-password: password
+      key-alias: jwt-sign-key
+      private-key-passphrase: password
+
 config:
   security:
     jwt:

@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.GET, "/api/v1/test").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/auth/token").permitAll();
+
                     req.requestMatchers(HttpMethod.GET, "/api/v1/test2").hasRole("ADMIN");
 
                     req.anyRequest().denyAll();
