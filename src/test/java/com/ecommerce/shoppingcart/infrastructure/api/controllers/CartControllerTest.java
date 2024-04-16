@@ -1,21 +1,22 @@
 package com.ecommerce.shoppingcart.infrastructure.api.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ecommerce.shoppingcart.application.AddCartItemApp;
 import com.ecommerce.shoppingcart.application.CartCheckoutApp;
 import com.ecommerce.shoppingcart.application.DeleteCartItemApp;
 import com.ecommerce.shoppingcart.application.GetPaymentSummaryApp;
-import com.perficient.shoppingcart.application.api.model.CheckoutPayMethodReq;
 import com.ecommerce.shoppingcart.domain.model.PaymentMethod;
 import com.ecommerce.shoppingcart.domain.valueobjects.ProductIdDomain;
 import com.ecommerce.shoppingcart.infrastructure.mother.CartItemDomainMother;
 import com.ecommerce.shoppingcart.infrastructure.mother.PaymentSummaryDomainMother;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.perficient.shoppingcart.application.api.model.CheckoutPayMethodReq;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.HttpClientErrorException;
@@ -29,7 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CartController.class)
+
+@WebMvcTest({ CartController.class })
 class CartControllerTest {
     private final String PRODUCT_ITEM_URI = "/api/v1/product/%s/item";
 
@@ -54,6 +56,9 @@ class CartControllerTest {
 
     @MockBean
     private CartCheckoutApp cartCheckoutApp;
+
+    @MockBean
+    private SecurityFilterChain securityFilterChain;
 
     @Test
     void addItemWhenIsSuccessfully() throws Exception {
