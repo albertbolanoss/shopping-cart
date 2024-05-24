@@ -34,6 +34,8 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.POST, "/api/v1/auth/token").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/user").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/api/v1/auth/token/csrf").permitAll();
+                    // Excluir Swagger de autenticación
+                    req.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
 
                     req.requestMatchers(HttpMethod.POST, "/api/v1/product/*/item")
                             .hasAnyRole(Authority.getWriteAuthorities(Authority.CART));
@@ -54,6 +56,7 @@ public class SecurityConfig {
                     req.anyRequest().denyAll();
                 })
                 .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                        .ignoringRequestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                         .ignoringRequestMatchers(toH2Console())
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(
