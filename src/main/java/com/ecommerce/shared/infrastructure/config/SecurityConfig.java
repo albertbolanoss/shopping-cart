@@ -9,12 +9,14 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
@@ -28,12 +30,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/api/v1/auth/token").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/api/v1/user").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/api/v1/auth/token/csrf").permitAll();
 
                     req.requestMatchers(HttpMethod.POST, "/api/v1/product/*/item")
                             .hasAnyRole(Authority.getWriteAuthorities(Authority.CART));
@@ -45,11 +45,19 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.GET, "/api/v1/items")
                             .hasAnyRole(Authority.getReadAuthorities(Authority.CART));
 
+                    req.requestMatchers(HttpMethod.POST, "/api/v1/checkout")
+                            .hasAnyRole(Authority.getReadAuthorities(Authority.CART));
+
                     req.requestMatchers(HttpMethod.POST, "/api/v1/user")
                             .hasAnyRole(Authority.getReadAuthorities(Authority.ADMIN));
 
                     req.anyRequest().denyAll();
                 })
+                .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                        .ignoringRequestMatchers(toH2Console())
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2ResourceServer ->
                         oauth2ResourceServer.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter()))

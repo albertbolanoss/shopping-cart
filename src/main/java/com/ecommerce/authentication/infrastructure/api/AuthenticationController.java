@@ -6,6 +6,8 @@ import com.perficient.shoppingcart.application.api.controller.AuthenticationApi;
 import com.perficient.shoppingcart.application.api.model.SignInReq;
 import com.perficient.shoppingcart.application.api.model.SignedInUser;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -18,6 +20,12 @@ public class AuthenticationController implements AuthenticationApi {
 
     public AuthenticationController(JWTConfig JWTConfig) {
         this.JWTConfig = JWTConfig;
+    }
+
+
+    @GetMapping("api/v1/auth/token/csrf")
+    public ResponseEntity<CsrfToken> getCsrfToken(org.springframework.security.web.csrf.CsrfToken csrfToken) {
+        return ok(csrfToken);
     }
 
     public ResponseEntity<SignedInUser> signIn(SignInReq signInReq) {
