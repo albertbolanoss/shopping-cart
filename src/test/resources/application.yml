@@ -27,3 +27,18 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+app:
+  security:
+    jwt:
+      keystore-location: jwt-keystore.jks
+      keystore-password: password
+      key-alias: jwt-sign-key
+      private-key-passphrase: password
+
+config:
+  security:
+    jwt:
+      issue: "E-commerce Cart Shopping"
+      expiration: 900000
+      claim: "roles"

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -38,6 +39,9 @@ class UserControllerTest {
 
     @MockBean
     private UserPageModelAssembler userPageModelAssembler;
+
+    @MockBean
+    private SecurityFilterChain securityFilterChain;
 
     @Test
     void createUserSuccessfully() throws Exception {
