@@ -85,7 +85,8 @@ dependencies {
 
     implementation 'net.datafaker:datafaker:2.1.0'
 
-
+    // AWS
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
 
 }
 
