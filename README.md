@@ -157,6 +157,15 @@ IMPORTANT NOTE
 
 Public/private keys are valid only for 90 days from the time they are generated. Therefore, make sure that you create a new set of public/private keys before you run this chapter’s code.
 
+To generate a key that last more time use validity parameter (days).  For instance to create for ten years
+```bash
+keytool -genkey -alias "jwt-sign-key" -keyalg RSA -keystore jwt-keystore.jks -keysize 4096 -validity 3650
+
+# Delete previous keys
+keytool -delete -alias "jwt-sign-key" -keystore jwt-keystore.jks
+
+```
+
 ### How generate self-signed certificate
 ```bash
 keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore keystore.jks -validity 3650
