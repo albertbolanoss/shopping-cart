@@ -164,6 +164,62 @@ keytool -exportcert -alias mykey -keystore keystore.jks -rfc -file certificate.c
 keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype JKS -deststoretype PKCS12
 ```
 
+### How configure AWS Secret Manager with Spring Boot Configuration
+
+This project is using a secret from AWS Secret Manager service to set the environment variables
+
+```sh
+# application.yml
+spring:
+    config:
+        import: optional:aws-secretsmanager:shopping-cart-config
+```
+
+#### References
+
+- https://docs.awspring.io/spring-cloud-aws/docs/3.0.1/reference/html/index.html#spring-cloud-aws-secrets-manager
+- https://www.youtube.com/watch?v=1j028KYS4ps
+
+#### Run local using AWS Secret Manager
+
+To run locally using the AWS Secret Manager, create the following enviroment variables:
+
+```sh
+export AWS_ACCESS_KEY_ID=???
+export AWS_SECRET_ACCESS_KEY=???
+```
+#### How show secret information with AWS CLIs 
+```sh
+aws secretsmanager get-secret-value --secret-id shopping-cart-config
+```
+
+#### Create Secret
+1. Create the secret in AWS Secret Manager service
+1. Create policy and Role
+1. Associate the IAM Role to the instance (Security/Modify IAM Role)
+
+```sh
+# Create the secret in AWS Secret Manager
+aws secretsmanager create-secret --name shopping-cart-config --secret-string '{"SSL_KEY_PASSWORD":"?","REDIS_HOST":"?","REDIS_PASSWORD":"?","JWT_PASSWORD":"?","JWT_PASSPHRASE":"?"}'
+
+
+# Policy
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+            ],
+            "Resource": "arn:aws:secretsmanager:[Region]:[User ID]:secret:[Secret name]"
+        }
+    ]
+}
+```
+
 ## Initial Challenge
 
 The exercise is used to:
